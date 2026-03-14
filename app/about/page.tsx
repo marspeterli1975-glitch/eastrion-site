@@ -1,52 +1,62 @@
 export default function AboutPage() {
   return (
-    <div className="container">
+    <main>
       <section className="page-hero">
-        <div className="kicker">About</div>
-        <h1>Supply chain infrastructure with a practical execution bias.</h1>
-        <p>
-          Eastrion is the operating brand of Shanghai Eastrion Information Science
-          &amp; Technology Co., Ltd, focused on helping SMEs navigate global sourcing,
-          operational coordination and supply chain risk.
-        </p>
-      </section>
-
-      <section className="section-grid-2">
-        <div className="card">
-          <h3>Our positioning</h3>
-          <p>
-            We are not positioned as a generic trading intermediary. Our role is to
-            help clients structure sourcing, improve execution discipline and build
-            clearer visibility into supply chain performance and risk.
-          </p>
-        </div>
-        <div className="card">
-          <h3>Our approach</h3>
-          <p>
-            We operate through an expert-led model supported by specialist partners
-            across sourcing, logistics, quality and cross-border execution.
-          </p>
+        <div className="container">
+          <div className="panel page-hero-card">
+            <div className="eyebrow">About</div>
+            <h1 className="page-title">An operating model built around supply chain clarity.</h1>
+            <p className="page-subtitle">
+              Eastrion is the operating brand of Shanghai Eastrion Information Science &amp; Technology Co., Ltd. We frame
+              the business as a global supply chain infrastructure partner focused on sourcing capability, industrial
+              execution and risk intelligence for SMEs and cross-border operating environments.
+            </p>
+          </div>
         </div>
       </section>
 
-      <section className="section-grid-2 section">
-        <div className="card">
-          <h3>What matters to us</h3>
-          <ul className="list">
-            <li>Commercial practicality over theoretical complexity</li>
-            <li>Clearer coordination across cost, quality and time</li>
-            <li>More disciplined communication of supply chain risk</li>
-          </ul>
-        </div>
-        <div className="card">
-          <h3>How we are evolving</h3>
-          <p>
-            Our long-term direction is to combine supply chain execution capability
-            with a stronger risk intelligence layer, including the development of
-            RiskAtlas as a structured product module.
-          </p>
+      <section className="section">
+        <div className="container two-col">
+          <div className="panel text-panel">
+            <h3>Positioning</h3>
+            <p>
+              We do not present the company as a generic sourcing broker. We position it as a structured operating
+              partner that connects supplier selection, execution support and risk communication.
+            </p>
+            <p>
+              This positioning is more durable because it supports both advisory work and future product-led growth.
+            </p>
+          </div>
+          <div className="panel text-panel">
+            <h3>Operating philosophy</h3>
+            <p>
+              The company is represented through an expert-led and partner-enabled model. That is a deliberate choice:
+              it preserves credibility, keeps the website aligned with reality and avoids overstating fixed footprint or
+              organisational scale.
+            </p>
+          </div>
         </div>
       </section>
-    </div>
+
+      <section className="section">
+        <div className="container two-col">
+          <div className="panel text-panel">
+            <h3>Mission</h3>
+            <p>
+              Help businesses improve supply chain performance through better sourcing structure, more reliable
+              execution and clearer risk visibility.
+            </p>
+          </div>
+          <div className="panel text-panel">
+            <h3>Brand architecture</h3>
+            <ul className="bullet-list">
+              <li>Legal entity: Shanghai Eastrion Information Science &amp; Technology Co., Ltd</li>
+              <li>Operating brand: Eastrion</li>
+              <li>Flagship product module: RiskAtlas</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }

@@ -1,16 +1,16 @@
+import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Eastrion | Global Supply Chain Infrastructure",
   description:
-    "Eastrion helps SMEs improve sourcing efficiency, operational coordination and supply chain visibility through practical execution and structured risk intelligence."
+    "Eastrion positions supply chain infrastructure, industry capability and risk intelligence within one operating model, with RiskAtlas as its flagship product module.",
 };
 
 export default function RootLayout({
-  children
+  children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
@@ -19,7 +19,7 @@ export default function RootLayout({
       <body>
         <div className="site-shell">
           <Navbar />
-          <main>{children}</main>
+          {children}
           <Footer />
         </div>
       </body>
