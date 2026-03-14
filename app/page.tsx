@@ -24,7 +24,7 @@ export default function HomePage() {
               Explore Solutions
             </Link>
             <Link href="/products" className="btn btn-secondary">
-              Discover RiskAtlas
+              Explore RiskAtlas
             </Link>
           </div>
         </div>
@@ -50,51 +50,51 @@ export default function HomePage() {
           </div>
 
           <div className="side-block">
-            <div className="side-label">Product module</div>
+            <div className="side-label">Product layer</div>
             <h3>RiskAtlas</h3>
           </div>
         </div>
       </section>
 
       <SectionIntro
-        eyebrow="What we solve"
-        title="From fragmented execution to structured visibility."
-        description="We help businesses reduce sourcing friction, improve operating discipline and communicate supply chain risk in a more structured way."
+        eyebrow="Why Eastrion"
+        title="A supply chain platform direction, not just a company profile."
+        description="Eastrion is positioned as a supply chain infrastructure and risk intelligence business with a product pathway. The website is designed to communicate that evolution clearly."
       />
 
       <section className="three-col-grid">
         <div className="card">
-          <div className="section-kicker">Supply Chain Infrastructure</div>
+          <div className="section-kicker">Infrastructure</div>
           <h3>Sourcing and coordination</h3>
           <p>
-            Build more resilient supplier and execution flows across sourcing,
-            quality, logistics and delivery.
+            Build more resilient execution flows across supplier selection,
+            quality, logistics and delivery coordination.
           </p>
         </div>
 
         <div className="card">
-          <div className="section-kicker">Industrial Capability</div>
-          <h3>Execution with industrial context</h3>
+          <div className="section-kicker">Capability</div>
+          <h3>Industrial context</h3>
           <p>
-            Support projects that require more than trading activity, including
-            structured supplier evaluation and cross-border coordination.
+            Support cross-border projects that require structured evaluation,
+            operating discipline and commercial practicality.
           </p>
         </div>
 
         <div className="card">
-          <div className="section-kicker">Risk Intelligence</div>
-          <h3>Visibility before escalation</h3>
+          <div className="section-kicker">Intelligence</div>
+          <h3>Structured risk visibility</h3>
           <p>
-            Translate fragmented signals into clearer views of supplier,
-            logistics and macro risk exposure.
+            Convert fragmented supply chain signals into clearer operating views
+            that businesses can actually use.
           </p>
         </div>
       </section>
 
       <SectionIntro
-        eyebrow="Our architecture"
+        eyebrow="Platform Architecture"
         title="Execution first. Intelligence second. Product third."
-        description="The Eastrion model starts from real-world supply chain execution, builds structured capability across sourcing and industry, and extends into risk intelligence through RiskAtlas."
+        description="The Eastrion model starts from real supply chain execution, builds structured capability across sourcing and industrial coordination, and then extends into RiskAtlas as the product intelligence layer."
       />
 
       <section className="three-col-grid">
@@ -102,7 +102,7 @@ export default function HomePage() {
           <div className="section-kicker">01</div>
           <h3>Supply chain execution</h3>
           <p>
-            Practical coordination across suppliers, logistics, lead time,
+            Practical coordination across suppliers, lead time, logistics,
             quality and delivery.
           </p>
         </div>
@@ -120,16 +120,16 @@ export default function HomePage() {
           <div className="section-kicker">03</div>
           <h3>RiskAtlas product layer</h3>
           <p>
-            A product module designed to turn fragmented risk inputs into more
+            A product direction designed to turn fragmented risk inputs into
             structured outputs for business use.
           </p>
         </div>
       </section>
 
       <SectionIntro
-        eyebrow="RiskAtlas"
-        title="A product module built on top of supply chain reality."
-        description="RiskAtlas is positioned as the intelligence layer of the Eastrion model — not as a standalone abstraction, but as a structured extension of real supply chain execution."
+        eyebrow="What we solve"
+        title="From fragmented execution to structured visibility."
+        description="We help businesses reduce sourcing friction, improve operating discipline and communicate supply chain risk in a more structured way."
       />
 
       <section className="three-col-grid">
@@ -161,78 +161,99 @@ export default function HomePage() {
         </div>
       </section>
 
+      <SectionIntro
+        eyebrow="RiskAtlas Demo"
+        title="A product entry point for future supply chain risk workflows."
+        description="This demo block shows how RiskAtlas can evolve from a static product page into a usable supply chain risk scanning interface."
+      />
+
       <section
         className="card"
         style={{
-          marginTop: "32px",
+          marginTop: "24px",
           padding: "36px 32px",
         }}
       >
-        <div className="section-kicker">RiskAtlas Demo</div>
-
-        <h3
-          style={{
-            margin: "0 0 16px",
-            fontSize: "32px",
-            letterSpacing: "-0.04em",
-            lineHeight: 1.05,
-          }}
-        >
-          Run a quick supply chain risk scan
-        </h3>
-
-        <p
-          style={{
-            marginBottom: "28px",
-            color: "var(--muted)",
-            maxWidth: "760px",
-            lineHeight: 1.7,
-          }}
-        >
-          Enter a supplier country and industry to simulate how RiskAtlas could
-          structure supply chain exposure across geopolitical, logistics and
-          operational dimensions.
-        </p>
-
         <div
           style={{
-            display: "flex",
-            gap: "12px",
-            flexWrap: "wrap",
-            marginBottom: "24px",
+            display: "grid",
+            gridTemplateColumns: "1.2fr 1fr",
+            gap: "28px",
           }}
         >
-          <input
-            placeholder="Supplier country (e.g. China)"
-            style={{
-              padding: "12px 16px",
-              borderRadius: "12px",
-              border: "1px solid var(--line)",
-              minWidth: "240px",
-              fontSize: "15px",
-              background: "#fff",
-              color: "var(--text)",
-            }}
-          />
+          <div>
+            <div className="section-kicker">Demo</div>
+            <h3
+              style={{
+                margin: "0 0 14px",
+                fontSize: "34px",
+                lineHeight: 1.05,
+                letterSpacing: "-0.04em",
+              }}
+            >
+              Run a quick supply chain risk scan
+            </h3>
+            <p
+              style={{
+                margin: 0,
+                color: "var(--muted)",
+                lineHeight: 1.7,
+                maxWidth: "700px",
+              }}
+            >
+              Enter a supplier country and industry to simulate how RiskAtlas
+              could structure exposure across geopolitical, logistics and
+              operational dimensions.
+            </p>
+          </div>
 
-          <input
-            placeholder="Industry (e.g. lithium battery)"
+          <div
             style={{
-              padding: "12px 16px",
-              borderRadius: "12px",
+              padding: "20px",
+              borderRadius: "18px",
+              background: "rgba(15, 23, 42, 0.03)",
               border: "1px solid var(--line)",
-              minWidth: "240px",
-              fontSize: "15px",
-              background: "#fff",
-              color: "var(--text)",
             }}
-          />
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "12px",
+              }}
+            >
+              <input
+                placeholder="Supplier country (e.g. China)"
+                style={{
+                  padding: "12px 16px",
+                  borderRadius: "12px",
+                  border: "1px solid var(--line)",
+                  fontSize: "15px",
+                  background: "#fff",
+                  color: "var(--text)",
+                }}
+              />
 
-          <button className="btn btn-primary">Run Risk Scan</button>
+              <input
+                placeholder="Industry (e.g. lithium battery)"
+                style={{
+                  padding: "12px 16px",
+                  borderRadius: "12px",
+                  border: "1px solid var(--line)",
+                  fontSize: "15px",
+                  background: "#fff",
+                  color: "var(--text)",
+                }}
+              />
+
+              <button className="btn btn-primary">Run Risk Scan</button>
+            </div>
+          </div>
         </div>
 
         <div
           style={{
+            marginTop: "24px",
             padding: "18px",
             background: "rgba(15, 23, 42, 0.03)",
             borderRadius: "14px",
@@ -245,39 +266,39 @@ export default function HomePage() {
           <br />
           Risk Score: <strong>B (Moderate Exposure)</strong>
           <br />
-          Key Signals: Logistics congestion, policy volatility, supplier
-          concentration.
+          Key Signals: supplier concentration, corridor congestion, regulatory
+          volatility.
         </div>
       </section>
 
       <SectionIntro
         eyebrow="Why it matters"
-        title="A platform direction, not just a company profile."
-        description="The purpose of the site is not only to describe Eastrion, but to establish a clearer path toward a structured supply chain intelligence product experience."
+        title="A website that already behaves like the first layer of a platform."
+        description="The long-term value is not just in describing Eastrion. It is in building a front-end structure that can later connect to risk logic, data inputs and product workflows."
       />
 
       <section className="three-col-grid">
         <div className="card">
           <div className="section-kicker">Business value</div>
-          <h3>Clearer risk communication</h3>
+          <h3>Clearer communication</h3>
           <p>
             Turn fragmented supply chain signals into outputs that are easier to
-            explain inside a business context.
+            explain inside a real operating environment.
           </p>
         </div>
 
         <div className="card">
-          <div className="section-kicker">Product direction</div>
-          <h3>From website to platform</h3>
+          <div className="section-kicker">Product value</div>
+          <h3>Product-led evolution</h3>
           <p>
-            Build from a strategic company website into a product-led RiskAtlas
-            interface over time.
+            Move from a company website toward a RiskAtlas interface that can
+            support real scanning and reporting workflows.
           </p>
         </div>
 
         <div className="card">
-          <div className="section-kicker">User focus</div>
-          <h3>Designed for SMEs</h3>
+          <div className="section-kicker">User value</div>
+          <h3>Built for SMEs</h3>
           <p>
             Keep the model practical, explainable and commercially useful for
             cross-border small and mid-sized businesses.
