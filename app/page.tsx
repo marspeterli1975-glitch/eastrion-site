@@ -168,109 +168,50 @@ export default function HomePage() {
         description="This demo block shows how RiskAtlas can evolve from a static product page into a usable supply chain risk scanning interface."
       />
 
-      <section
-        className="card"
+    <section
+  className="card"
+  style={{
+    marginTop: "24px",
+    padding: "36px 32px",
+  }}
+>
+  <div
+    style={{
+      display: "grid",
+      gridTemplateColumns: "1.2fr 1fr",
+      gap: "28px",
+      alignItems: "start",
+    }}
+  >
+    <div>
+      <div className="section-kicker">Demo</div>
+      <h3
         style={{
-          marginTop: "24px",
-          padding: "36px 32px",
+          margin: "0 0 14px",
+          fontSize: "34px",
+          lineHeight: 1.05,
+          letterSpacing: "-0.04em",
         }}
       >
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1.2fr 1fr",
-            gap: "28px",
-          }}
-        >
-          <div>
-            <div className="section-kicker">Demo</div>
-            <h3
-              style={{
-                margin: "0 0 14px",
-                fontSize: "34px",
-                lineHeight: 1.05,
-                letterSpacing: "-0.04em",
-              }}
-            >
-              Run a quick supply chain risk scan
-            </h3>
-            <p
-              style={{
-                margin: 0,
-                color: "var(--muted)",
-                lineHeight: 1.7,
-                maxWidth: "700px",
-              }}
-            >
-              Enter a supplier country and industry to simulate how RiskAtlas
-              could structure exposure across geopolitical, logistics and
-              operational dimensions.
-            </p>
-          </div>
+        Run a quick supply chain risk scan
+      </h3>
+      <p
+        style={{
+          margin: 0,
+          color: "var(--muted)",
+          lineHeight: 1.7,
+          maxWidth: "700px",
+        }}
+      >
+        Enter a supplier country and industry to simulate how RiskAtlas
+        could structure exposure across geopolitical, logistics and
+        operational dimensions.
+      </p>
+    </div>
 
-          <div
-            style={{
-              padding: "20px",
-              borderRadius: "18px",
-              background: "rgba(15, 23, 42, 0.03)",
-              border: "1px solid var(--line)",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "12px",
-              }}
-            >
-              <input
-                placeholder="Supplier country (e.g. China)"
-                style={{
-                  padding: "12px 16px",
-                  borderRadius: "12px",
-                  border: "1px solid var(--line)",
-                  fontSize: "15px",
-                  background: "#fff",
-                  color: "var(--text)",
-                }}
-              />
-
-              <input
-                placeholder="Industry (e.g. lithium battery)"
-                style={{
-                  padding: "12px 16px",
-                  borderRadius: "12px",
-                  border: "1px solid var(--line)",
-                  fontSize: "15px",
-                  background: "#fff",
-                  color: "var(--text)",
-                }}
-              />
-
-              <button className="btn btn-primary">Run Risk Scan</button>
-            </div>
-          </div>
-        </div>
-
-        <div
-          style={{
-            marginTop: "24px",
-            padding: "18px",
-            background: "rgba(15, 23, 42, 0.03)",
-            borderRadius: "14px",
-            fontSize: "15px",
-            color: "var(--muted)",
-            lineHeight: 1.7,
-          }}
-        >
-          <strong>Sample Output</strong>
-          <br />
-          Risk Score: <strong>B (Moderate Exposure)</strong>
-          <br />
-          Key Signals: supplier concentration, corridor congestion, regulatory
-          volatility.
-        </div>
-      </section>
+    <RiskScanner />
+  </div>
+</section>
 
       <SectionIntro
         eyebrow="Why it matters"
