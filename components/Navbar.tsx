@@ -1,35 +1,35 @@
-import Image from "next/image";
 import Link from "next/link";
-
-const links = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/solutions", label: "Solutions" },
-  { href: "/products", label: "Products" },
-  { href: "/contact", label: "Contact" },
-];
+import Image from "next/image";
 
 export default function Navbar() {
   return (
     <header className="site-header">
-      <div className="container nav-row">
-        <Link href="/" className="brand-wrap" aria-label="Eastrion home">
-          <span className="brand-mark">
-            <Image src="/eastrion-logo.png" alt="Eastrion logo" width={50} height={50} priority />
-          </span>
-          <span className="brand-copy">
-            <span className="brand-name">Eastrion</span>
-            <span className="brand-tag">Global Supply Chain Infrastructure</span>
-          </span>
+      <div className="container site-header-inner">
+        <Link href="/" className="brand">
+          <Image
+            src="/eastrion-logo.png"
+            alt="Eastrion logo"
+            width={40}
+            height={40}
+            className="brand-mark"
+          />
+          <div className="brand-copy">
+            <div className="brand-title">Eastrion</div>
+            <div className="brand-subtitle">
+              Global Supply Chain Infrastructure
+            </div>
+          </div>
         </Link>
 
-        <nav className="nav-links" aria-label="Primary navigation">
-          {links.map((link) => (
-            <Link key={link.href} href={link.href}>
-              {link.label}
-            </Link>
-          ))}
-          <Link href="/products" className="nav-cta">
+        <nav className="nav">
+          <div className="nav-links">
+            <Link href="/">Home</Link>
+            <Link href="/about">About</Link>
+            <Link href="/solutions">Solutions</Link>
+            <Link href="/products">Products</Link>
+            <Link href="/contact">Contact</Link>
+          </div>
+          <Link href="/products" className="cta-button">
             Try RiskAtlas
           </Link>
         </nav>
