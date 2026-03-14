@@ -4,9 +4,11 @@ import SectionIntro from "@/components/SectionIntro";
 export default function HomePage() {
   return (
     <main>
-      <section className="hero">
+      <section className="hero hero-enhanced">
+        <div className="hero-aura hero-aura-left" />
+        <div className="hero-aura hero-aura-right" />
         <div className="container hero-grid">
-          <div className="panel hero-main">
+          <div className="panel hero-main hero-main-enhanced">
             <div>
               <div className="eyebrow">Global Supply Chain Infrastructure</div>
               <h1>Global supply chain infrastructure for sourcing, industry and risk intelligence.</h1>
@@ -26,26 +28,35 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="panel hero-side">
-            <div className="mini-card">
+          <div className="panel hero-side hero-side-enhanced">
+            <div className="mini-card mini-card-accent">
               <div className="mini-label">Operating model</div>
               <h3 className="mini-title">Expert-led, partner-enabled, execution-focused.</h3>
               <p className="mini-text">
-                We work through a flexible model supported by specialist partners across sourcing, quality and
-                cross-border execution.
+                We work through a flexible model supported by specialist partners across sourcing, quality,
+                logistics and cross-border execution.
               </p>
             </div>
-            <div className="mini-card">
-              <div className="mini-label">Core lens</div>
-              <p className="mini-text">Cost · Quality · Time · Risk</p>
+            <div className="signal-card">
+              <div className="signal-row">
+                <span className="signal-dot signal-green" />
+                <span>Supply chain infrastructure</span>
+              </div>
+              <div className="signal-row">
+                <span className="signal-dot signal-blue" />
+                <span>Industrial capability</span>
+              </div>
+              <div className="signal-row">
+                <span className="signal-dot signal-dark" />
+                <span>Risk intelligence</span>
+              </div>
             </div>
-            <div className="mini-card">
-              <div className="mini-label">Primary focus</div>
-              <p className="mini-text">SME supply chain performance</p>
-            </div>
-            <div className="mini-card">
-              <div className="mini-label">Product module</div>
-              <p className="mini-text">RiskAtlas</p>
+            <div className="mini-card mini-card-dark">
+              <div className="mini-label mini-label-dark">Product module</div>
+              <p className="mini-title small">RiskAtlas</p>
+              <p className="mini-text mini-text-dark">
+                Structured score logic, clearer reporting and a stronger bridge between execution and risk.
+              </p>
             </div>
           </div>
         </div>
@@ -60,98 +71,90 @@ export default function HomePage() {
           />
 
           <div className="card-grid">
-            <div className="panel info-card">
-              <h3>Fragmented sourcing decisions</h3>
-              <p>
-                Businesses often compare price well but compare supplier stability, execution capability and
-                expansion risk poorly.
-              </p>
-              <ul>
-                <li>Supplier filtration and shortlist design</li>
-                <li>RFQ structure and capability review</li>
-                <li>Pre-selection logic before execution scale-up</li>
-              </ul>
+            <div className="panel info-card photo-card sourcing-photo">
+              <div className="card-overlay">
+                <h3>Fragmented sourcing decisions</h3>
+                <p>
+                  Businesses often compare price well but compare supplier stability, execution capability and
+                  expansion risk poorly.
+                </p>
+                <ul>
+                  <li>Supplier filtration and shortlist design</li>
+                  <li>RFQ structure and capability review</li>
+                  <li>Pre-selection logic before execution scale-up</li>
+                </ul>
+              </div>
             </div>
-            <div className="panel info-card">
-              <h3>Cross-border operating complexity</h3>
-              <p>
-                Procurement, production timing, packaging, logistics and after-sales coordination usually sit in
-                disconnected silos.
-              </p>
-              <ul>
-                <li>Execution visibility across handoffs</li>
-                <li>Operational coordination for trade and projects</li>
-                <li>Structured communication around delivery risk</li>
-              </ul>
+            <div className="panel info-card photo-card operations-photo">
+              <div className="card-overlay">
+                <h3>Cross-border operating complexity</h3>
+                <p>
+                  Procurement, production timing, packaging, logistics and after-sales coordination usually sit in
+                  disconnected silos.
+                </p>
+                <ul>
+                  <li>Execution visibility across handoffs</li>
+                  <li>Operational coordination for trade and projects</li>
+                  <li>Structured communication around delivery risk</li>
+                </ul>
+              </div>
             </div>
-            <div className="panel info-card">
-              <h3>Weak risk communication</h3>
-              <p>
-                Risk is frequently discussed in qualitative terms only. That makes it difficult to explain,
-                prioritise or operationalise.
-              </p>
-              <ul>
-                <li>Structured risk framing</li>
-                <li>Comparable scoring logic</li>
-                <li>More usable reporting for management discussion</li>
-              </ul>
+            <div className="panel info-card photo-card risk-photo">
+              <div className="card-overlay">
+                <h3>Weak risk communication</h3>
+                <p>
+                  Risk is frequently discussed in qualitative terms only. That makes it difficult to explain,
+                  prioritise or operationalise.
+                </p>
+                <ul>
+                  <li>Structured risk framing</li>
+                  <li>Comparable scoring logic</li>
+                  <li>More usable reporting for management discussion</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       <section className="section">
-        <div className="container">
+        <div className="container architecture-shell">
           <SectionIntro
-            kicker="Solutions"
-            title="Three connected solution pillars"
-            text="We do not position the company as a narrow sourcing intermediary. We position Eastrion as a supply chain infrastructure business with three connected pillars: sourcing capability, industrial execution and risk intelligence."
+            kicker="Our architecture"
+            title="A cleaner operating logic from execution to intelligence"
+            text="We position Eastrion as a supply chain infrastructure business with a practical execution bias. Risk intelligence is not detached from operations. It is layered on top of execution experience and then productised through RiskAtlas."
           />
-
-          <div className="card-grid">
-            <div className="panel info-card">
-              <h3>Global Sourcing</h3>
-              <p>
-                Supplier discovery, filtration, quotation comparison, capability review and entry path design for
-                projects that require disciplined front-end selection.
-              </p>
-              <ul>
-                <li>Supplier scouting</li>
-                <li>Factory and capability assessment</li>
-                <li>Cost and fit-for-purpose evaluation</li>
-              </ul>
+          <div className="architecture-grid">
+            <div className="panel architecture-card">
+              <span className="architecture-step">01</span>
+              <h3>Supply Chain Infrastructure</h3>
+              <p>Front-end sourcing, supplier selection, operational handoff and coordination design.</p>
             </div>
-            <div className="panel info-card">
-              <h3>Supply Chain Operations</h3>
-              <p>
-                Execution support across product development, coordination, packaging, logistics and operational
-                handoff where practical delivery matters more than brochure language.
-              </p>
-              <ul>
-                <li>Operational coordination</li>
-                <li>3PL and delivery planning support</li>
-                <li>Cross-border project execution logic</li>
-              </ul>
+            <div className="architecture-arrow">→</div>
+            <div className="panel architecture-card">
+              <span className="architecture-step">02</span>
+              <h3>Industrial Capability</h3>
+              <p>Application understanding across industrial components, automotive aftermarket and tools.</p>
             </div>
-            <div className="panel info-card">
+            <div className="architecture-arrow">→</div>
+            <div className="panel architecture-card architecture-accent">
+              <span className="architecture-step">03</span>
               <h3>Risk Intelligence</h3>
-              <p>
-                Structured identification, framing and communication of supply chain risk across supplier,
-                logistics, country and operating conditions.
-              </p>
-              <ul>
-                <li>Risk visibility</li>
-                <li>Scoring and reporting structure</li>
-                <li>Pathway toward RiskAtlas workflows</li>
-              </ul>
+              <p>Clearer framing of supplier, country, logistics and operating exposure.</p>
+            </div>
+            <div className="architecture-arrow">→</div>
+            <div className="panel architecture-card architecture-dark">
+              <span className="architecture-step">04</span>
+              <h3>RiskAtlas</h3>
+              <p>Structured product layer for score logic, reporting and future workflow expansion.</p>
             </div>
           </div>
         </div>
       </section>
 
       <section className="section">
-        <div className="container highlight">
-          <div className="panel highlight-main">
+        <div className="container highlight enhanced-highlight">
+          <div className="panel highlight-main highlight-main-visual">
             <div className="kicker">Industry capability</div>
             <h2>Selected experience in industrial components, automotive aftermarket and hardware.</h2>
             <p className="section-text" style={{ marginTop: 14 }}>
@@ -178,21 +181,27 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-          <div className="panel highlight-side">
-            <div className="kicker">RiskAtlas</div>
+          <div className="panel highlight-side riskatlas-panel">
+            <div className="kicker kicker-bright">RiskAtlas</div>
             <h2>From supply chain execution to risk intelligence</h2>
-            <p className="section-text" style={{ marginTop: 14 }}>
-              RiskAtlas is not positioned as a detached software story. It is presented as the flagship product module
-              emerging from execution experience in sourcing, operations and cross-border coordination.
+            <p className="section-text section-text-dark" style={{ marginTop: 14 }}>
+              RiskAtlas is not positioned as a detached software story. It is the flagship product module emerging
+              from execution experience in sourcing, operations and cross-border coordination.
             </p>
-            <ul className="bullet-list" style={{ marginTop: 18 }}>
+            <div className="riskatlas-mockup">
+              <div className="mockup-line" />
+              <div className="mockup-line short" />
+              <div className="mockup-score">81</div>
+              <div className="mockup-chip">Structured risk score</div>
+            </div>
+            <ul className="bullet-list bullet-list-bright" style={{ marginTop: 18 }}>
               <li>Supply chain risk framing</li>
               <li>Structured score logic</li>
               <li>Clearer management communication</li>
               <li>Pathway to future digital workflows</li>
             </ul>
             <div className="hero-actions" style={{ marginTop: 18 }}>
-              <Link href="/products" className="button-primary">
+              <Link href="/products" className="button-primary button-green">
                 View Product
               </Link>
             </div>
@@ -202,7 +211,7 @@ export default function HomePage() {
 
       <section className="section">
         <div className="container highlight">
-          <div className="panel callout">
+          <div className="panel callout callout-soft">
             <div>
               <div className="kicker">How we work</div>
               <h3>We prefer clear framing over inflated positioning.</h3>
@@ -212,22 +221,14 @@ export default function HomePage() {
               </p>
             </div>
           </div>
-          <div className="panel callout">
+          <div className="panel callout callout-soft">
             <div>
               <div className="kicker">Next step</div>
               <h3>Build better visibility before scaling execution.</h3>
               <p>
                 The immediate purpose of the website is not only to look credible. It is to create a cleaner commercial
-                path from advisory conversations to product interest and, eventually, to structured RiskAtlas usage.
+                narrative and a better entry point into future products, especially RiskAtlas.
               </p>
-            </div>
-            <div className="hero-actions">
-              <Link href="/contact" className="button-secondary">
-                Contact Eastrion
-              </Link>
-              <Link href="/products" className="button-primary">
-                Try RiskAtlas
-              </Link>
             </div>
           </div>
         </div>

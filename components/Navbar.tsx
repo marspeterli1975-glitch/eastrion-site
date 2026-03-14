@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const links = [
@@ -13,8 +14,13 @@ export default function Navbar() {
     <header className="site-header">
       <div className="container nav-row">
         <Link href="/" className="brand-wrap" aria-label="Eastrion home">
-          <span className="brand-name">Eastrion</span>
-          <span className="brand-tag">Global Supply Chain Infrastructure</span>
+          <span className="brand-mark">
+            <Image src="/eastrion-logo.png" alt="Eastrion logo" width={50} height={50} priority />
+          </span>
+          <span className="brand-copy">
+            <span className="brand-name">Eastrion</span>
+            <span className="brand-tag">Global Supply Chain Infrastructure</span>
+          </span>
         </Link>
 
         <nav className="nav-links" aria-label="Primary navigation">
