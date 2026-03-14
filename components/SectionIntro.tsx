@@ -1,17 +1,19 @@
 type Props = {
-  kicker: string;
+  eyebrow: string;
   title: string;
-  text: string;
+  description: string;
 };
 
-export default function SectionIntro({ kicker, title, text }: Props) {
+export default function SectionIntro({
+  eyebrow,
+  title,
+  description,
+}: Props) {
   return (
-    <div className="section-intro">
-      <div>
-        <div className="kicker">{kicker}</div>
-        <h2>{title}</h2>
-      </div>
-      <p className="section-text">{text}</p>
-    </div>
+    <section className="section-intro">
+      <div className="section-intro-eyebrow">{eyebrow}</div>
+      <h2 className="section-intro-title">{title}</h2>
+      <p className="section-intro-description">{description}</p>
+    </section>
   );
 }
