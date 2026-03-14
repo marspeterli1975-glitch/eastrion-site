@@ -1,5 +1,6 @@
 import Link from "next/link";
 import SectionIntro from "../components/SectionIntro";
+import RiskScanner from "../components/RiskScanner";
 
 export default function HomePage() {
   return (
