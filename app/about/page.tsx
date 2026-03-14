@@ -1,5 +1,5 @@
 import Link from "next/link";
-import SectionIntro from "../components/SectionIntro";
+import SectionIntro from "../../components/SectionIntro";
 
 export default function HomePage() {
   return (
