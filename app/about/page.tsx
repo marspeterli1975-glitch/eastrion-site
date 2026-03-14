@@ -1,62 +1,213 @@
-export default function AboutPage() {
+import Link from "next/link";
+import SectionIntro from "../components/SectionIntro";
+
+export default function HomePage() {
   return (
-    <main>
-      <section className="page-hero">
-        <div className="container">
-          <div className="panel page-hero-card">
-            <div className="eyebrow">About</div>
-            <h1 className="page-title">An operating model built around supply chain clarity.</h1>
-            <p className="page-subtitle">
-              Eastrion is the operating brand of Shanghai Eastrion Information Science &amp; Technology Co., Ltd. We frame
-              the business as a global supply chain infrastructure partner focused on sourcing capability, industrial
-              execution and risk intelligence for SMEs and cross-border operating environments.
+    <div className="page-shell">
+      <section className="hero-grid">
+        <div className="hero-main card">
+          <div className="eyebrow-pill">Global Supply Chain Infrastructure</div>
+
+          <h1 className="hero-title">
+            Building resilient supply chains across sourcing, operations and
+            risk.
+          </h1>
+
+          <p className="hero-copy">
+            Eastrion helps businesses improve sourcing efficiency, operational
+            coordination and supply chain visibility through practical execution
+            and structured risk intelligence.
+          </p>
+
+          <div className="hero-actions">
+            <Link href="/solutions" className="btn btn-primary">
+              Explore Solutions
+            </Link>
+            <Link href="/products" className="btn btn-secondary">
+              Discover RiskAtlas
+            </Link>
+          </div>
+        </div>
+
+        <div className="hero-side card">
+          <div className="side-block">
+            <div className="side-label">Operating model</div>
+            <h3>Expert-led, partner-enabled, execution-focused.</h3>
+            <p>
+              We work through a flexible model supported by specialist partners
+              across sourcing, logistics, quality and cross-border execution.
             </p>
+          </div>
+
+          <div className="side-block">
+            <div className="side-label">Core lens</div>
+            <h3>Cost · Quality · Time · Risk</h3>
+          </div>
+
+          <div className="side-block">
+            <div className="side-label">Primary focus</div>
+            <h3>SME supply chain performance</h3>
+          </div>
+
+          <div className="side-block">
+            <div className="side-label">Product module</div>
+            <h3>RiskAtlas</h3>
           </div>
         </div>
       </section>
 
-      <section className="section">
-        <div className="container two-col">
-          <div className="panel text-panel">
-            <h3>Positioning</h3>
-            <p>
-              We do not present the company as a generic sourcing broker. We position it as a structured operating
-              partner that connects supplier selection, execution support and risk communication.
-            </p>
-            <p>
-              This positioning is more durable because it supports both advisory work and future product-led growth.
-            </p>
-          </div>
-          <div className="panel text-panel">
-            <h3>Operating philosophy</h3>
-            <p>
-              The company is represented through an expert-led and partner-enabled model. That is a deliberate choice:
-              it preserves credibility, keeps the website aligned with reality and avoids overstating fixed footprint or
-              organisational scale.
-            </p>
-          </div>
+      <SectionIntro
+        eyebrow="What we solve"
+        title="From fragmented execution to structured visibility."
+        description="We help businesses reduce sourcing friction, improve operating discipline and communicate supply chain risk in a more structured way."
+      />
+
+      <section className="three-col-grid">
+        <div className="card">
+          <div className="section-kicker">Supply Chain Infrastructure</div>
+          <h3>Sourcing and coordination</h3>
+          <p>
+            Build more resilient supplier and execution flows across sourcing,
+            quality, logistics and delivery.
+          </p>
+        </div>
+
+        <div className="card">
+          <div className="section-kicker">Industrial Capability</div>
+          <h3>Execution with industrial context</h3>
+          <p>
+            Support projects that require more than trading activity, including
+            structured supplier evaluation and cross-border coordination.
+          </p>
+        </div>
+
+        <div className="card">
+          <div className="section-kicker">Risk Intelligence</div>
+          <h3>Visibility before escalation</h3>
+          <p>
+            Translate fragmented signals into clearer views of supplier,
+            logistics and macro risk exposure.
+          </p>
         </div>
       </section>
 
-      <section className="section">
-        <div className="container two-col">
-          <div className="panel text-panel">
-            <h3>Mission</h3>
-            <p>
-              Help businesses improve supply chain performance through better sourcing structure, more reliable
-              execution and clearer risk visibility.
-            </p>
-          </div>
-          <div className="panel text-panel">
-            <h3>Brand architecture</h3>
-            <ul className="bullet-list">
-              <li>Legal entity: Shanghai Eastrion Information Science &amp; Technology Co., Ltd</li>
-              <li>Operating brand: Eastrion</li>
-              <li>Flagship product module: RiskAtlas</li>
-            </ul>
-          </div>
+      <SectionIntro
+        eyebrow="Our architecture"
+        title="Execution first. Intelligence second. Product third."
+        description="The Eastrion model starts from real-world supply chain execution, builds structured capability across sourcing and industry, and extends into risk intelligence through RiskAtlas."
+      />
+
+      <section className="three-col-grid">
+        <div className="card">
+          <div className="section-kicker">01</div>
+          <h3>Supply chain execution</h3>
+          <p>
+            Practical coordination across suppliers, logistics, lead time,
+            quality and delivery.
+          </p>
+        </div>
+
+        <div className="card">
+          <div className="section-kicker">02</div>
+          <h3>Structured intelligence</h3>
+          <p>
+            A clearer operating view built from sourcing signals, execution
+            friction and risk exposure.
+          </p>
+        </div>
+
+        <div className="card">
+          <div className="section-kicker">03</div>
+          <h3>RiskAtlas product layer</h3>
+          <p>
+            A product module designed to turn fragmented risk inputs into more
+            structured outputs for business use.
+          </p>
         </div>
       </section>
-    </main>
+
+      <SectionIntro
+        eyebrow="RiskAtlas"
+        title="A product module built on top of supply chain reality."
+        description="RiskAtlas is positioned as the intelligence layer of the Eastrion model — not as a standalone abstraction, but as a structured extension of real supply chain execution."
+      />
+
+      <section className="three-col-grid">
+        <div className="card">
+          <div className="section-kicker">Use case</div>
+          <h3>Supplier risk</h3>
+          <p>
+            Identify potential weaknesses across supplier structure, delivery
+            discipline and operating reliability.
+          </p>
+        </div>
+
+        <div className="card">
+          <div className="section-kicker">Use case</div>
+          <h3>Logistics and route risk</h3>
+          <p>
+            Build clearer visibility into transport disruption, corridor
+            exposure and coordination pressure.
+          </p>
+        </div>
+
+        <div className="card">
+          <div className="section-kicker">Use case</div>
+          <h3>Cross-border operating risk</h3>
+          <p>
+            Communicate macro, policy and execution-related risks in a more
+            usable format for SMEs.
+          </p>
+        </div>
+      </section>
+
+      <section
+        className="card"
+        style={{
+          marginTop: "32px",
+          padding: "36px 32px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: "20px",
+          flexWrap: "wrap",
+        }}
+      >
+        <div>
+          <div className="section-kicker">Next step</div>
+          <h3
+            style={{
+              margin: "0 0 10px",
+              fontSize: "32px",
+              lineHeight: 1.05,
+              letterSpacing: "-0.04em",
+            }}
+          >
+            Explore the product direction behind RiskAtlas.
+          </h3>
+          <p
+            style={{
+              margin: 0,
+              color: "var(--muted)",
+              fontSize: "16px",
+              lineHeight: 1.7,
+              maxWidth: "760px",
+            }}
+          >
+            Start with the product overview today. The interactive risk scan
+            experience can be added in the next phase.
+          </p>
+        </div>
+
+        <div style={{ display: "flex", gap: "14px", flexWrap: "wrap" }}>
+          <Link href="/products" className="btn btn-primary">
+            View RiskAtlas
+          </Link>
+          <Link href="/contact" className="btn btn-secondary">
+            Contact Eastrion
+          </Link>
+        </div>
+      </section>
+    </div>
   );
 }
