@@ -31,7 +31,7 @@ export default function ContactPage() {
               A future version can include a form, but for the current stage the page should remain simple and direct.
             </p>
             <ul className="bullet-list">
-              <li>Email: contact to be added</li>
+              <li>Email: peter.li@eastrion.com</li>
               <li>Company: Shanghai Eastrion Information Science &amp; Technology Co., Ltd</li>
               <li>Location: Shanghai, China</li>
             </ul>
