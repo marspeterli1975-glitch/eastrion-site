@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { PDFDocument, StandardFonts, rgb, degrees } from "pdf-lib";
+import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import type { RiskScanResult } from "@/lib/risk-types";
 
 type RGB = [number, number, number];
@@ -11,8 +11,9 @@ const COLORS = {
   muted: [0.39, 0.45, 0.54] as RGB,
   line: [0.86, 0.89, 0.91] as RGB,
   card: [0.97, 0.98, 0.99] as RGB,
-  low: [0.09, 0.50, 0.24] as RGB,
-  guarded: [0.11, 0.30, 0.85] as RGB,
+  white: [1, 1, 1] as RGB,
+  low: [0.09, 0.5, 0.24] as RGB,
+  guarded: [0.11, 0.3, 0.85] as RGB,
   moderate: [0.71, 0.33, 0.04] as RGB,
   high: [0.76, 0.25, 0.05] as RGB,
   critical: [0.73, 0.11, 0.11] as RGB,
@@ -50,7 +51,7 @@ function getExecutiveSummary(data: RiskScanResult) {
   return `RiskAtlas evaluates structural exposure across supply chain environments based on country conditions, industry sensitivity, logistics complexity, and event-driven disruption factors. For the selected parameters, the overall exposure score is ${data.risk_score}, indicating a ${data.level.toLowerCase()} level of supply chain exposure. The current profile reflects a combination of structural dependencies and operating conditions that may affect continuity, predictability, and resilience.`;
 }
 
-function getStrategicInterpretation(data: RiskScanResult) {
+function getStrategicInterpretation() {
   return `The current exposure profile suggests that companies operating within the selected market environment should consider reinforcing supply chain resilience in a targeted manner. Priority attention should be given to supplier diversification, logistics route redundancy, and active monitoring of policy or operational developments. While the overall profile does not necessarily imply immediate disruption, structural dependencies may amplify exposure under adverse scenarios.`;
 }
 
@@ -78,7 +79,7 @@ function getMethodologyText() {
   ];
 }
 
-function getExposureDefinitions() {
+function getExposureDefinitions(): [string, string, string][] {
   return [
     ["0–20", "Low", "Stable supply environment with limited structural exposure."],
     ["21–40", "Guarded", "Limited but manageable exposure requiring routine monitoring."],
@@ -93,7 +94,6 @@ export async function POST(req: NextRequest) {
     const data = (await req.json()) as RiskScanResult;
 
     const pdfDoc = await PDFDocument.create();
-
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
     const bold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
@@ -103,7 +103,7 @@ export async function POST(req: NextRequest) {
 
     const addPage = () => pdfDoc.addPage([pageWidth, pageHeight]);
 
-    const drawHeaderBand = (page: any) => {
+    const drawHeaderBand = (page: PDFPageLike) => {
       page.drawRectangle({
         x: 0,
         y: pageHeight - 120,
@@ -121,7 +121,7 @@ export async function POST(req: NextRequest) {
       });
     };
 
-    const drawFooter = (page: any, pageNumber: number) => {
+    const drawFooter = (page: PDFPageLike, pageNumber: number) => {
       page.drawLine({
         start: { x: marginX, y: 34 },
         end: { x: pageWidth - marginX, y: 34 },
@@ -146,7 +146,7 @@ export async function POST(req: NextRequest) {
       });
     };
 
-    const drawSectionTitle = (page: any, title: string, y: number) => {
+    const drawSectionTitle = (page: PDFPageLike, title: string, y: number) => {
       page.drawText(title, {
         x: marginX,
         y,
@@ -164,7 +164,7 @@ export async function POST(req: NextRequest) {
     };
 
     const drawParagraph = (
-      page: any,
+      page: PDFPageLike,
       text: string,
       x: number,
       startY: number,
@@ -191,7 +191,7 @@ export async function POST(req: NextRequest) {
     };
 
     const drawBulletList = (
-      page: any,
+      page: PDFPageLike,
       items: string[],
       x: number,
       startY: number,
@@ -201,6 +201,7 @@ export async function POST(req: NextRequest) {
 
       for (const item of items) {
         const lines = wrapText(item, maxChars);
+
         page.drawCircle({
           x: x + 3,
           y: y + 4,
@@ -208,7 +209,6 @@ export async function POST(req: NextRequest) {
           color: rgb(...COLORS.navy),
         });
 
-        let first = true;
         for (const line of lines) {
           page.drawText(line, {
             x: x + 12,
@@ -218,7 +218,6 @@ export async function POST(req: NextRequest) {
             color: rgb(...COLORS.text),
           });
           y -= 17;
-          if (first) first = false;
         }
 
         y -= 4;
@@ -228,7 +227,7 @@ export async function POST(req: NextRequest) {
     };
 
     const drawMetricCard = (
-      page: any,
+      page: PDFPageLike,
       x: number,
       y: number,
       w: number,
@@ -264,7 +263,7 @@ export async function POST(req: NextRequest) {
       });
     };
 
-    const drawGauge = (page: any, x: number, y: number, width: number, score: number) => {
+    const drawGauge = (page: PDFPageLike, x: number, y: number, width: number, score: number) => {
       const labels = [
         { name: "Low", color: COLORS.low },
         { name: "Guarded", color: COLORS.guarded },
@@ -312,7 +311,7 @@ export async function POST(req: NextRequest) {
     };
 
     const drawTable = (
-      page: any,
+      page: PDFPageLike,
       headers: string[],
       rows: string[][],
       x: number,
@@ -337,7 +336,7 @@ export async function POST(req: NextRequest) {
           y: yTop - 18,
           size: 10,
           font: bold,
-          color: rgb(1, 1, 1),
+          color: rgb(...COLORS.white),
         });
         cursorX += colWidths[index];
       });
@@ -347,12 +346,14 @@ export async function POST(req: NextRequest) {
       rows.forEach((row, rowIndex) => {
         currentY -= rowHeight;
 
+        const rowColor: RGB = rowIndex % 2 === 0 ? COLORS.card : COLORS.white;
+
         page.drawRectangle({
           x,
           y: currentY,
           width: tableWidth,
           height: rowHeight,
-          color: rgb(...(rowIndex % 2 === 0 ? COLORS.card : [1, 1, 1])),
+          color: rgb(...rowColor),
           borderWidth: 0.5,
           borderColor: rgb(...COLORS.line),
         });
@@ -383,7 +384,7 @@ export async function POST(req: NextRequest) {
         y: pageHeight - 66,
         size: 28,
         font: bold,
-        color: rgb(1, 1, 1),
+        color: rgb(...COLORS.white),
       });
 
       page.drawText("Supply Chain Exposure Assessment", {
@@ -463,9 +464,7 @@ export async function POST(req: NextRequest) {
       drawSectionTitle(page, "Executive Summary", 770);
 
       let y = 724;
-
       y = drawParagraph(page, getExecutiveSummary(data), marginX, y, 92, 11, COLORS.text, 7);
-
       y -= 14;
 
       drawMetricCard(page, marginX, y - 86, 150, 86, "Exposure Score", String(data.risk_score), COLORS.text);
@@ -485,7 +484,7 @@ export async function POST(req: NextRequest) {
       });
 
       y -= 22;
-      y = drawParagraph(page, getStrategicInterpretation(data), marginX, y, 92, 11, COLORS.text, 7);
+      drawParagraph(page, getStrategicInterpretation(), marginX, y, 92, 11, COLORS.text, 7);
 
       drawFooter(page, 2);
     }
@@ -621,7 +620,7 @@ export async function POST(req: NextRequest) {
       });
 
       y -= 22;
-      y = drawParagraph(page, getStrategicInterpretation(data), marginX, y, 92, 11, COLORS.text, 7);
+      y = drawParagraph(page, getStrategicInterpretation(), marginX, y, 92, 11, COLORS.text, 7);
 
       y -= 18;
 
@@ -704,3 +703,14 @@ export async function POST(req: NextRequest) {
     });
   }
 }
+
+/**
+ * Minimal shape used for pdf-lib page drawing methods.
+ * Keeps TypeScript happy without pulling internal pdf-lib page types into custom signatures.
+ */
+type PDFPageLike = {
+  drawRectangle: (options: Record<string, unknown>) => void;
+  drawText: (text: string, options: Record<string, unknown>) => void;
+  drawLine: (options: Record<string, unknown>) => void;
+  drawCircle: (options: Record<string, unknown>) => void;
+};
