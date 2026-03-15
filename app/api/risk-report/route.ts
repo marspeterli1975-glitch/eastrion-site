@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import { PDFDocument, PDFPage, StandardFonts, rgb } from "pdf-lib";
 import type { RiskScanResult } from "@/lib/risk-types";
 
 type RGB = [number, number, number];
@@ -103,7 +103,7 @@ export async function POST(req: NextRequest) {
 
     const addPage = () => pdfDoc.addPage([pageWidth, pageHeight]);
 
-    const drawHeaderBand = (page: PDFPageLike) => {
+    const drawHeaderBand = (page: PDFPage) => {
       page.drawRectangle({
         x: 0,
         y: pageHeight - 120,
@@ -121,7 +121,7 @@ export async function POST(req: NextRequest) {
       });
     };
 
-    const drawFooter = (page: PDFPageLike, pageNumber: number) => {
+    const drawFooter = (page: PDFPage, pageNumber: number) => {
       page.drawLine({
         start: { x: marginX, y: 34 },
         end: { x: pageWidth - marginX, y: 34 },
@@ -146,7 +146,7 @@ export async function POST(req: NextRequest) {
       });
     };
 
-    const drawSectionTitle = (page: PDFPageLike, title: string, y: number) => {
+    const drawSectionTitle = (page: PDFPage, title: string, y: number) => {
       page.drawText(title, {
         x: marginX,
         y,
@@ -164,7 +164,7 @@ export async function POST(req: NextRequest) {
     };
 
     const drawParagraph = (
-      page: PDFPageLike,
+      page: PDFPage,
       text: string,
       x: number,
       startY: number,
@@ -191,7 +191,7 @@ export async function POST(req: NextRequest) {
     };
 
     const drawBulletList = (
-      page: PDFPageLike,
+      page: PDFPage,
       items: string[],
       x: number,
       startY: number,
@@ -227,7 +227,7 @@ export async function POST(req: NextRequest) {
     };
 
     const drawMetricCard = (
-      page: PDFPageLike,
+      page: PDFPage,
       x: number,
       y: number,
       w: number,
@@ -263,7 +263,7 @@ export async function POST(req: NextRequest) {
       });
     };
 
-    const drawGauge = (page: PDFPageLike, x: number, y: number, width: number, score: number) => {
+    const drawGauge = (page: PDFPage, x: number, y: number, width: number, score: number) => {
       const labels = [
         { name: "Low", color: COLORS.low },
         { name: "Guarded", color: COLORS.guarded },
@@ -311,7 +311,7 @@ export async function POST(req: NextRequest) {
     };
 
     const drawTable = (
-      page: PDFPageLike,
+      page: PDFPage,
       headers: string[],
       rows: string[][],
       x: number,
@@ -703,14 +703,3 @@ export async function POST(req: NextRequest) {
     });
   }
 }
-
-/**
- * Minimal shape used for pdf-lib page drawing methods.
- * Keeps TypeScript happy without pulling internal pdf-lib page types into custom signatures.
- */
-type PDFPageLike = {
-  drawRectangle: (options: Record<string, unknown>) => void;
-  drawText: (text: string, options: Record<string, unknown>) => void;
-  drawLine: (options: Record<string, unknown>) => void;
-  drawCircle: (options: Record<string, unknown>) => void;
-};
