@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 
 type RiskResult = {
   country: string;
@@ -31,8 +30,6 @@ const scoreDefinition = [
 ];
 
 export default function RiskAtlasPage() {
-  const searchParams = useSearchParams();
-
   const [country, setCountry] = useState("");
   const [industry, setIndustry] = useState("");
   const [loading, setLoading] = useState(false);
@@ -41,11 +38,15 @@ export default function RiskAtlasPage() {
   const [result, setResult] = useState<RiskResult | null>(null);
 
   useEffect(() => {
-    const queryCountry = searchParams.get("country") || "";
-    const queryIndustry = searchParams.get("industry") || "";
+    if (typeof window === "undefined") return;
+
+    const params = new URLSearchParams(window.location.search);
+    const queryCountry = params.get("country") || "";
+    const queryIndustry = params.get("industry") || "";
+
     setCountry(queryCountry);
     setIndustry(queryIndustry);
-  }, [searchParams]);
+  }, []);
 
   async function handleScan() {
     setLoading(true);
@@ -146,7 +147,13 @@ export default function RiskAtlasPage() {
               Enter a country and industry to generate an initial supply chain exposure scan.
             </p>
 
-            <div style={{ display: "grid", gap: "16px", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
+            <div
+              style={{
+                display: "grid",
+                gap: "16px",
+                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))"
+              }}
+            >
               <div>
                 <label style={{ display: "block", marginBottom: "8px" }}>Country</label>
                 <input
