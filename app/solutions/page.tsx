@@ -1,60 +1,55 @@
+import Link from "next/link";
+
 export default function SolutionsPage() {
   return (
-    <main>
-      <section className="page-hero">
-        <div className="container">
-          <div className="panel page-hero-card">
-            <div className="eyebrow">Solutions</div>
-            <h1 className="page-title">Solutions designed around execution, not presentation alone.</h1>
-            <p className="page-subtitle">
-              Our solutions architecture follows three connected pillars: global sourcing, supply chain operations and
-              risk intelligence. The objective is to make supply chain decisions more coherent, practical and easier to
-              communicate.
-            </p>
+    <main className="page-shell">
+      <section className="hero-section">
+        <div className="hero-content">
+          <p className="hero-eyebrow">Solutions</p>
+          <h1 className="hero-title">Structured supply chain support for global SMEs</h1>
+          <p className="hero-copy">
+            Eastrion supports sourcing, trade execution, coordination and structured
+            risk visibility across cross-border operations.
+          </p>
+
+          <div className="hero-actions">
+            <Link href="/riskatlas" className="btn btn-primary">
+              Run Risk Scan
+            </Link>
+
+            <Link href="/contact" className="btn btn-secondary">
+              Contact Eastrion
+            </Link>
           </div>
         </div>
       </section>
 
-      <section className="section">
-        <div className="container card-grid">
-          <div className="panel info-card">
-            <h3>Global Sourcing</h3>
-            <p>
-              Structured supplier discovery and selection support for businesses that need better front-end sourcing
-              decisions before committing time and capital.
-            </p>
-            <ul>
-              <li>Supplier identification</li>
-              <li>Filtration logic</li>
-              <li>Capability comparison</li>
-              <li>Commercial screening support</li>
-            </ul>
-          </div>
-          <div className="panel info-card">
-            <h3>Supply Chain Operations</h3>
-            <p>
-              Practical support across coordination, logistics planning, packaging handoff and execution structure for
-              cross-border trade and industrial project flows.
-            </p>
-            <ul>
-              <li>Execution coordination</li>
-              <li>Project and delivery logic</li>
-              <li>Operational problem framing</li>
-              <li>Cross-border handoff visibility</li>
-            </ul>
-          </div>
-          <div className="panel info-card">
-            <h3>Risk Intelligence</h3>
-            <p>
-              Structured identification and communication of supplier, logistics and external exposure, with a pathway
-              toward RiskAtlas-based workflows.
-            </p>
-            <ul>
-              <li>Risk framing</li>
-              <li>Scoring structure</li>
-              <li>Reporting and communication</li>
-              <li>Decision support preparation</li>
-            </ul>
+      <section className="section-block">
+        <div className="section-inner">
+          <div className="card-grid">
+            <div className="info-card">
+              <h3>Risk Exposure Scanning</h3>
+              <p>
+                Initial country-industry-logistics-event exposure screening through
+                the RiskAtlas framework.
+              </p>
+            </div>
+
+            <div className="info-card">
+              <h3>Sourcing Support</h3>
+              <p>
+                Supplier discovery, qualification framing and structured execution support
+                for global SME trade activity.
+              </p>
+            </div>
+
+            <div className="info-card">
+              <h3>Operational Coordination</h3>
+              <p>
+                Practical support for cross-border shipment coordination, documentation
+                awareness and execution alignment.
+              </p>
+            </div>
           </div>
         </div>
       </section>
