@@ -32,18 +32,10 @@ const scoreDefinition = [
 function getLevelTone(level: string) {
   const normalized = level.toLowerCase();
 
-  if (normalized === "low") {
-    return { badge: "badge-low", panel: "tone-low" };
-  }
-  if (normalized === "guarded") {
-    return { badge: "badge-guarded", panel: "tone-guarded" };
-  }
-  if (normalized === "moderate") {
-    return { badge: "badge-moderate", panel: "tone-moderate" };
-  }
-  if (normalized === "high") {
-    return { badge: "badge-high", panel: "tone-high" };
-  }
+  if (normalized === "low") return { badge: "badge-low", panel: "tone-low" };
+  if (normalized === "guarded") return { badge: "badge-guarded", panel: "tone-guarded" };
+  if (normalized === "moderate") return { badge: "badge-moderate", panel: "tone-moderate" };
+  if (normalized === "high") return { badge: "badge-high", panel: "tone-high" };
   return { badge: "badge-critical", panel: "tone-critical" };
 }
 
@@ -218,16 +210,26 @@ export default function RiskAtlasPage() {
               </div>
             </div>
 
-            <div className="quick-tags">
-              <button type="button" className="quick-tag" onClick={() => { setCountry("India"); setIndustry("Battery"); }}>
-                India + Battery
-              </button>
-              <button type="button" className="quick-tag" onClick={() => { setCountry("China"); setIndustry("Electronics"); }}>
-                China + Electronics
-              </button>
-              <button type="button" className="quick-tag" onClick={() => { setCountry("Saudi Arabia"); setIndustry("Chemicals"); }}>
-                Saudi Arabia + Chemicals
-              </button>
+            <div className="shortcut-block">
+              <div className="shortcut-group">
+                <span className="shortcut-label">Popular Countries</span>
+                <div className="quick-tags">
+                  <button type="button" className="quick-tag" onClick={() => setCountry("India")}>India</button>
+                  <button type="button" className="quick-tag" onClick={() => setCountry("China")}>China</button>
+                  <button type="button" className="quick-tag" onClick={() => setCountry("Saudi Arabia")}>Saudi Arabia</button>
+                  <button type="button" className="quick-tag" onClick={() => setCountry("USA")}>USA</button>
+                </div>
+              </div>
+
+              <div className="shortcut-group">
+                <span className="shortcut-label">Popular Industries</span>
+                <div className="quick-tags">
+                  <button type="button" className="quick-tag" onClick={() => setIndustry("Battery")}>Battery</button>
+                  <button type="button" className="quick-tag" onClick={() => setIndustry("Electronics")}>Electronics</button>
+                  <button type="button" className="quick-tag" onClick={() => setIndustry("Chemicals")}>Chemicals</button>
+                  <button type="button" className="quick-tag" onClick={() => setIndustry("Logistics")}>Logistics</button>
+                </div>
+              </div>
             </div>
 
             <div className="scanner-actions">
