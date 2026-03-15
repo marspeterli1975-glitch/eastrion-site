@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 type RiskResult = {
   country: string;
@@ -30,12 +31,21 @@ const scoreDefinition = [
 ];
 
 export default function RiskAtlasPage() {
+  const searchParams = useSearchParams();
+
   const [country, setCountry] = useState("");
   const [industry, setIndustry] = useState("");
   const [loading, setLoading] = useState(false);
   const [pdfLoading, setPdfLoading] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState<RiskResult | null>(null);
+
+  useEffect(() => {
+    const queryCountry = searchParams.get("country") || "";
+    const queryIndustry = searchParams.get("industry") || "";
+    setCountry(queryCountry);
+    setIndustry(queryIndustry);
+  }, [searchParams]);
 
   async function handleScan() {
     setLoading(true);
