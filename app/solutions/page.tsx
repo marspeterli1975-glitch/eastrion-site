@@ -34,6 +34,9 @@ export default function SolutionsPage() {
               <p>
                 Initial country-industry-logistics-event exposure screening through the RiskAtlas framework.
               </p>
+              <Link href="/riskatlas" className="text-link">
+                Open RiskAtlas →
+              </Link>
             </div>
 
             <div className="content-card">
@@ -59,11 +62,11 @@ export default function SolutionsPage() {
         <div className="content-shell">
           <div className="content-feature">
             <div>
-              <span className="content-kicker">How to use this</span>
+              <span className="content-kicker">How to engage</span>
               <h2>Start with visibility, then deepen the workflow.</h2>
               <p>
-                A typical engagement can begin with a lightweight exposure scan, then move toward more
-                detailed sourcing review, corridor discussion, execution planning or tailored assessment.
+                A typical engagement can begin with a lightweight exposure scan, then move toward
+                more detailed sourcing review, corridor discussion, execution planning or tailored assessment.
               </p>
             </div>
 
