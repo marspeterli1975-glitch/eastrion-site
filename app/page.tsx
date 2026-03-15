@@ -6,10 +6,12 @@ export default function HomePage() {
       <section className="content-hero">
         <div className="content-shell">
           <p className="content-eyebrow">Eastrion — Global Supply Chain Infrastructure</p>
-          <h1 className="content-title">
+
+          <h1 className="content-title content-title-home">
             Building resilient supply chains across sourcing, operations and risk.
           </h1>
-          <p className="content-subtitle">
+
+          <p className="content-subtitle content-subtitle-home">
             Eastrion helps businesses improve sourcing efficiency, operational coordination
             and supply chain visibility through practical execution and structured risk intelligence.
           </p>
@@ -53,12 +55,15 @@ export default function HomePage() {
             </div>
 
             <div className="content-card">
-              <span className="content-kicker">Positioning</span>
-              <h3>What Eastrion does</h3>
+              <span className="content-kicker">Business Scope</span>
+              <h3>Products & Projects</h3>
               <p>
-                We combine sourcing support, trade execution and structured risk scanning
-                to help SMEs operate with better visibility and stronger discipline.
+                Industrial component sourcing, project support, filtration-related products,
+                and structured supply chain execution across international markets.
               </p>
+              <Link href="/products" className="text-link">
+                Browse Business Scope →
+              </Link>
             </div>
           </div>
         </div>
@@ -72,8 +77,8 @@ export default function HomePage() {
               <h2>Practical supply chain support for global SMEs</h2>
               <p>
                 Our operating approach is execution-first. We help clients improve sourcing
-                reliability, reduce friction across cross-border coordination, and build a
-                clearer understanding of where supply chain exposure is actually concentrated.
+                reliability, reduce friction across cross-border coordination, and build a clearer
+                understanding of where supply chain exposure is actually concentrated.
               </p>
             </div>
 
