@@ -26,7 +26,7 @@ export default function HomePage() {
           </p>
 
           <div className="hero-actions">
-            <Link href="/solutions" className="btn btn-primary">
+           <Link href="/riskatlas">Run Risk Scan</Link>
               Explore Solutions
             </Link>
 
