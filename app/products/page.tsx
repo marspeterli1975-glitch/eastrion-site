@@ -1,166 +1,125 @@
-import Link from "next/link";
-import SectionIntro from "../../components/SectionIntro";
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function ProductsPage() {
+  const router = useRouter();
+  const [country, setCountry] = useState("India");
+  const [industry, setIndustry] = useState("Battery");
+
+  function handleGoToRiskAtlas() {
+    const query = new URLSearchParams({
+      country,
+      industry,
+    }).toString();
+
+    router.push(`/riskatlas?${query}`);
+  }
+
   return (
-    <div className="page-shell">
-
-      <SectionIntro
-        eyebrow="Product"
-        title="RiskAtlas"
-        description="RiskAtlas is the intelligence layer of the Eastrion model — designed to translate fragmented supply chain signals into structured risk visibility."
-      />
-
-      <section className="three-col-grid">
-
-        <div className="card">
-          <div className="section-kicker">Risk Layer</div>
-          <h3>Supplier Risk</h3>
-          <p>
-            Evaluate supplier exposure across delivery discipline, structural
-            reliability and supply concentration.
+    <main className="page-shell">
+      <section className="hero-section">
+        <div className="hero-content">
+          <p className="hero-eyebrow">Risk Scan</p>
+          <h1 className="hero-title">Run a structured supply chain risk scan.</h1>
+          <p className="hero-copy" style={{ maxWidth: "520px" }}>
+            This page provides a simple preview entrance. Click the button to open the
+            full RiskAtlas scan page with your selected country and industry.
           </p>
         </div>
-
-        <div className="card">
-          <div className="section-kicker">Logistics Layer</div>
-          <h3>Route Risk</h3>
-          <p>
-            Identify logistics vulnerabilities across corridors, ports and
-            transport infrastructure.
-          </p>
-        </div>
-
-        <div className="card">
-          <div className="section-kicker">Macro Layer</div>
-          <h3>Policy & Geopolitical Risk</h3>
-          <p>
-            Monitor policy changes, macro exposure and geopolitical pressure
-            affecting supply chain stability.
-          </p>
-        </div>
-
       </section>
 
-      <SectionIntro
-        eyebrow="Risk Scan"
-        title="Run a simulated supply chain risk scan."
-        description="This demo illustrates how RiskAtlas converts real-world supply chain signals into a structured risk score."
-      />
-
-      <section
-        className="card"
-        style={{
-          padding: "36px 32px",
-          marginTop: "24px"
-        }}
-      >
-
-        <div
-          style={{
-            display: "flex",
-            gap: "12px",
-            flexWrap: "wrap",
-            marginBottom: "24px"
-          }}
-        >
-
-          <input
-            placeholder="Supplier country"
+      <section className="section-block">
+        <div className="section-inner">
+          <div
             style={{
-              padding: "12px 16px",
-              borderRadius: "12px",
-              border: "1px solid var(--line)",
-              minWidth: "220px"
-            }}
-          />
-
-          <input
-            placeholder="Industry"
-            style={{
-              padding: "12px 16px",
-              borderRadius: "12px",
-              border: "1px solid var(--line)",
-              minWidth: "220px"
-            }}
-          />
-
-          <button className="btn btn-primary">
-            Run Risk Scan
-          </button>
-
-        </div>
-
-        <div
-          style={{
-            padding: "18px",
-            background: "rgba(15,23,42,0.03)",
-            borderRadius: "14px",
-            fontSize: "15px",
-            lineHeight: 1.7
-          }}
-        >
-          <strong>Sample Output</strong>
-          <br />
-          Risk Score: <strong>B (Moderate Exposure)</strong>
-          <br />
-          Key signals: supplier concentration, corridor congestion,
-          regulatory volatility.
-        </div>
-
-      </section>
-
-      <section
-        className="card"
-        style={{
-          marginTop: "32px",
-          padding: "36px 32px",
-          display: "flex",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          gap: "20px"
-        }}
-      >
-
-        <div>
-
-          <div className="section-kicker">Next step</div>
-
-          <h3
-            style={{
-              fontSize: "32px",
-              margin: "0 0 10px"
+              background: "#f3f4f6",
+              borderRadius: "28px",
+              padding: "32px",
+              border: "1px solid #e5e7eb",
             }}
           >
-            Integrate RiskAtlas into your supply chain workflow.
-          </h3>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr auto",
+                gap: "18px",
+                alignItems: "center",
+              }}
+            >
+              <input
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+                placeholder="Country"
+                style={{
+                  padding: "18px 24px",
+                  borderRadius: "18px",
+                  border: "1px solid #d1d5db",
+                  fontSize: "18px",
+                  outline: "none",
+                }}
+              />
 
-          <p
-            style={{
-              color: "var(--muted)",
-              maxWidth: "720px"
-            }}
-          >
-            The next phase connects RiskAtlas with real supply chain data
-            sources and automated risk signals.
-          </p>
+              <input
+                value={industry}
+                onChange={(e) => setIndustry(e.target.value)}
+                placeholder="Industry"
+                style={{
+                  padding: "18px 24px",
+                  borderRadius: "18px",
+                  border: "1px solid #d1d5db",
+                  fontSize: "18px",
+                  outline: "none",
+                }}
+              />
 
+              <button
+                onClick={handleGoToRiskAtlas}
+                style={{
+                  padding: "20px 36px",
+                  borderRadius: "999px",
+                  border: "3px solid #111827",
+                  background: "#0f2357",
+                  color: "white",
+                  fontSize: "20px",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Run Risk Scan
+              </button>
+            </div>
+
+            <div
+              style={{
+                marginTop: "28px",
+                background: "#ececec",
+                borderRadius: "20px",
+                padding: "28px",
+              }}
+            >
+              <h3
+                style={{
+                  margin: 0,
+                  marginBottom: "12px",
+                  fontSize: "18px",
+                  fontWeight: 700,
+                  color: "#111827",
+                }}
+              >
+                Preview
+              </h3>
+
+              <p style={{ margin: 0, fontSize: "18px", color: "#111827", lineHeight: 1.7 }}>
+                Click the button to open the full RiskAtlas scan page with your selected
+                country and industry.
+              </p>
+            </div>
+          </div>
         </div>
-
-        <div style={{display:"flex",gap:"12px"}}>
-
-          <Link href="/" className="btn btn-secondary">
-            Back to homepage
-          </Link>
-
-          <Link href="/contact" className="btn btn-primary">
-            Contact Eastrion
-          </Link>
-
-        </div>
-
       </section>
-
-    </div>
+    </main>
   );
 }
