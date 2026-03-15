@@ -1,38 +1,30 @@
 import Link from "next/link";
-import Image from "next/image";
 
 export default function Navbar() {
   return (
     <header className="site-header">
-      <div className="container site-header-inner">
-        <Link href="/" className="brand">
-          <Image
-            src="/eastrion-logo.png"
-            alt="Eastrion logo"
-            width={40}
-            height={40}
-            className="brand-mark"
-          />
-          <div className="brand-copy">
+      <div className="nav-inner">
+        <Link href="/" className="brand-wrap">
+          <div className="brand-mark">⛓</div>
+          <div>
             <div className="brand-title">Eastrion</div>
-            <div className="brand-subtitle">
-              Global Supply Chain Infrastructure
-            </div>
+            <div className="brand-subtitle">GLOBAL SUPPLY CHAIN INFRASTRUCTURE</div>
           </div>
         </Link>
 
-        <nav className="nav">
-          <div className="nav-links">
-            <Link href="/">Home</Link>
-            <Link href="/about">About</Link>
-            <Link href="/solutions">Solutions</Link>
-            <Link href="/products">RiskAtlas</Link>
-            <Link href="/contact">Contact</Link>
-          </div>
-          <Link href="/products" className="cta-button">
+        <nav className="main-nav">
+          <Link href="/">Home</Link>
+          <Link href="/about">About</Link>
+          <Link href="/solutions">Solutions</Link>
+          <Link href="/riskatlas">RiskAtlas</Link>
+          <Link href="/contact">Contact</Link>
+        </nav>
+
+        <div className="nav-cta">
+          <Link href="/riskatlas" className="btn btn-primary">
             Try RiskAtlas
           </Link>
-        </nav>
+        </div>
       </div>
     </header>
   );
