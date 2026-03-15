@@ -1,121 +1,88 @@
-"use client";
-
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function ProductsPage() {
-  const router = useRouter();
-  const [country, setCountry] = useState("India");
-  const [industry, setIndustry] = useState("Battery");
-
-  function handleGoToRiskAtlas() {
-    const query = new URLSearchParams({
-      country,
-      industry,
-    }).toString();
-
-    router.push(`/riskatlas?${query}`);
-  }
-
   return (
-    <main className="page-shell">
-      <section className="hero-section">
-        <div className="hero-content">
-          <p className="hero-eyebrow">Risk Scan</p>
-          <h1 className="hero-title">Run a structured supply chain risk scan.</h1>
-          <p className="hero-copy" style={{ maxWidth: "520px" }}>
-            This page provides a simple preview entrance. Click the button to open the
-            full RiskAtlas scan page with your selected country and industry.
+    <main className="content-page">
+      <section className="content-hero">
+        <div className="content-shell">
+          <p className="content-eyebrow">Business Scope</p>
+          <h1 className="content-title">
+            Products, project support and supply chain execution scope.
+          </h1>
+          <p className="content-subtitle">
+            This page is not a catalog-only page. It should explain the types of products,
+            projects and business support areas Eastrion can cover across sourcing and execution.
           </p>
+
+          <div className="content-actions">
+            <Link href="/contact" className="btn btn-primary">
+              Discuss a Requirement
+            </Link>
+            <Link href="/riskatlas" className="btn btn-secondary">
+              Try RiskAtlas
+            </Link>
+          </div>
         </div>
       </section>
 
-      <section className="section-block">
-        <div className="section-inner">
-          <div
-            style={{
-              background: "#f3f4f6",
-              borderRadius: "28px",
-              padding: "32px",
-              border: "1px solid #e5e7eb",
-            }}
-          >
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr auto",
-                gap: "18px",
-                alignItems: "center",
-              }}
-            >
-              <input
-                value={country}
-                onChange={(e) => setCountry(e.target.value)}
-                placeholder="Country"
-                style={{
-                  padding: "18px 24px",
-                  borderRadius: "18px",
-                  border: "1px solid #d1d5db",
-                  fontSize: "18px",
-                  outline: "none",
-                }}
-              />
-
-              <input
-                value={industry}
-                onChange={(e) => setIndustry(e.target.value)}
-                placeholder="Industry"
-                style={{
-                  padding: "18px 24px",
-                  borderRadius: "18px",
-                  border: "1px solid #d1d5db",
-                  fontSize: "18px",
-                  outline: "none",
-                }}
-              />
-
-              <button
-                onClick={handleGoToRiskAtlas}
-                style={{
-                  padding: "20px 36px",
-                  borderRadius: "999px",
-                  border: "3px solid #111827",
-                  background: "#0f2357",
-                  color: "white",
-                  fontSize: "20px",
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                Run Risk Scan
-              </button>
+      <section className="content-section">
+        <div className="content-shell">
+          <div className="content-grid three">
+            <div className="content-card">
+              <span className="content-kicker">Industrial Components</span>
+              <h3>Project-linked sourcing</h3>
+              <p>
+                Support for industrial components, engineering-related procurement and supplier-side
+                coordination where execution discipline matters.
+              </p>
             </div>
 
-            <div
-              style={{
-                marginTop: "28px",
-                background: "#ececec",
-                borderRadius: "20px",
-                padding: "28px",
-              }}
-            >
-              <h3
-                style={{
-                  margin: 0,
-                  marginBottom: "12px",
-                  fontSize: "18px",
-                  fontWeight: 700,
-                  color: "#111827",
-                }}
-              >
-                Preview
-              </h3>
-
-              <p style={{ margin: 0, fontSize: "18px", color: "#111827", lineHeight: 1.7 }}>
-                Click the button to open the full RiskAtlas scan page with your selected
-                country and industry.
+            <div className="content-card">
+              <span className="content-kicker">Filtration & Materials</span>
+              <h3>Specialized product support</h3>
+              <p>
+                Selected filtration-related, process-related and industrial material categories
+                that require structured supplier communication and technical alignment.
               </p>
+            </div>
+
+            <div className="content-card">
+              <span className="content-kicker">Cross-border Execution</span>
+              <h3>From quotation to movement</h3>
+              <p>
+                Not only product matching, but also coordination around documentation, supplier follow-up,
+                shipment execution and risk visibility.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="content-section">
+        <div className="content-shell">
+          <div className="content-feature">
+            <div>
+              <span className="content-kicker">How to read this page</span>
+              <h2>Business range, not a static catalog.</h2>
+              <p>
+                The purpose of this section is to show clients the practical range of business support
+                Eastrion can cover, especially where sourcing, execution and risk communication overlap.
+              </p>
+            </div>
+
+            <div className="content-bullets">
+              <div className="bullet-card">
+                <strong>Products</strong>
+                <p>Component and material categories that require practical commercial follow-through.</p>
+              </div>
+              <div className="bullet-card">
+                <strong>Projects</strong>
+                <p>Situations where the supply side must align with timing, technical detail and execution expectations.</p>
+              </div>
+              <div className="bullet-card">
+                <strong>Support layer</strong>
+                <p>RiskAtlas can serve as the structured front-end scan before deeper supplier or corridor work.</p>
+              </div>
             </div>
           </div>
         </div>
