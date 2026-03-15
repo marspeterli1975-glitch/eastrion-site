@@ -29,6 +29,24 @@ const scoreDefinition = [
   { range: "81–100", level: "Critical", meaning: "Severe exposure requiring active mitigation" }
 ];
 
+function getLevelTone(level: string) {
+  const normalized = level.toLowerCase();
+
+  if (normalized === "low") {
+    return { badge: "badge-low", panel: "tone-low" };
+  }
+  if (normalized === "guarded") {
+    return { badge: "badge-guarded", panel: "tone-guarded" };
+  }
+  if (normalized === "moderate") {
+    return { badge: "badge-moderate", panel: "tone-moderate" };
+  }
+  if (normalized === "high") {
+    return { badge: "badge-high", panel: "tone-high" };
+  }
+  return { badge: "badge-critical", panel: "tone-critical" };
+}
+
 export default function RiskAtlasPage() {
   const [country, setCountry] = useState("");
   const [industry, setIndustry] = useState("");
@@ -113,83 +131,106 @@ export default function RiskAtlasPage() {
     }
   }
 
-  return (
-    <main className="page-shell">
-      <section className="hero-section">
-        <div className="hero-content">
-          <p className="hero-eyebrow">Eastrion — Global Supply Chain Infrastructure</p>
-          <h1 className="hero-title">RiskAtlas</h1>
-          <p className="hero-copy">
-            A structured supply chain exposure scanner for global SMEs across sourcing,
-            logistics, trade corridors and manufacturing ecosystems.
-          </p>
+  const tone = result ? getLevelTone(result.level) : null;
 
-          <div className="hero-actions">
-            <Link href="/" className="btn btn-secondary">
+  return (
+    <main className="riskatlas-page">
+      <section className="riskatlas-hero">
+        <div className="riskatlas-shell">
+          <div className="riskatlas-hero-top">
+            <Link href="/" className="riskatlas-back">
               Back to Home
             </Link>
+          </div>
+
+          <div className="riskatlas-hero-grid">
+            <div className="riskatlas-hero-copy">
+              <p className="riskatlas-eyebrow">Eastrion — Structured Supply Chain Risk Intelligence</p>
+              <h1 className="riskatlas-title">RiskAtlas</h1>
+              <p className="riskatlas-subtitle">
+                A practical exposure scanner for global SMEs across sourcing, logistics,
+                manufacturing corridors, and cross-border operating environments.
+              </p>
+
+              <div className="riskatlas-usecases">
+                <div className="riskatlas-mini-card">
+                  <span className="mini-label">Use Case</span>
+                  <strong>Supplier & corridor pre-screening</strong>
+                </div>
+                <div className="riskatlas-mini-card">
+                  <span className="mini-label">Output</span>
+                  <strong>Structured scan + exportable PDF</strong>
+                </div>
+                <div className="riskatlas-mini-card">
+                  <span className="mini-label">Positioning</span>
+                  <strong>Exposure scanner, not legal or investment advice</strong>
+                </div>
+              </div>
+            </div>
+
+            <div className="riskatlas-side-panel">
+              <div className="side-panel-card">
+                <span className="side-kicker">What this scans</span>
+                <ul className="side-list">
+                  <li>Country operating exposure</li>
+                  <li>Industry sensitivity</li>
+                  <li>Logistics complexity</li>
+                  <li>Event-linked disruption risk</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="section-block">
-        <div className="section-inner">
-          <div
-            style={{
-              border: "1px solid rgba(255,255,255,0.12)",
-              borderRadius: "20px",
-              padding: "24px",
-              background: "rgba(255,255,255,0.03)"
-            }}
-          >
-            <h2 className="section-title">Run Risk Scan</h2>
-            <p className="section-copy" style={{ marginBottom: "20px" }}>
-              Enter a country and industry to generate an initial supply chain exposure scan.
-            </p>
-
-            <div
-              style={{
-                display: "grid",
-                gap: "16px",
-                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))"
-              }}
-            >
+      <section className="riskatlas-section">
+        <div className="riskatlas-shell">
+          <div className="riskatlas-card scan-card">
+            <div className="section-head">
               <div>
-                <label style={{ display: "block", marginBottom: "8px" }}>Country</label>
+                <p className="section-kicker">Scanner</p>
+                <h2>Run Risk Scan</h2>
+              </div>
+              <p className="section-note">
+                Enter a country and industry to generate an initial supply chain exposure scan.
+              </p>
+            </div>
+
+            <div className="scanner-grid">
+              <div className="field-wrap">
+                <label>Country</label>
                 <input
                   value={country}
                   onChange={(e) => setCountry(e.target.value)}
                   placeholder="e.g. India"
-                  style={{
-                    width: "100%",
-                    padding: "12px 14px",
-                    borderRadius: "12px",
-                    border: "1px solid rgba(255,255,255,0.15)",
-                    background: "#0f172a",
-                    color: "white"
-                  }}
+                  className="risk-input"
                 />
               </div>
 
-              <div>
-                <label style={{ display: "block", marginBottom: "8px" }}>Industry</label>
+              <div className="field-wrap">
+                <label>Industry</label>
                 <input
                   value={industry}
                   onChange={(e) => setIndustry(e.target.value)}
                   placeholder="e.g. Battery"
-                  style={{
-                    width: "100%",
-                    padding: "12px 14px",
-                    borderRadius: "12px",
-                    border: "1px solid rgba(255,255,255,0.15)",
-                    background: "#0f172a",
-                    color: "white"
-                  }}
+                  className="risk-input"
                 />
               </div>
             </div>
 
-            <div style={{ marginTop: "20px", display: "flex", gap: "12px", flexWrap: "wrap" }}>
+            <div className="quick-tags">
+              <button type="button" className="quick-tag" onClick={() => { setCountry("India"); setIndustry("Battery"); }}>
+                India + Battery
+              </button>
+              <button type="button" className="quick-tag" onClick={() => { setCountry("China"); setIndustry("Electronics"); }}>
+                China + Electronics
+              </button>
+              <button type="button" className="quick-tag" onClick={() => { setCountry("Saudi Arabia"); setIndustry("Chemicals"); }}>
+                Saudi Arabia + Chemicals
+              </button>
+            </div>
+
+            <div className="scanner-actions">
               <button
                 onClick={handleScan}
                 disabled={loading || !country || !industry}
@@ -209,113 +250,180 @@ export default function RiskAtlasPage() {
               )}
             </div>
 
-            {error && (
-              <div style={{ marginTop: "16px", color: "#fca5a5" }}>
-                {error}
-              </div>
-            )}
+            {error && <div className="error-box">{error}</div>}
           </div>
         </div>
       </section>
 
       {result && (
-        <section className="section-block">
-          <div className="section-inner">
-            <div
-              style={{
-                border: "1px solid rgba(255,255,255,0.12)",
-                borderRadius: "20px",
-                padding: "24px",
-                background: "rgba(255,255,255,0.03)"
-              }}
-            >
-              <h2 className="section-title">Scan Result</h2>
+        <section className="riskatlas-section">
+          <div className="riskatlas-shell">
+            <div className={`riskatlas-card result-hero ${tone?.panel}`}>
+              <div className="result-head">
+                <div>
+                  <p className="section-kicker">Result</p>
+                  <h2>Scan Result</h2>
+                  <p className="result-context">
+                    {result.country} · {result.industry}
+                  </p>
+                </div>
 
-              <div
-                style={{
-                  display: "grid",
-                  gap: "16px",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-                  marginTop: "20px"
-                }}
-              >
-                <div>
-                  <p style={{ opacity: 0.7 }}>Risk Score</p>
-                  <h3>{result.risk_score}</h3>
-                </div>
-                <div>
-                  <p style={{ opacity: 0.7 }}>Grade</p>
-                  <h3>{result.grade}</h3>
-                </div>
-                <div>
-                  <p style={{ opacity: 0.7 }}>Exposure Level</p>
-                  <h3>{result.level}</h3>
+                <div className={`level-badge ${tone?.badge}`}>
+                  {result.level}
                 </div>
               </div>
 
-              <div style={{ marginTop: "24px" }}>
-                <h3>Risk Breakdown</h3>
-                <ul>
-                  <li>Country Risk: {result.breakdown.country_risk}</li>
-                  <li>Industry Risk: {result.breakdown.industry_risk}</li>
-                  <li>Logistics Risk: {result.breakdown.logistics_risk}</li>
-                  <li>Event Risk: {result.breakdown.event_risk}</li>
-                </ul>
+              <div className="metric-grid">
+                <div className="metric-card">
+                  <span className="metric-label">Risk Score</span>
+                  <strong>{result.risk_score}</strong>
+                </div>
+                <div className="metric-card">
+                  <span className="metric-label">Grade</span>
+                  <strong>{result.grade}</strong>
+                </div>
+                <div className="metric-card">
+                  <span className="metric-label">Exposure Level</span>
+                  <strong>{result.level}</strong>
+                </div>
+              </div>
+            </div>
+
+            <div className="breakdown-grid">
+              <div className="break-card">
+                <span className="break-label">Country Risk</span>
+                <strong>{result.breakdown.country_risk}</strong>
+              </div>
+              <div className="break-card">
+                <span className="break-label">Industry Risk</span>
+                <strong>{result.breakdown.industry_risk}</strong>
+              </div>
+              <div className="break-card">
+                <span className="break-label">Logistics Risk</span>
+                <strong>{result.breakdown.logistics_risk}</strong>
+              </div>
+              <div className="break-card">
+                <span className="break-label">Event Risk</span>
+                <strong>{result.breakdown.event_risk}</strong>
+              </div>
+            </div>
+
+            <div className="two-col-grid">
+              <div className="riskatlas-card">
+                <div className="section-head compact">
+                  <div>
+                    <p className="section-kicker">Interpretation</p>
+                    <h3>Assessment Summary</h3>
+                  </div>
+                </div>
+                <p className="body-copy">{result.summary}</p>
               </div>
 
-              <div style={{ marginTop: "24px" }}>
-                <h3>Score Definition</h3>
-                <ul>
+              <div className="riskatlas-card">
+                <div className="section-head compact">
+                  <div>
+                    <p className="section-kicker">Meaning</p>
+                    <h3>Score Definition</h3>
+                  </div>
+                </div>
+
+                <div className="definition-list">
                   {scoreDefinition.map((item) => (
-                    <li key={item.range}>
-                      {item.range} — {item.level}: {item.meaning}
-                    </li>
+                    <div key={item.range} className="definition-row">
+                      <div className="definition-range">{item.range}</div>
+                      <div>
+                        <div className="definition-level">{item.level}</div>
+                        <div className="definition-meaning">{item.meaning}</div>
+                      </div>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
+            </div>
 
-              <div style={{ marginTop: "24px" }}>
-                <h3>Assessment Summary</h3>
-                <p>{result.summary}</p>
-              </div>
-
-              <div style={{ marginTop: "24px" }}>
-                <h3>Key Risk Factors</h3>
-                <ul>
+            <div className="two-col-grid">
+              <div className="riskatlas-card">
+                <div className="section-head compact">
+                  <div>
+                    <p className="section-kicker">Signals</p>
+                    <h3>Key Risk Factors</h3>
+                  </div>
+                </div>
+                <ul className="bullet-list">
                   {result.risk_factors.map((factor, index) => (
                     <li key={index}>{factor}</li>
                   ))}
                 </ul>
               </div>
 
-              <div style={{ marginTop: "24px" }}>
-                <h3>Suggested Risk Awareness</h3>
-                <ul>
+              <div className="riskatlas-card">
+                <div className="section-head compact">
+                  <div>
+                    <p className="section-kicker">Action Framing</p>
+                    <h3>Suggested Risk Awareness</h3>
+                  </div>
+                </div>
+                <ul className="bullet-list">
                   {result.suggested_risk_awareness.map((item, index) => (
                     <li key={index}>{item}</li>
                   ))}
                 </ul>
               </div>
+            </div>
 
-              <div style={{ marginTop: "24px" }}>
-                <h3>Disclaimer</h3>
-                <p>{result.disclaimer}</p>
+            <div className="two-col-grid">
+              <div className="riskatlas-card">
+                <div className="section-head compact">
+                  <div>
+                    <p className="section-kicker">Methodology</p>
+                    <h3>How the score is structured</h3>
+                  </div>
+                </div>
+
+                <div className="method-grid">
+                  <div className="method-item">
+                    <strong>Country Risk</strong>
+                    <p>Structural operating exposure linked to country conditions, execution reliability, and macro uncertainty.</p>
+                  </div>
+                  <div className="method-item">
+                    <strong>Industry Risk</strong>
+                    <p>Sector-specific sensitivity including compliance burden, hazardous handling, and material criticality.</p>
+                  </div>
+                  <div className="method-item">
+                    <strong>Logistics Risk</strong>
+                    <p>Transport complexity, route dependence, lead-time pressure, and shipment fragility.</p>
+                  </div>
+                  <div className="method-item">
+                    <strong>Event Risk</strong>
+                    <p>Disruption potential from policy shifts, congestion, infrastructure interruptions, and other operational shocks.</p>
+                  </div>
+                </div>
+
+                <p className="formula-line">
+                  Total Risk Score = Country Risk + Industry Risk + Logistics Risk + Event Risk
+                </p>
+              </div>
+
+              <div className="riskatlas-card disclaimer-card">
+                <div className="section-head compact">
+                  <div>
+                    <p className="section-kicker">Boundary</p>
+                    <h3>Disclaimer</h3>
+                  </div>
+                </div>
+                <p className="body-copy">{result.disclaimer}</p>
+
+                <div className="cta-mini">
+                  <p>For deeper evaluation, tailored corridor analysis, or enterprise use, contact Eastrion for an extended assessment workflow.</p>
+                  <Link href="/contact" className="text-cta">
+                    Contact Eastrion →
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
         </section>
       )}
-
-      <section className="section-block">
-        <div className="section-inner">
-          <h2 className="section-title">Methodology</h2>
-          <p className="section-copy">
-            Total Risk Score = Country Risk + Industry Risk + Logistics Risk + Event Risk.
-            This MVP is designed as a structured exposure scanner, not as legal, investment,
-            customs or compliance advice.
-          </p>
-        </div>
-      </section>
     </main>
   );
 }
