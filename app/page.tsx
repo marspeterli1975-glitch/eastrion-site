@@ -43,6 +43,10 @@ export default function HomePage() {
     background: "#ffffff",
     border: "1px solid #e2e8f0",
     boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    minHeight: 320,
   } as React.CSSProperties;
 
   const button = {
@@ -95,65 +99,71 @@ export default function HomePage() {
 
         <div style={grid}>
           <div style={card}>
-            <h3 style={{ fontSize: 30, margin: 0, color: "#0f172a" }}>RiskAtlas</h3>
-            <p
-              style={{
-                marginTop: 16,
-                fontSize: 18,
-                lineHeight: 1.7,
-                color: "#334155",
-              }}
-            >
-              Scan supply chain exposure across countries, industries, and logistics
-              environments. Identify hidden risks before they become cost.
-            </p>
-            <p
-              style={{
-                marginTop: 12,
-                fontSize: 16,
-                lineHeight: 1.7,
-                color: "#64748b",
-                fontWeight: 600,
-              }}
-            >
-              Equivalent to a consulting-grade initial assessment.
-            </p>
+            <div>
+              <h3 style={{ fontSize: 30, margin: 0, color: "#0f172a" }}>RiskAtlas</h3>
+              <p
+                style={{
+                  marginTop: 16,
+                  fontSize: 18,
+                  lineHeight: 1.7,
+                  color: "#334155",
+                }}
+              >
+                Scan supply chain exposure across countries, industries, and logistics
+                environments. Identify hidden risks before they become cost.
+              </p>
+              <p
+                style={{
+                  marginTop: 12,
+                  fontSize: 16,
+                  lineHeight: 1.7,
+                  color: "#64748b",
+                  fontWeight: 600,
+                }}
+              >
+                Equivalent to a consulting-grade initial assessment.
+              </p>
+            </div>
             <a href="/riskatlas" style={button}>
               Run Risk Scan
             </a>
           </div>
 
           <div style={card}>
-            <h3 style={{ fontSize: 30, margin: 0, color: "#0f172a" }}>Load Planning</h3>
-            <p
-              style={{
-                marginTop: 16,
-                fontSize: 18,
-                lineHeight: 1.7,
-                color: "#334155",
-              }}
-            >
-              Optimize container and truck loading based on dimensions, weight, and
-              packing logic. Reduce cost and improve efficiency.
-            </p>
+            <div>
+              <h3 style={{ fontSize: 30, margin: 0, color: "#0f172a" }}>Load Planning</h3>
+              <p
+                style={{
+                  marginTop: 16,
+                  fontSize: 18,
+                  lineHeight: 1.7,
+                  color: "#334155",
+                }}
+              >
+                Optimize container and truck loading based on dimensions, weight, and
+                packing logic. Reduce cost and improve efficiency.
+              </p>
+            </div>
             <a href="/load-planning" style={button}>
               Open Tool
             </a>
           </div>
 
           <div style={card}>
-            <h3 style={{ fontSize: 30, margin: 0, color: "#0f172a" }}>QR Tool</h3>
-            <p
-              style={{
-                marginTop: 16,
-                fontSize: 18,
-                lineHeight: 1.7,
-                color: "#334155",
-              }}
-            >
-              Generate QR codes for shipment tracking, product linking, and operational
-              workflows across supply chains.
-            </p>
+            <div>
+              <h3 style={{ fontSize: 30, margin: 0, color: "#0f172a" }}>QR Tool</h3>
+              <p
+                style={{
+                  marginTop: 16,
+                  fontSize: 18,
+                  lineHeight: 1.7,
+                  color: "#334155",
+                }}
+              >
+                Generate QR codes for shipment tracking, product linking, and operational
+                workflows across supply chains.
+              </p>
+            </div>
             <a href="#" style={button}>
               Coming Soon
             </a>
