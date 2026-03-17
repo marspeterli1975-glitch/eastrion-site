@@ -1,102 +1,121 @@
-import Link from "next/link";
-
 export default function HomePage() {
+  const container = {
+    maxWidth: 1200,
+    margin: "0 auto",
+    padding: "80px 24px",
+  } as React.CSSProperties;
+
+  const heroTitle = {
+    fontSize: 64,
+    fontWeight: 800,
+    letterSpacing: "-0.03em",
+    color: "#0f172a",
+  } as React.CSSProperties;
+
+  const heroSub = {
+    marginTop: 20,
+    fontSize: 20,
+    color: "#475569",
+    lineHeight: 1.7,
+  } as React.CSSProperties;
+
+  const grid = {
+    display: "grid",
+    gridTemplateColumns: "repeat(3, 1fr)",
+    gap: 24,
+    marginTop: 60,
+  } as React.CSSProperties;
+
+  const card = {
+    borderRadius: 24,
+    padding: 28,
+    background: "#ffffff",
+    border: "1px solid #e2e8f0",
+    boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
+  } as React.CSSProperties;
+
+  const button = {
+    marginTop: 20,
+    display: "inline-block",
+    padding: "12px 20px",
+    borderRadius: 999,
+    background: "#0f172a",
+    color: "#ffffff",
+    fontWeight: 700,
+    textDecoration: "none",
+  } as React.CSSProperties;
+
   return (
-    <main className="content-page">
-      <section className="content-hero">
-        <div className="content-shell">
-          <p className="content-eyebrow">Eastrion — Global Supply Chain Infrastructure</p>
+    <main style={{ background: "#f8fafc", minHeight: "100vh" }}>
+      <section style={container}>
+        {/* Hero */}
+        <h1 style={heroTitle}>
+          Eastrion
+          <br />
+          Supply Chain Intelligence Platform
+        </h1>
 
-          <h1 className="content-title content-title-home">
-            Building resilient supply chains across sourcing, operations and risk.
-          </h1>
+        <p style={heroSub}>
+          Risk, planning, and execution tools for global SMEs operating across
+          sourcing, logistics, and cross-border environments.
+        </p>
 
-          <p className="content-subtitle content-subtitle-home">
-            Eastrion helps businesses improve sourcing efficiency, operational coordination
-            and supply chain visibility through practical execution and structured risk intelligence.
+        {/* Tools */}
+        <div style={grid}>
+          {/* RiskAtlas */}
+          <div style={card}>
+            <h3>RiskAtlas</h3>
+            <p>
+              Scan supply chain exposure across countries, industries, and
+              logistics environments. Identify hidden risks before they become
+              cost.
+            </p>
+            <a href="/riskatlas" style={button}>
+              Run Risk Scan
+            </a>
+          </div>
+
+          {/* Load Planning */}
+          <div style={card}>
+            <h3>Load Planning</h3>
+            <p>
+              Optimize container and truck loading based on dimensions, weight,
+              and packing logic. Reduce cost and improve efficiency.
+            </p>
+            <a href="#" style={button}>
+              Coming Soon
+            </a>
+          </div>
+
+          {/* QR Tool */}
+          <div style={card}>
+            <h3>QR Tool</h3>
+            <p>
+              Generate QR codes for shipment tracking, product linking, and
+              operational workflows across supply chains.
+            </p>
+            <a href="#" style={button}>
+              Coming Soon
+            </a>
+          </div>
+        </div>
+
+        {/* Why */}
+        <div style={{ marginTop: 80 }}>
+          <h2>Why Eastrion</h2>
+          <p style={{ ...heroSub, maxWidth: 700 }}>
+            Eastrion combines structured risk intelligence with practical supply
+            chain tools. Our goal is to help SMEs operate with more clarity,
+            resilience, and execution confidence in an increasingly fragmented
+            global environment.
           </p>
-
-          <div className="content-actions">
-            <Link href="/riskatlas" className="btn btn-primary">
-              Open RiskAtlas
-            </Link>
-            <Link href="/solutions" className="btn btn-secondary">
-              Explore Solutions
-            </Link>
-          </div>
         </div>
-      </section>
 
-      <section className="content-section">
-        <div className="content-shell">
-          <div className="content-grid three">
-            <div className="content-card">
-              <span className="content-kicker">Flagship Product</span>
-              <h3>RiskAtlas</h3>
-              <p>
-                A structured supply chain exposure scanner for country, industry,
-                logistics and event-linked risk awareness.
-              </p>
-              <Link href="/riskatlas" className="text-link">
-                Open RiskAtlas →
-              </Link>
-            </div>
-
-            <div className="content-card">
-              <span className="content-kicker">Execution Support</span>
-              <h3>Solutions</h3>
-              <p>
-                Supply chain coordination, sourcing support and operational problem-solving
-                for cross-border business.
-              </p>
-              <Link href="/solutions" className="text-link">
-                View Solutions →
-              </Link>
-            </div>
-
-            <div className="content-card">
-              <span className="content-kicker">Business Scope</span>
-              <h3>Products & Projects</h3>
-              <p>
-                Industrial component sourcing, project support, filtration-related products,
-                and structured supply chain execution across international markets.
-              </p>
-              <Link href="/products" className="text-link">
-                Browse Business Scope →
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="content-section">
-        <div className="content-shell">
-          <div className="content-feature">
-            <div>
-              <span className="content-kicker">Core Focus</span>
-              <h2>Practical supply chain support for global SMEs</h2>
-              <p>
-                Our operating approach is execution-first. We help clients improve sourcing
-                reliability, reduce friction across cross-border coordination, and build a clearer
-                understanding of where supply chain exposure is actually concentrated.
-              </p>
-            </div>
-
-            <div className="content-bullets">
-              <div className="bullet-card">
-                <strong>Sourcing visibility</strong>
-                <p>Clarify supplier screening, execution assumptions and sourcing risk concentration.</p>
-              </div>
-              <div className="bullet-card">
-                <strong>Operational coordination</strong>
-                <p>Support structured execution across logistics, documentation and shipment alignment.</p>
-              </div>
-              <div className="bullet-card">
-                <strong>Risk communication</strong>
-                <p>Turn fragmented external signals into a more structured risk view through RiskAtlas.</p>
-              </div>
-            </div>
-          </div>
+        {/* CTA */}
+        <div style={{ marginTop: 60 }}>
+          <a href="/riskatlas" style={button}>
+            Try RiskAtlas
+          </a>
         </div>
       </section>
     </main>
