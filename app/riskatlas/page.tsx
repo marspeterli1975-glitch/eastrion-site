@@ -120,7 +120,7 @@ export default function RiskAtlasPage() {
         body: JSON.stringify({
           session_id: scanResult.session_id,
           amount_cents: 4900,
-          currency: "aud",
+          currency: "usd",
           product_name: "RiskAtlas Exposure Report",
         }),
       });
