@@ -11,16 +11,11 @@ type PaymentStatusResponse = {
 export default function SuccessPage() {
   const [status, setStatus] = useState<"loading" | "paid" | "pending" | "error">("loading");
   const [message, setMessage] = useState("Checking payment status...");
-  const [downloadToken, setDownloadToken] = useState<string>("");
-  const [sessionId, setSessionId] = useState<string>("");
+  const [downloadToken, setDownloadToken] = useState("");
+  const [sessionId, setSessionId] = useState("");
 
   const apiBase =
     process.env.NEXT_PUBLIC_API_BASE_URL || "https://global-risk-api.onrender.com";
-
-  const paymentStatusUrl = useMemo(() => {
-    if (!sessionId) return "";
-    return `${apiBase}/payment-status/${sessionId}`;
-  }, [apiBase, sessionId]);
 
   const downloadUrl = useMemo(() => {
     if (!downloadToken) return "";
@@ -69,7 +64,7 @@ export default function SuccessPage() {
           setStatus("pending");
           setMessage("Payment is still being confirmed. Please wait a few seconds and refresh.");
         }
-      } catch (error) {
+      } catch {
         if (cancelled) return;
         setStatus("error");
         setMessage("Unable to verify payment status right now. Please try again shortly.");
@@ -85,84 +80,144 @@ export default function SuccessPage() {
 
   return (
     <main className="min-h-screen bg-white text-slate-900">
-      <section className="mx-auto max-w-4xl px-6 py-16">
-        <div className="mb-8">
-          <a
-            href="/"
-            className="text-sm font-medium text-slate-500 hover:text-slate-800"
-          >
-            ← Back to Home
-          </a>
-        </div>
+      {/* Hero Section */}
+      <section className="bg-[#eef2f1]">
+        <div className="mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-24">
+          <div className="max-w-4xl">
+            <div className="mb-6 text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
+              RiskAtlas Payment
+            </div>
 
-        <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-          <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-900 text-white text-2xl">
-            ✓
+            <h1 className="max-w-5xl text-5xl font-semibold leading-[0.95] tracking-tight text-slate-950 md:text-7xl">
+              Payment confirmed.
+              <br />
+              Structured report
+              <br />
+              ready for delivery.
+            </h1>
+
+            <p className="mt-8 max-w-3xl text-xl leading-9 text-slate-600">
+              Your RiskAtlas purchase has been verified through the backend payment workflow.
+              The report is now available for secure download.
+            </p>
+
+            <div className="mt-10 flex flex-wrap gap-4">
+              {status === "paid" && downloadUrl ? (
+                <a
+                  href={downloadUrl}
+                  className="inline-flex items-center rounded-full bg-gradient-to-r from-[#183a72] to-[#4db7b2] px-7 py-4 text-base font-semibold text-white shadow-sm transition hover:opacity-95"
+                >
+                  Download Risk Report
+                </a>
+              ) : (
+                <button
+                  disabled
+                  className="inline-flex items-center rounded-full bg-slate-300 px-7 py-4 text-base font-semibold text-white"
+                >
+                  Download Pending
+                </button>
+              )}
+
+              <button
+                onClick={() => window.location.reload()}
+                className="inline-flex items-center rounded-full bg-white px-7 py-4 text-base font-semibold text-slate-900 shadow-sm ring-1 ring-slate-200 transition hover:bg-slate-50"
+              >
+                Refresh Status
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Status Cards */}
+      <section className="mx-auto max-w-7xl px-6 py-12 md:px-10">
+        <div className="grid gap-6 md:grid-cols-3">
+          <div className="rounded-[28px] bg-white p-7 shadow-sm ring-1 ring-slate-200">
+            <div className="mb-4 text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">
+              Current Status
+            </div>
+            <div className="text-3xl font-semibold tracking-tight text-slate-950">
+              {status === "paid"
+                ? "Paid"
+                : status === "pending"
+                ? "Pending"
+                : status === "error"
+                ? "Error"
+                : "Checking"}
+            </div>
+            <p className="mt-4 text-base leading-7 text-slate-600">{message}</p>
           </div>
 
-          <h1 className="mb-3 text-3xl font-semibold tracking-tight">
-            RiskAtlas Payment Status
-          </h1>
-
-          <p className="mb-6 text-base text-slate-600">{message}</p>
-
-          <div className="mb-8 rounded-2xl bg-slate-50 p-5">
-            <div className="mb-2 text-sm font-medium text-slate-500">Session ID</div>
-            <div className="break-all font-mono text-sm text-slate-900">
+          <div className="rounded-[28px] bg-white p-7 shadow-sm ring-1 ring-slate-200">
+            <div className="mb-4 text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">
+              Session ID
+            </div>
+            <div className="break-all text-sm leading-7 text-slate-800">
               {sessionId || "Not available"}
             </div>
           </div>
 
-          {status === "loading" && (
-            <div className="rounded-2xl border border-slate-200 p-5 text-slate-600">
-              Verifying your payment with the server...
+          <div className="rounded-[28px] bg-white p-7 shadow-sm ring-1 ring-slate-200">
+            <div className="mb-4 text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">
+              Delivery Method
             </div>
-          )}
-
-          {status === "pending" && (
-            <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5 text-amber-800">
-              Payment is in progress or the report is still being generated.
+            <div className="text-3xl font-semibold tracking-tight text-slate-950">
+              PDF Report
             </div>
-          )}
-
-          {status === "error" && (
-            <div className="rounded-2xl border border-red-200 bg-red-50 p-5 text-red-700">
-              We could not confirm the order automatically.
-            </div>
-          )}
-
-          {status === "paid" && downloadUrl && (
-            <div className="space-y-4">
-              <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-emerald-800">
-                Your payment has been confirmed. Your report is ready for download.
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                <a
-                  href={downloadUrl}
-                  className="inline-flex items-center rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
-                >
-                  Download Risk Report
-                </a>
-
-                <button
-                  onClick={() => window.location.reload()}
-                  className="inline-flex items-center rounded-2xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-                >
-                  Refresh Status
-                </button>
-              </div>
-            </div>
-          )}
-
-          <div className="mt-10 border-t border-slate-200 pt-6">
-            <h2 className="mb-3 text-lg font-semibold">What happens next</h2>
-            <ul className="space-y-2 text-sm text-slate-600">
-              <li>• Your payment is verified through Stripe webhook confirmation.</li>
-              <li>• Your RiskAtlas PDF report is generated on the backend.</li>
-              <li>• The download link is protected by a signed token.</li>
-            </ul>
+            <p className="mt-4 text-base leading-7 text-slate-600">
+              Delivered through a signed download link generated after Stripe webhook confirmation.
+            </p>
           </div>
+        </div>
+      </section>
+
+      {/* Next Steps */}
+      <section className="mx-auto max-w-7xl px-6 pb-20 md:px-10">
+        <div className="grid gap-6 md:grid-cols-3">
+          <div className="rounded-[28px] bg-white p-7 shadow-sm ring-1 ring-slate-200">
+            <div className="mb-4 text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">
+              Verification
+            </div>
+            <h2 className="text-2xl font-semibold tracking-tight text-slate-950">
+              Stripe webhook confirmed
+            </h2>
+            <p className="mt-4 text-base leading-7 text-slate-600">
+              Payment status is validated on the backend rather than relying on a front-end redirect alone.
+            </p>
+          </div>
+
+          <div className="rounded-[28px] bg-white p-7 shadow-sm ring-1 ring-slate-200">
+            <div className="mb-4 text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">
+              Report Generation
+            </div>
+            <h2 className="text-2xl font-semibold tracking-tight text-slate-950">
+              PDF prepared automatically
+            </h2>
+            <p className="mt-4 text-base leading-7 text-slate-600">
+              The RiskAtlas engine generates a structured consulting-style PDF after payment confirmation.
+            </p>
+          </div>
+
+          <div className="rounded-[28px] bg-white p-7 shadow-sm ring-1 ring-slate-200">
+            <div className="mb-4 text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">
+              Access Control
+            </div>
+            <h2 className="text-2xl font-semibold tracking-tight text-slate-950">
+              Signed download token
+            </h2>
+            <p className="mt-4 text-base leading-7 text-slate-600">
+              Delivery is protected by a signed token rather than an exposed public file link.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-10">
+          <a
+            href="/"
+            className="inline-flex items-center text-base font-medium text-slate-500 transition hover:text-slate-900"
+          >
+            ← Back to Home
+          </a>
         </div>
       </section>
     </main>
