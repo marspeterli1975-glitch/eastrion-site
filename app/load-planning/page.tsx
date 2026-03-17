@@ -22,12 +22,6 @@ type CargoForm = "solid" | "powder" | "liquid";
 type TransportMode = "container" | "inland_truck";
 
 export default function LoadPlanningPage() {
-   return (
-    <main>
-      <h1>LOAD PLANNING LIVE TEST 0317</h1>
-    </main>
-  );
-}
   const [mode, setMode] = useState<"upload" | "manual">("upload");
 
   const [productName, setProductName] = useState("Battery module skid");
@@ -58,6 +52,7 @@ export default function LoadPlanningPage() {
     const wt = Number(weightKg) || 0;
     const qty = Number(quantity) || 0;
     const itemVolume = (l * w * h) / 1_000_000_000;
+
     return {
       itemVolumeM3: itemVolume,
       totalVolumeM3: itemVolume * qty,
@@ -107,8 +102,7 @@ export default function LoadPlanningPage() {
       setUploadResults(rows);
       setUploadSuccessMessage(`Upload successful. ${rows.length} line(s) processed.`);
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Unexpected upload error.";
+      const message = err instanceof Error ? err.message : "Unexpected upload error.";
       setUploadError(message);
     } finally {
       setUploading(false);
@@ -236,7 +230,7 @@ export default function LoadPlanningPage() {
                     <div className="mt-4 space-y-3 text-sm">
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="font-medium text-slate-700">Selected file:</span>
-                        <span className="rounded-full bg-white px-3 py-1 text-slate-700 border border-slate-200">
+                        <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-slate-700">
                           {selectedFile ? selectedFile.name : "No file selected"}
                         </span>
                       </div>
