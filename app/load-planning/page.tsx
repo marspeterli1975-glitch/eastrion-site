@@ -118,7 +118,7 @@ export default function LoadPlanningPage() {
   }, [uploadResults]);
 
   return (
-    <main className="min-h-screen bg-[#f4f6f8]">
+    <main className="min-h-screen bg-[#f4f6f8] text-slate-900">
       <section className="border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
           <Link
