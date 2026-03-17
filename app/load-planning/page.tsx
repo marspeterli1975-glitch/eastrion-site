@@ -22,6 +22,12 @@ type CargoForm = "solid" | "powder" | "liquid";
 type TransportMode = "container" | "inland_truck";
 
 export default function LoadPlanningPage() {
+   return (
+    <main>
+      <h1>LOAD PLANNING LIVE TEST 0317</h1>
+    </main>
+  );
+}
   const [mode, setMode] = useState<"upload" | "manual">("upload");
 
   const [productName, setProductName] = useState("Battery module skid");
