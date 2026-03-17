@@ -1,6 +1,3 @@
-<h1 className="text-4xl font-semibold tracking-tight text-[#123b66] md:text-5xl">
-  LOAD PLANNING LIVE TEST 0317
-</h1>
 "use client";
 
 import Link from "next/link";
