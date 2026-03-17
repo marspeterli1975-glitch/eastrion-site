@@ -855,7 +855,7 @@ export default function RiskAtlasPage() {
                         color: "#ffffff",
                       }}
                     >
-                      A$49
+                      US$49
                     </div>
                   </div>
 
