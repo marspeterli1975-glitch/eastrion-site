@@ -52,13 +52,13 @@ export default function RiskAtlasPage() {
   }, [companyName, email, country, industry]);
 
   const scoreTone = useMemo(() => {
-    if (!scanResult) return "text-slate-900";
+    if (!scanResult) return "#0f172a";
     const score = scanResult.analysis.score;
-    if (score <= 20) return "text-emerald-700";
-    if (score <= 40) return "text-sky-700";
-    if (score <= 60) return "text-amber-700";
-    if (score <= 80) return "text-orange-700";
-    return "text-red-700";
+    if (score <= 20) return "#047857";
+    if (score <= 40) return "#0369a1";
+    if (score <= 60) return "#b45309";
+    if (score <= 80) return "#c2410c";
+    return "#b91c1c";
   }, [scanResult]);
 
   async function handleScan() {
@@ -89,13 +89,12 @@ export default function RiskAtlasPage() {
       });
 
       if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text || `Scan failed with HTTP ${res.status}`);
+        throw new Error(`Scan failed with HTTP ${res.status}`);
       }
 
       const data: ScanResponse = await res.json();
       setScanResult(data);
-    } catch (err) {
+    } catch {
       setError("Unable to complete the scan right now. Please try again.");
     } finally {
       setLoading(false);
@@ -127,8 +126,7 @@ export default function RiskAtlasPage() {
       });
 
       if (!res.ok) {
-        const text = await res.text();
-        throw new Error(text || `Checkout failed with HTTP ${res.status}`);
+        throw new Error(`Checkout failed with HTTP ${res.status}`);
       }
 
       const data: CheckoutResponse = await res.json();
@@ -139,190 +137,430 @@ export default function RiskAtlasPage() {
       }
 
       throw new Error("Missing checkout URL");
-    } catch (err) {
+    } catch {
       setError("Unable to start checkout right now. Please try again.");
     } finally {
       setUnlocking(false);
     }
   }
 
+  const pageWrap: React.CSSProperties = {
+    background: "#ffffff",
+    color: "#0f172a",
+    minHeight: "100vh",
+  };
+
+  const heroSection: React.CSSProperties = {
+    background: "#eef2f1",
+    padding: "56px 24px 44px",
+  };
+
+  const container: React.CSSProperties = {
+    maxWidth: 1280,
+    margin: "0 auto",
+  };
+
+  const heroGrid: React.CSSProperties = {
+    display: "grid",
+    gridTemplateColumns: "1.7fr 1fr",
+    gap: 32,
+    alignItems: "start",
+  };
+
+  const cardGrid: React.CSSProperties = {
+    display: "grid",
+    gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+    gap: 20,
+    marginTop: 36,
+  };
+
+  const whiteCard: React.CSSProperties = {
+    background: "#ffffff",
+    borderRadius: 28,
+    padding: 28,
+    boxShadow: "0 1px 2px rgba(15, 23, 42, 0.04)",
+    border: "1px solid #e2e8f0",
+  };
+
+  const navyCard: React.CSSProperties = {
+    background: "#22346f",
+    borderRadius: 34,
+    padding: 32,
+    color: "#ffffff",
+    boxShadow: "0 1px 2px rgba(15, 23, 42, 0.04)",
+  };
+
+  const scanWrap: React.CSSProperties = {
+    maxWidth: 1280,
+    margin: "0 auto",
+    padding: "40px 24px 80px",
+  };
+
+  const scannerCard: React.CSSProperties = {
+    background: "#f5f6f7",
+    borderRadius: 36,
+    padding: 40,
+    boxShadow: "0 1px 2px rgba(15, 23, 42, 0.04)",
+    border: "1px solid #e2e8f0",
+  };
+
+  const scannerHead: React.CSSProperties = {
+    display: "grid",
+    gridTemplateColumns: "1.1fr 1fr",
+    gap: 24,
+    alignItems: "start",
+  };
+
+  const inputGrid: React.CSSProperties = {
+    display: "grid",
+    gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+    gap: 24,
+    marginTop: 28,
+  };
+
+  const labelStyle: React.CSSProperties = {
+    display: "block",
+    fontSize: 18,
+    fontWeight: 700,
+    marginBottom: 10,
+    color: "#0f172a",
+  };
+
+  const inputStyle: React.CSSProperties = {
+    width: "100%",
+    borderRadius: 26,
+    border: "none",
+    background: "#0f1a57",
+    color: "#ffffff",
+    padding: "18px 24px",
+    fontSize: 18,
+    outline: "none",
+    boxSizing: "border-box",
+  };
+
+  const chipWrap: React.CSSProperties = {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: 12,
+    marginTop: 12,
+  };
+
+  const chipStyle: React.CSSProperties = {
+    borderRadius: 999,
+    background: "#ffffff",
+    border: "1px solid #dbe2ea",
+    padding: "10px 18px",
+    fontSize: 16,
+    fontWeight: 700,
+    color: "#0f172a",
+    cursor: "pointer",
+  };
+
+  const primaryBtn: React.CSSProperties = {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 999,
+    background: "linear-gradient(90deg, #183a72 0%, #a9c9cd 100%)",
+    color: "#ffffff",
+    border: "none",
+    padding: "16px 28px",
+    fontSize: 18,
+    fontWeight: 800,
+    cursor: "pointer",
+  };
+
+  const secondaryBtn: React.CSSProperties = {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 999,
+    background: "#ffffff",
+    color: "#0f172a",
+    border: "1px solid #dbe2ea",
+    padding: "14px 24px",
+    fontSize: 16,
+    fontWeight: 700,
+    textDecoration: "none",
+  };
+
   return (
-    <main className="min-h-screen bg-white text-slate-900">
-      {/* Hero */}
-      <section className="bg-[#eef2f1]">
-        <div className="mx-auto max-w-7xl px-6 py-12 md:px-10 md:py-16">
-          <a
-            href="/"
-            className="inline-flex items-center rounded-full bg-white px-7 py-4 text-base font-semibold text-slate-900 shadow-sm ring-1 ring-slate-200 transition hover:bg-slate-50"
-          >
+    <main style={pageWrap}>
+      <section style={heroSection}>
+        <div style={container}>
+          <a href="/" style={secondaryBtn}>
             Back to Home
           </a>
 
-          <div className="mt-10 grid gap-8 lg:grid-cols-[1.7fr_1fr]">
+          <div style={{ height: 32 }} />
+
+          <div style={heroGrid}>
             <div>
-              <div className="mb-5 text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
+              <div
+                style={{
+                  marginBottom: 16,
+                  fontSize: 14,
+                  fontWeight: 700,
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  color: "#64748b",
+                }}
+              >
                 Eastrion — Structured Supply Chain Risk Intelligence
               </div>
 
-              <h1 className="text-6xl font-semibold leading-[0.92] tracking-tight text-slate-950 md:text-8xl">
+              <h1
+                style={{
+                  margin: 0,
+                  fontSize: 84,
+                  lineHeight: 0.95,
+                  fontWeight: 700,
+                  letterSpacing: "-0.04em",
+                  color: "#0f172a",
+                }}
+              >
                 RiskAtlas
               </h1>
 
-              <p className="mt-6 max-w-4xl text-2xl leading-10 text-slate-600">
+              <p
+                style={{
+                  marginTop: 24,
+                  maxWidth: 880,
+                  fontSize: 24,
+                  lineHeight: 1.6,
+                  color: "#475569",
+                }}
+              >
                 A practical exposure scanner for global SMEs across sourcing, logistics,
                 manufacturing corridors, and cross-border operating environments.
               </p>
 
-              <p className="mt-6 max-w-4xl text-lg leading-8 text-slate-700">
+              <p
+                style={{
+                  marginTop: 18,
+                  maxWidth: 760,
+                  fontSize: 20,
+                  lineHeight: 1.7,
+                  color: "#334155",
+                  fontWeight: 500,
+                }}
+              >
                 Identify hidden supply chain exposure before it becomes cost.
               </p>
 
-              <div className="mt-10 grid gap-5 md:grid-cols-3">
-                <div className="rounded-[28px] bg-white p-7 shadow-sm ring-1 ring-slate-200">
-                  <div className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">
+              <div style={cardGrid}>
+                <div style={whiteCard}>
+                  <div
+                    style={{
+                      fontSize: 13,
+                      fontWeight: 700,
+                      letterSpacing: "0.16em",
+                      textTransform: "uppercase",
+                      color: "#94a3b8",
+                      marginBottom: 12,
+                    }}
+                  >
                     Use Case
                   </div>
-                  <div className="text-2xl font-semibold leading-9 tracking-tight text-slate-950">
+                  <div style={{ fontSize: 22, lineHeight: 1.45, fontWeight: 700 }}>
                     Supplier & corridor pre-screening
                   </div>
                 </div>
 
-                <div className="rounded-[28px] bg-white p-7 shadow-sm ring-1 ring-slate-200">
-                  <div className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">
+                <div style={whiteCard}>
+                  <div
+                    style={{
+                      fontSize: 13,
+                      fontWeight: 700,
+                      letterSpacing: "0.16em",
+                      textTransform: "uppercase",
+                      color: "#94a3b8",
+                      marginBottom: 12,
+                    }}
+                  >
                     Output
                   </div>
-                  <div className="text-2xl font-semibold leading-9 tracking-tight text-slate-950">
+                  <div style={{ fontSize: 22, lineHeight: 1.45, fontWeight: 700 }}>
                     Structured scan + exportable PDF
                   </div>
                 </div>
 
-                <div className="rounded-[28px] bg-white p-7 shadow-sm ring-1 ring-slate-200">
-                  <div className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">
+                <div style={whiteCard}>
+                  <div
+                    style={{
+                      fontSize: 13,
+                      fontWeight: 700,
+                      letterSpacing: "0.16em",
+                      textTransform: "uppercase",
+                      color: "#94a3b8",
+                      marginBottom: 12,
+                    }}
+                  >
                     Positioning
                   </div>
-                  <div className="text-2xl font-semibold leading-9 tracking-tight text-slate-950">
+                  <div style={{ fontSize: 22, lineHeight: 1.45, fontWeight: 700 }}>
                     Exposure scanner, not legal or investment advice
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-[36px] bg-[#22346f] p-8 text-white shadow-sm">
-              <div className="mb-5 text-sm font-semibold uppercase tracking-[0.18em] text-slate-300">
+            <div style={navyCard}>
+              <div
+                style={{
+                  marginBottom: 16,
+                  fontSize: 14,
+                  fontWeight: 700,
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  color: "#cbd5e1",
+                }}
+              >
                 What this scans
               </div>
-              <ul className="space-y-4 text-xl leading-9 text-white/95">
-                <li>• Country operating exposure</li>
-                <li>• Industry sensitivity</li>
-                <li>• Logistics complexity</li>
-                <li>• Event-linked disruption risk</li>
+              <ul
+                style={{
+                  margin: 0,
+                  paddingLeft: 24,
+                  fontSize: 18,
+                  lineHeight: 1.9,
+                  color: "rgba(255,255,255,0.95)",
+                }}
+              >
+                <li>Country operating exposure</li>
+                <li>Industry sensitivity</li>
+                <li>Logistics complexity</li>
+                <li>Event-linked disruption risk</li>
               </ul>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Scanner */}
-      <section className="mx-auto max-w-7xl px-6 py-12 md:px-10">
-        <div className="rounded-[36px] bg-[#f5f6f7] p-8 shadow-sm ring-1 ring-slate-200 md:p-10">
-          <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr]">
+      <section style={scanWrap}>
+        <div style={scannerCard}>
+          <div style={scannerHead}>
             <div>
-              <div className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">
+              <div
+                style={{
+                  marginBottom: 10,
+                  fontSize: 14,
+                  fontWeight: 700,
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  color: "#94a3b8",
+                }}
+              >
                 Scanner
               </div>
-              <h2 className="text-5xl font-semibold tracking-tight text-slate-950">
+              <h2
+                style={{
+                  margin: 0,
+                  fontSize: 52,
+                  lineHeight: 1,
+                  fontWeight: 700,
+                  color: "#0f172a",
+                  letterSpacing: "-0.03em",
+                }}
+              >
                 Run Risk Scan
               </h2>
             </div>
 
-            <div className="text-xl leading-10 text-slate-500">
+            <div
+              style={{
+                fontSize: 20,
+                lineHeight: 1.7,
+                color: "#64748b",
+              }}
+            >
               Enter a company, country, and industry to generate an initial supply chain
               exposure scan.
             </div>
           </div>
 
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
+          <div style={inputGrid}>
             <div>
-              <label className="mb-3 block text-2xl font-semibold text-slate-950">
-                Company Name
-              </label>
+              <label style={labelStyle}>Company Name</label>
               <input
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
                 placeholder="e.g. Test Battery Co"
-                className="w-full rounded-[28px] border-0 bg-[#0f1a57] px-7 py-5 text-2xl text-white placeholder:text-slate-400 outline-none ring-1 ring-transparent focus:ring-slate-300"
+                style={inputStyle}
               />
             </div>
 
             <div>
-              <label className="mb-3 block text-2xl font-semibold text-slate-950">
-                Email
-              </label>
+              <label style={labelStyle}>Email</label>
               <input
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="e.g. name@company.com"
-                className="w-full rounded-[28px] border-0 bg-[#0f1a57] px-7 py-5 text-2xl text-white placeholder:text-slate-400 outline-none ring-1 ring-transparent focus:ring-slate-300"
+                style={inputStyle}
               />
             </div>
           </div>
 
-          <div className="mt-6 grid gap-6 md:grid-cols-2">
+          <div style={inputGrid}>
             <div>
-              <label className="mb-3 block text-2xl font-semibold text-slate-950">
-                Country
-              </label>
+              <label style={labelStyle}>Country</label>
               <input
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
                 placeholder="e.g. India"
-                className="w-full rounded-[28px] border-0 bg-[#0f1a57] px-7 py-5 text-2xl text-white placeholder:text-slate-400 outline-none ring-1 ring-transparent focus:ring-slate-300"
+                style={inputStyle}
               />
             </div>
 
             <div>
-              <label className="mb-3 block text-2xl font-semibold text-slate-950">
-                Industry
-              </label>
+              <label style={labelStyle}>Industry</label>
               <input
                 value={industry}
                 onChange={(e) => setIndustry(e.target.value)}
                 placeholder="e.g. Battery"
-                className="w-full rounded-[28px] border-0 bg-[#0f1a57] px-7 py-5 text-2xl text-white placeholder:text-slate-400 outline-none ring-1 ring-transparent focus:ring-slate-300"
+                style={inputStyle}
               />
             </div>
           </div>
 
-          <div className="mt-8">
-            <div className="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">
+          <div style={{ marginTop: 28 }}>
+            <div
+              style={{
+                fontSize: 14,
+                fontWeight: 700,
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+                color: "#94a3b8",
+                marginBottom: 10,
+              }}
+            >
               Popular Countries
             </div>
-            <div className="flex flex-wrap gap-3">
+            <div style={chipWrap}>
               {popularCountries.map((item) => (
-                <button
-                  key={item}
-                  type="button"
-                  onClick={() => setCountry(item)}
-                  className="rounded-full bg-white px-6 py-3 text-xl font-semibold text-slate-900 ring-1 ring-slate-200 transition hover:bg-slate-50"
-                >
+                <button key={item} onClick={() => setCountry(item)} style={chipStyle}>
                   {item}
                 </button>
               ))}
             </div>
           </div>
 
-          <div className="mt-6">
-            <div className="mb-4 text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">
+          <div style={{ marginTop: 24 }}>
+            <div
+              style={{
+                fontSize: 14,
+                fontWeight: 700,
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+                color: "#94a3b8",
+                marginBottom: 10,
+              }}
+            >
               Popular Industries
             </div>
-            <div className="flex flex-wrap gap-3">
+            <div style={chipWrap}>
               {popularIndustries.map((item) => (
-                <button
-                  key={item}
-                  type="button"
-                  onClick={() => setIndustry(item)}
-                  className="rounded-full bg-white px-6 py-3 text-xl font-semibold text-slate-900 ring-1 ring-slate-200 transition hover:bg-slate-50"
-                >
+                <button key={item} onClick={() => setIndustry(item)} style={chipStyle}>
                   {item}
                 </button>
               ))}
@@ -330,111 +568,328 @@ export default function RiskAtlasPage() {
           </div>
 
           {error && (
-            <div className="mt-8 rounded-[24px] border border-red-200 bg-red-50 px-6 py-4 text-base text-red-700">
+            <div
+              style={{
+                marginTop: 24,
+                borderRadius: 20,
+                padding: "14px 18px",
+                border: "1px solid #fecaca",
+                background: "#fef2f2",
+                color: "#b91c1c",
+                fontSize: 15,
+              }}
+            >
               {error}
             </div>
           )}
 
-          <div className="mt-8">
+          <div style={{ marginTop: 28, display: "flex", gap: 16, flexWrap: "wrap" }}>
             <button
               type="button"
               onClick={handleScan}
               disabled={loading}
-              className="inline-flex items-center rounded-full bg-gradient-to-r from-[#183a72] to-[#a9c9cd] px-10 py-5 text-2xl font-semibold text-white shadow-sm transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
+              style={{
+                ...primaryBtn,
+                opacity: loading ? 0.7 : 1,
+                cursor: loading ? "not-allowed" : "pointer",
+              }}
             >
               {loading ? "Running..." : "Run Free Risk Scan"}
             </button>
+
+            <a href="/sample-riskatlas-report.pdf" target="_blank" style={secondaryBtn}>
+              Sample Report Preview
+            </a>
           </div>
 
-          {/* Result Block */}
           {scanResult && (
-            <div className="mt-12 rounded-[32px] bg-white p-8 shadow-sm ring-1 ring-slate-200 md:p-10">
-              <div className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">
+            <div
+              style={{
+                marginTop: 36,
+                borderRadius: 32,
+                background: "#ffffff",
+                padding: 36,
+                border: "1px solid #e2e8f0",
+                boxShadow: "0 1px 2px rgba(15, 23, 42, 0.04)",
+              }}
+            >
+              <div
+                style={{
+                  marginBottom: 10,
+                  fontSize: 14,
+                  fontWeight: 700,
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  color: "#94a3b8",
+                }}
+              >
                 Initial Exposure Result
               </div>
 
-              <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr]">
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1.2fr 1fr",
+                  gap: 28,
+                  alignItems: "start",
+                }}
+              >
                 <div>
-                  <h3 className="text-4xl font-semibold tracking-tight text-slate-950">
+                  <h3
+                    style={{
+                      margin: 0,
+                      fontSize: 40,
+                      lineHeight: 1.05,
+                      fontWeight: 700,
+                      color: "#0f172a",
+                      letterSpacing: "-0.03em",
+                    }}
+                  >
                     Exposure Score Preview
                   </h3>
 
-                  <p className="mt-4 max-w-3xl text-lg leading-8 text-slate-600">
-                    This free scan gives you an initial view of structural exposure. Unlock the
-                    full PDF report for strategic interpretation and action guidance.
+                  <p
+                    style={{
+                      marginTop: 16,
+                      maxWidth: 760,
+                      fontSize: 18,
+                      lineHeight: 1.7,
+                      color: "#64748b",
+                    }}
+                  >
+                    This free scan gives you an initial view of structural exposure. Unlock
+                    the full PDF report for strategic interpretation and action guidance.
                   </p>
 
-                  <div className="mt-8 grid gap-5 md:grid-cols-3">
-                    <div className="rounded-[24px] bg-[#f5f6f7] p-6">
-                      <div className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                      gap: 18,
+                      marginTop: 24,
+                    }}
+                  >
+                    <div
+                      style={{
+                        borderRadius: 24,
+                        background: "#f5f6f7",
+                        padding: 24,
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: 13,
+                          fontWeight: 700,
+                          letterSpacing: "0.16em",
+                          textTransform: "uppercase",
+                          color: "#94a3b8",
+                        }}
+                      >
                         Score
                       </div>
-                      <div className={`mt-3 text-5xl font-semibold tracking-tight ${scoreTone}`}>
+                      <div
+                        style={{
+                          marginTop: 14,
+                          fontSize: 52,
+                          lineHeight: 1,
+                          fontWeight: 700,
+                          color: scoreTone,
+                        }}
+                      >
                         {scanResult.analysis.score}
                       </div>
                     </div>
 
-                    <div className="rounded-[24px] bg-[#f5f6f7] p-6">
-                      <div className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">
+                    <div
+                      style={{
+                        borderRadius: 24,
+                        background: "#f5f6f7",
+                        padding: 24,
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: 13,
+                          fontWeight: 700,
+                          letterSpacing: "0.16em",
+                          textTransform: "uppercase",
+                          color: "#94a3b8",
+                        }}
+                      >
                         Grade
                       </div>
-                      <div className="mt-3 text-5xl font-semibold tracking-tight text-slate-950">
+                      <div
+                        style={{
+                          marginTop: 14,
+                          fontSize: 52,
+                          lineHeight: 1,
+                          fontWeight: 700,
+                          color: "#0f172a",
+                        }}
+                      >
                         {scanResult.analysis.grade}
                       </div>
                     </div>
 
-                    <div className="rounded-[24px] bg-[#f5f6f7] p-6">
-                      <div className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">
+                    <div
+                      style={{
+                        borderRadius: 24,
+                        background: "#f5f6f7",
+                        padding: 24,
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: 13,
+                          fontWeight: 700,
+                          letterSpacing: "0.16em",
+                          textTransform: "uppercase",
+                          color: "#94a3b8",
+                        }}
+                      >
                         Exposure
                       </div>
-                      <div className="mt-3 text-4xl font-semibold tracking-tight text-slate-950">
+                      <div
+                        style={{
+                          marginTop: 14,
+                          fontSize: 38,
+                          lineHeight: 1.1,
+                          fontWeight: 700,
+                          color: "#0f172a",
+                        }}
+                      >
                         {scanResult.analysis.exposure_level}
                       </div>
                     </div>
                   </div>
 
-                  <div className="mt-8 rounded-[24px] bg-[#f5f6f7] p-6">
-                    <div className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-400">
+                  <div
+                    style={{
+                      marginTop: 24,
+                      borderRadius: 24,
+                      background: "#f5f6f7",
+                      padding: 24,
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: 13,
+                        fontWeight: 700,
+                        letterSpacing: "0.16em",
+                        textTransform: "uppercase",
+                        color: "#94a3b8",
+                        marginBottom: 10,
+                      }}
+                    >
                       Scan Interpretation
                     </div>
-                    <p className="mt-3 text-lg leading-8 text-slate-700">
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: 17,
+                        lineHeight: 1.8,
+                        color: "#334155",
+                      }}
+                    >
                       {scanResult.analysis.summary}
                     </p>
                   </div>
                 </div>
 
-                <div className="rounded-[28px] bg-[#22346f] p-8 text-white">
-                  <div className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-slate-300">
+                <div style={navyCard}>
+                  <div
+                    style={{
+                      fontSize: 14,
+                      fontWeight: 700,
+                      letterSpacing: "0.18em",
+                      textTransform: "uppercase",
+                      color: "#cbd5e1",
+                      marginBottom: 12,
+                    }}
+                  >
                     Full Report Unlock
                   </div>
 
-                  <h4 className="text-3xl font-semibold tracking-tight">
+                  <h4
+                    style={{
+                      margin: 0,
+                      fontSize: 34,
+                      lineHeight: 1.15,
+                      fontWeight: 700,
+                      color: "#ffffff",
+                    }}
+                  >
                     Structured PDF delivery
                   </h4>
 
-                  <p className="mt-4 text-lg leading-8 text-white/85">
-                    Unlock the full consulting-style report with score breakdown, structural risk
-                    signals, and strategic actions.
+                  <p
+                    style={{
+                      marginTop: 16,
+                      fontSize: 18,
+                      lineHeight: 1.8,
+                      color: "rgba(255,255,255,0.84)",
+                    }}
+                  >
+                    Unlock the full consulting-style report with score breakdown, structural
+                    risk signals, and strategic actions.
                   </p>
 
-                  <div className="mt-8">
-                    <div className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-300">
+                  <div style={{ marginTop: 28 }}>
+                    <div
+                      style={{
+                        fontSize: 13,
+                        fontWeight: 700,
+                        letterSpacing: "0.16em",
+                        textTransform: "uppercase",
+                        color: "#cbd5e1",
+                      }}
+                    >
                       Price
                     </div>
-                    <div className="mt-2 text-5xl font-semibold tracking-tight">A$49</div>
+                    <div
+                      style={{
+                        marginTop: 8,
+                        fontSize: 52,
+                        lineHeight: 1,
+                        fontWeight: 700,
+                        color: "#ffffff",
+                      }}
+                    >
+                      A$49
+                    </div>
                   </div>
 
                   <button
                     type="button"
                     onClick={handleUnlockReport}
                     disabled={unlocking}
-                    className="mt-8 inline-flex w-full items-center justify-center rounded-full bg-white px-6 py-4 text-lg font-semibold text-slate-950 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60"
+                    style={{
+                      marginTop: 28,
+                      width: "100%",
+                      borderRadius: 999,
+                      border: "none",
+                      background: "#ffffff",
+                      color: "#0f172a",
+                      padding: "16px 20px",
+                      fontSize: 18,
+                      fontWeight: 800,
+                      cursor: unlocking ? "not-allowed" : "pointer",
+                      opacity: unlocking ? 0.7 : 1,
+                    }}
                   >
                     {unlocking ? "Redirecting..." : "Unlock Full Report"}
                   </button>
 
-                  <div className="mt-6 text-sm leading-7 text-white/70">
-                    Includes structured PDF output, score interpretation, and secure download delivery.
+                  <div
+                    style={{
+                      marginTop: 18,
+                      fontSize: 14,
+                      lineHeight: 1.8,
+                      color: "rgba(255,255,255,0.7)",
+                    }}
+                  >
+                    Includes structured PDF output, score interpretation, and secure
+                    download delivery.
                   </div>
                 </div>
               </div>
