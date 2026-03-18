@@ -66,49 +66,39 @@ export default function LoadPlanningPage() {
     setUploadSuccessMessage("");
   };
 
-  const handleUpload = async () => {
-    if (!selectedFile) {
-      setUploadError("Please choose a CSV packing list file first.");
-      return;
-    }
+ const handleUpload = async () => {
+  if (!file) return;
 
-    const lowerName = selectedFile.name.toLowerCase();
-    if (!lowerName.endsWith(".csv")) {
-      setUploadError("V1 currently supports CSV upload only.");
-      return;
-    }
+  setLoading(true);
+  setError(null);
 
-    try {
-      setUploading(true);
-      setUploadError("");
-      setUploadSuccessMessage("");
-      setUploadResults([]);
+  const formData = new FormData();
+  formData.append("file", file);
 
-      const formData = new FormData();
-      formData.append("file", selectedFile);
-
-      const res = await fetch("https://global-risk-api.onrender.com/load-planning/upload", {
+  try {
+    const res = await fetch(
+      "https://global-risk-api.onrender.com/load-planning/upload",
+      {
         method: "POST",
         body: formData,
-      });
-
-      const data: UploadApiResponse = await res.json();
-
-      if (!res.ok || !data.success) {
-        throw new Error(data.error || "Upload failed.");
       }
+    );
 
-      const rows = data.results ?? [];
-      setUploadResults(rows);
-      setUploadSuccessMessage(`Upload successful. ${rows.length} line(s) processed.`);
-    } catch (err) {
-      const message = err instanceof Error ? err.message : "Unexpected upload error.";
-      setUploadError(message);
-    } finally {
-      setUploading(false);
+    if (!res.ok) {
+      throw new Error("Upload failed");
     }
-  };
 
+    const data = await res.json();
+    console.log("API response:", data);
+
+    setResult(data);
+  } catch (err: any) {
+    console.error(err);
+    setError("Failed to fetch");
+  } finally {
+    setLoading(false);
+  }
+};
   const totalUploadedVolume = useMemo(() => {
     return uploadResults.reduce((sum, row) => sum + (row.total_volume_m3 || 0), 0);
   }, [uploadResults]);
