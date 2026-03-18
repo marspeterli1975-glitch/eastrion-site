@@ -155,7 +155,7 @@ export default function LoadPlanningPage() {
         <div className="grid gap-8 xl:grid-cols-[1.08fr_0.92fr]">
           <div className="space-y-8">
             <Card>
-              <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+              <div className="flex flex-col gap-5">
                 <div>
                   <h2 className="text-2xl font-semibold text-[#123b66]">Input Method</h2>
                   <p className="mt-2 text-sm leading-7 text-slate-600">
@@ -163,7 +163,7 @@ export default function LoadPlanningPage() {
                   </p>
                 </div>
 
-                <div className="inline-flex w-full rounded-2xl border border-slate-200 bg-slate-50 p-1 lg:w-auto">
+                <div className="inline-flex w-full max-w-md rounded-2xl border border-slate-200 bg-slate-50 p-1">
                   <ModeButton active={mode === "upload"} onClick={() => setMode("upload")}>
                     Upload Packing List
                   </ModeButton>
@@ -444,7 +444,7 @@ function ModeButton({
     <button
       type="button"
       onClick={onClick}
-      className={`flex-1 rounded-xl px-4 py-2.5 text-sm font-medium transition lg:flex-none ${
+      className={`flex-1 rounded-xl px-4 py-2.5 text-sm font-medium transition ${
         active
           ? "bg-[#123b66] text-white shadow-sm"
           : "text-slate-600 hover:bg-white hover:text-slate-900"
