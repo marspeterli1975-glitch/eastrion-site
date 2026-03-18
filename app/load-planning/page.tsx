@@ -66,39 +66,54 @@ export default function LoadPlanningPage() {
     setUploadSuccessMessage("");
   };
 
- const handleUpload = async () => {
-  if (!file) return;
-
-  setLoading(true);
-  setError(null);
-
-  const formData = new FormData();
-  formData.append("file", file);
-
-  try {
-    const res = await fetch(
-      "https://global-risk-api.onrender.com/load-planning/upload",
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
-
-    if (!res.ok) {
-      throw new Error("Upload failed");
+  const handleUpload = async () => {
+    if (!selectedFile) {
+      setUploadError("Please choose a CSV packing list file first.");
+      return;
     }
 
-    const data = await res.json();
-    console.log("API response:", data);
+    const lowerName = selectedFile.name.toLowerCase();
+    if (!lowerName.endsWith(".csv")) {
+      setUploadError("V1 currently supports CSV upload only.");
+      return;
+    }
 
-    setResult(data);
-  } catch (err: any) {
-    console.error(err);
-    setError("Failed to fetch");
-  } finally {
-    setLoading(false);
-  }
-};
+    try {
+      setUploading(true);
+      setUploadError("");
+      setUploadSuccessMessage("");
+      setUploadResults([]);
+
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+
+      const res = await fetch(
+        "https://global-risk-api.onrender.com/load-planning/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data: UploadApiResponse = await res.json();
+      console.log("API response:", data);
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "Upload failed.");
+      }
+
+      const rows = data.results ?? [];
+      setUploadResults(rows);
+      setUploadSuccessMessage(`Upload successful. ${rows.length} line(s) processed.`);
+    } catch (err) {
+      console.error(err);
+      const message = err instanceof Error ? err.message : "Failed to fetch";
+      setUploadError(message);
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const totalUploadedVolume = useMemo(() => {
     return uploadResults.reduce((sum, row) => sum + (row.total_volume_m3 || 0), 0);
   }, [uploadResults]);
@@ -390,7 +405,7 @@ export default function LoadPlanningPage() {
                   <span className="font-semibold text-slate-800">Current live path:</span> Upload Packing List → CSV parsing → initial load planning result.
                 </p>
                 <p>
-                  <span className="font-semibold text-slate-800">Already connected:</span> public template download, Vercel front-end entry, Render upload API, and JSON result rendering.
+                  <span className="font-semibold text-slate-800">Already connected:</span> public template download, local front-end entry, Render upload API, and JSON result rendering.
                 </p>
                 <p>
                   <span className="font-semibold text-slate-800">Next step:</span> connect manual entry to backend, enrich the planning model, and expand from single-line estimation to multi-line shipment intelligence.
