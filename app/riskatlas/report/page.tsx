@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type RiskLevel = "Low" | "Moderate" | "Elevated" | "High" | "Critical";
 type ActionPriority = "Immediate" | "High" | "Medium" | "Low";
-type StatusTone = "good" | "warn" | "bad" | "neutral";
 
 type RiskFactor = {
   id: string;
@@ -56,47 +55,45 @@ function getGrade(score: number) {
   if (score <= 20) {
     return {
       grade: "A",
-      label: "Low Risk",
       level: "Low" as RiskLevel,
       description:
         "Exposure is currently controlled. Normal monitoring and periodic review are sufficient.",
     };
   }
+
   if (score <= 40) {
     return {
       grade: "B",
-      label: "Moderate Risk",
       level: "Moderate" as RiskLevel,
       description:
         "Some vulnerabilities exist, but they are manageable with targeted controls and route discipline.",
     };
   }
+
   if (score <= 60) {
     return {
       grade: "C",
-      label: "Elevated Risk",
       level: "Elevated" as RiskLevel,
       description:
         "Material vulnerabilities are present. Management action is recommended before scaling execution.",
     };
   }
+
   if (score <= 80) {
     return {
       grade: "D",
-      label: "High Risk",
       level: "High" as RiskLevel,
       description:
         "The supply chain is exposed to serious disruption or execution failure. Immediate mitigation is advised.",
     };
   }
+
   return {
     grade: "E",
-    label: "Critical Risk",
     level: "Critical" as RiskLevel,
     description:
       "Risk concentration is too high. Execute only with redesign, contingency planning, or management override.",
-    };
-  }
+  };
 }
 
 function getScoreColor(score: number) {
@@ -108,50 +105,10 @@ function getScoreColor(score: number) {
 }
 
 function getPriorityTone(priority: ActionPriority) {
-  if (priority === "Immediate") {
-    return "bg-red-100 text-red-700 border-red-200";
-  }
-  if (priority === "High") {
-    return "bg-orange-100 text-orange-700 border-orange-200";
-  }
-  if (priority === "Medium") {
-    return "bg-amber-100 text-amber-700 border-amber-200";
-  }
+  if (priority === "Immediate") return "bg-red-100 text-red-700 border-red-200";
+  if (priority === "High") return "bg-orange-100 text-orange-700 border-orange-200";
+  if (priority === "Medium") return "bg-amber-100 text-amber-700 border-amber-200";
   return "bg-slate-100 text-slate-700 border-slate-200";
-}
-
-function getStatusTone(level: RiskLevel): {
-  tone: StatusTone;
-  badge: string;
-} {
-  if (level === "Low") return { tone: "good", badge: "Operationally Stable" };
-  if (level === "Moderate")
-    return { tone: "neutral", badge: "Watchlist Required" };
-  if (level === "Elevated")
-    return { tone: "warn", badge: "Mitigation Recommended" };
-  if (level === "High") return { tone: "bad", badge: "Action Required" };
-  return { tone: "bad", badge: "Executive Escalation" };
-}
-
-function toneClasses(tone: StatusTone) {
-  if (tone === "good") {
-    return "bg-emerald-50 border-emerald-200 text-emerald-800";
-  }
-  if (tone === "warn") {
-    return "bg-amber-50 border-amber-200 text-amber-800";
-  }
-  if (tone === "bad") {
-    return "bg-red-50 border-red-200 text-red-800";
-  }
-  return "bg-slate-50 border-slate-200 text-slate-800";
-}
-
-function formatDate(input: string) {
-  try {
-    return new Date(input).toLocaleString();
-  } catch {
-    return input;
-  }
 }
 
 function buildDemoReport(): ReportData {
@@ -220,8 +177,7 @@ function buildDemoReport(): ReportData {
         category: "Documentation",
         title: "Document control risk remains manageable but not automated",
         score: 24,
-        impact:
-          "Missed document alignment can still delay customs or handover.",
+        impact: "Missed document alignment can still delay customs or handover.",
         likelihood: "Low",
         evidence:
           "No high-risk exception detected, but manual control is still required.",
@@ -280,14 +236,140 @@ function buildDemoReport(): ReportData {
   };
 }
 
+function formatDate(value: string) {
+  try {
+    return new Date(value).toLocaleString();
+  } catch {
+    return value;
+  }
+}
+
+function SectionTitle({
+  title,
+  subtitle,
+}: {
+  title: string;
+  subtitle: string;
+}) {
+  return (
+    <div>
+      <h2 className="text-xl font-semibold text-white">{title}</h2>
+      <p className="mt-1 text-sm text-slate-400">{subtitle}</p>
+    </div>
+  );
+}
+
+function InfoChip({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+      <div className="text-xs uppercase tracking-wide text-slate-500">{label}</div>
+      <div className="mt-1 text-sm font-medium text-slate-200">{value}</div>
+    </div>
+  );
+}
+
+function MetaBlock({ title, value }: { title: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+      <div className="text-xs uppercase tracking-wide text-slate-500">{title}</div>
+      <div className="mt-2 text-sm leading-6 text-slate-300">{value}</div>
+    </div>
+  );
+}
+
+function ValueCard({ title, text }: { title: string; text: string }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-slate-950/50 p-5">
+      <div className="text-sm font-semibold text-white">{title}</div>
+      <p className="mt-2 text-sm leading-6 text-slate-300">{text}</p>
+    </div>
+  );
+}
+
+function LockedCard({
+  title,
+  description,
+}: {
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
+      <div className="mb-2 flex items-center justify-between">
+        <h3 className="text-sm font-semibold text-white">{title}</h3>
+        <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-2 py-1 text-[11px] font-medium text-cyan-300">
+          Premium
+        </span>
+      </div>
+      <p className="text-sm leading-6 text-slate-300">{description}</p>
+      <div className="mt-4">
+        <button className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white hover:bg-white/10">
+          Unlock Module
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function MiniRiskBar({ score }: { score: number }) {
+  const width = `${Math.max(4, Math.min(score, 100))}%`;
+
+  return (
+    <div className="w-full max-w-[160px]">
+      <div className="mb-2 flex items-center justify-between text-xs text-slate-400">
+        <span>Exposure</span>
+        <span>{score}/100</span>
+      </div>
+      <div className="h-2 overflow-hidden rounded-full bg-white/10">
+        <div className={`h-full rounded-full ${getScoreColor(score)}`} style={{ width }} />
+      </div>
+    </div>
+  );
+}
+
+function ScoreDial({ score, grade }: { score: number; grade: string }) {
+  return (
+    <div className="flex flex-col items-center">
+      <div className="relative mt-2 flex h-56 w-56 items-center justify-center rounded-full border-[18px] border-white/10 bg-slate-950">
+        <div className="text-center">
+          <div className="text-xs uppercase tracking-[0.22em] text-slate-500">Score</div>
+          <div className="mt-1 text-5xl font-semibold text-white">{score}</div>
+          <div className="mt-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-sm text-slate-300">
+            Grade {grade}
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-3 w-full max-w-[260px]">
+        <div className="mb-2 flex justify-between text-[11px] uppercase tracking-wide text-slate-500">
+          <span>A</span>
+          <span>B</span>
+          <span>C</span>
+          <span>D</span>
+          <span>E</span>
+        </div>
+        <div className="h-3 overflow-hidden rounded-full bg-white/10">
+          <div className="flex h-full">
+            <div className="h-full w-1/5 bg-emerald-500" />
+            <div className="h-full w-1/5 bg-lime-500" />
+            <div className="h-full w-1/5 bg-amber-500" />
+            <div className="h-full w-1/5 bg-orange-500" />
+            <div className="h-full w-1/5 bg-red-500" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function RiskReportPage() {
   const [report, setReport] = useState<ReportData | null>(null);
   const [loading, setLoading] = useState(true);
   const [useDemo, setUseDemo] = useState(false);
-  const [error, setError] = useState<string>("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    let active = true;
+    let mounted = true;
 
     async function loadData() {
       setLoading(true);
@@ -295,7 +377,7 @@ export default function RiskReportPage() {
 
       try {
         if (!API_BASE) {
-          if (!active) return;
+          if (!mounted) return;
           setUseDemo(true);
           setReport(buildDemoReport());
           setLoading(false);
@@ -304,9 +386,7 @@ export default function RiskReportPage() {
 
         const response = await fetch(`${API_BASE}/risk-report-preview`, {
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           cache: "no-store",
         });
 
@@ -315,7 +395,6 @@ export default function RiskReportPage() {
         }
 
         const data = await response.json();
-
         const safeScore =
           typeof data?.overall_score === "number" ? data.overall_score : 37;
         const mapped = getGrade(safeScore);
@@ -359,35 +438,32 @@ export default function RiskReportPage() {
           },
         };
 
-        if (!active) return;
+        if (!mounted) return;
         setReport(normalized);
       } catch (err) {
         console.error(err);
-        if (!active) return;
+        if (!mounted) return;
         setUseDemo(true);
         setError(
           "Live API unavailable. The page is showing demo data so you can continue UI testing."
         );
         setReport(buildDemoReport());
       } finally {
-        if (active) setLoading(false);
+        if (mounted) {
+          setLoading(false);
+        }
       }
     }
 
     loadData();
 
     return () => {
-      active = false;
+      mounted = false;
     };
   }, []);
 
   const gradeInfo = useMemo(() => {
-    const score = report?.overall_score ?? 0;
-    return getGrade(score);
-  }, [report]);
-
-  const statusInfo = useMemo(() => {
-    return getStatusTone(report?.risk_level || "Moderate");
+    return getGrade(report?.overall_score ?? 0);
   }, [report]);
 
   if (loading) {
@@ -415,8 +491,7 @@ export default function RiskReportPage() {
           <div className="rounded-3xl border border-red-500/20 bg-red-500/10 p-8">
             <h1 className="text-2xl font-semibold">Risk report unavailable</h1>
             <p className="mt-3 text-sm text-slate-300">
-              No report data was returned. Check the API connection or fallback
-              logic.
+              No report data was returned. Check the API connection or fallback logic.
             </p>
           </div>
         </div>
@@ -427,48 +502,35 @@ export default function RiskReportPage() {
   return (
     <main className="min-h-screen bg-slate-950 text-white">
       <div className="mx-auto max-w-7xl px-6 py-8">
-        <header className="mb-8 flex flex-col gap-5 rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 p-6 shadow-2xl shadow-black/20 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <div className="mb-3 flex flex-wrap items-center gap-2">
-              <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs font-medium tracking-wide text-cyan-300">
-                RiskAtlas
+        <header className="mb-8 rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 p-6 shadow-2xl shadow-black/20">
+          <div className="mb-3 flex flex-wrap items-center gap-2">
+            <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs font-medium tracking-wide text-cyan-300">
+              RiskAtlas
+            </span>
+            {useDemo && (
+              <span className="rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-xs font-medium text-amber-300">
+                Demo Mode
               </span>
-              <span
-                className={`rounded-full border px-3 py-1 text-xs font-medium ${toneClasses(
-                  statusInfo.tone
-                )}`}
-              >
-                {statusInfo.badge}
-              </span>
-              {useDemo && (
-                <span className="rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-xs font-medium text-amber-300">
-                  Demo Mode
-                </span>
-              )}
-            </div>
-
-            <h1 className="text-3xl font-semibold tracking-tight lg:text-4xl">
-              Risk Report Preview
-            </h1>
-
-            <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-300">
-              A commercial-grade preview built for paid delivery: score meaning,
-              executive summary, action priorities, and locked premium sections
-              for upsell.
-            </p>
-
-            <div className="mt-5 grid gap-3 text-sm text-slate-300 sm:grid-cols-2 lg:grid-cols-4">
-              <InfoChip label="Client" value={report.company_name} />
-              <InfoChip label="Route" value={report.route_name} />
-              <InfoChip label="Product" value={report.product_name} />
-              <InfoChip
-                label="Generated"
-                value={formatDate(report.generated_at)}
-              />
-            </div>
+            )}
           </div>
 
-          <div className="flex flex-wrap gap-3">
+          <h1 className="text-3xl font-semibold tracking-tight lg:text-4xl">
+            Risk Report Preview
+          </h1>
+
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-300">
+            A commercial-grade preview built for paid delivery: score meaning,
+            executive summary, action priorities, and locked premium sections for upsell.
+          </p>
+
+          <div className="mt-5 grid gap-3 text-sm text-slate-300 sm:grid-cols-2 lg:grid-cols-4">
+            <InfoChip label="Client" value={report.company_name} />
+            <InfoChip label="Route" value={report.route_name} />
+            <InfoChip label="Product" value={report.product_name} />
+            <InfoChip label="Generated" value={formatDate(report.generated_at)} />
+          </div>
+
+          <div className="mt-5 flex flex-wrap gap-3">
             <button className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white transition hover:bg-white/10">
               Export Preview PDF
             </button>
@@ -478,11 +540,11 @@ export default function RiskReportPage() {
           </div>
         </header>
 
-        {error ? (
+        {error && (
           <div className="mb-6 rounded-2xl border border-amber-500/20 bg-amber-500/10 p-4 text-sm text-amber-200">
             {error}
           </div>
-        ) : null}
+        )}
 
         <section className="grid gap-6 lg:grid-cols-[360px_1fr]">
           <div className="rounded-3xl border border-white/10 bg-slate-900 p-6">
@@ -502,9 +564,7 @@ export default function RiskReportPage() {
               </div>
               <div className="mt-2 flex items-center justify-between">
                 <span className="text-sm text-slate-400">Risk Level</span>
-                <span className="text-sm font-medium text-slate-200">
-                  {report.risk_level}
-                </span>
+                <span className="text-sm font-medium text-slate-200">{report.risk_level}</span>
               </div>
               <p className="mt-4 text-sm leading-6 text-slate-300">
                 {gradeInfo.description}
@@ -512,9 +572,7 @@ export default function RiskReportPage() {
             </div>
 
             <div className="mt-6 rounded-2xl border border-cyan-400/20 bg-cyan-400/5 p-4">
-              <div className="text-sm font-semibold text-cyan-300">
-                Score Definition
-              </div>
+              <div className="text-sm font-semibold text-cyan-300">Score Definition</div>
               <p className="mt-2 text-sm leading-6 text-slate-300">
                 {report.score_definition}
               </p>
@@ -533,17 +591,13 @@ export default function RiskReportPage() {
 
               <div className="mt-6 grid gap-4 lg:grid-cols-2">
                 <div className="rounded-2xl border border-white/10 bg-slate-950/50 p-4">
-                  <div className="text-sm font-semibold text-white">
-                    Decision Guidance
-                  </div>
+                  <div className="text-sm font-semibold text-white">Decision Guidance</div>
                   <p className="mt-2 text-sm leading-6 text-slate-300">
                     {report.decision_note}
                   </p>
                 </div>
                 <div className="rounded-2xl border border-white/10 bg-slate-950/50 p-4">
-                  <div className="text-sm font-semibold text-white">
-                    Confidence Note
-                  </div>
+                  <div className="text-sm font-semibold text-white">Confidence Note</div>
                   <p className="mt-2 text-sm leading-6 text-slate-300">
                     {report.confidence_note}
                   </p>
@@ -558,52 +612,46 @@ export default function RiskReportPage() {
               />
 
               <div className="mt-5 space-y-4">
-                {report.factors.length > 0 ? (
-                  report.factors.map((factor) => (
-                    <div
-                      key={factor.id}
-                      className="rounded-2xl border border-white/10 bg-slate-950/40 p-5"
-                    >
-                      <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
-                        <div className="min-w-0">
-                          <div className="mb-2 flex flex-wrap items-center gap-2">
-                            <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-slate-300">
-                              {factor.category}
-                            </span>
-                            <span
-                              className={`rounded-full px-2.5 py-1 text-xs font-medium text-white ${getScoreColor(
-                                factor.score
-                              )}`}
-                            >
-                              Score {factor.score}
-                            </span>
-                          </div>
-                          <h3 className="text-base font-semibold text-white">
-                            {factor.title}
-                          </h3>
+                {report.factors.map((factor) => (
+                  <div
+                    key={factor.id}
+                    className="rounded-2xl border border-white/10 bg-slate-950/40 p-5"
+                  >
+                    <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                      <div className="min-w-0">
+                        <div className="mb-2 flex flex-wrap items-center gap-2">
+                          <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-slate-300">
+                            {factor.category}
+                          </span>
+                          <span
+                            className={`rounded-full px-2.5 py-1 text-xs font-medium text-white ${getScoreColor(
+                              factor.score
+                            )}`}
+                          >
+                            Score {factor.score}
+                          </span>
                         </div>
-                        <MiniRiskBar score={factor.score} />
+                        <h3 className="text-base font-semibold text-white">{factor.title}</h3>
                       </div>
-
-                      <div className="mt-4 grid gap-4 lg:grid-cols-3">
-                        <MetaBlock title="Impact" value={factor.impact} />
-                        <MetaBlock title="Likelihood" value={factor.likelihood} />
-                        <MetaBlock title="Evidence" value={factor.evidence} />
-                      </div>
-
-                      <div className="mt-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-4">
-                        <div className="text-sm font-semibold text-emerald-300">
-                          Recommended Action
-                        </div>
-                        <p className="mt-2 text-sm leading-6 text-slate-300">
-                          {factor.recommendation}
-                        </p>
-                      </div>
+                      <MiniRiskBar score={factor.score} />
                     </div>
-                  ))
-                ) : (
-                  <EmptyState text="No factor breakdown received from the API yet." />
-                )}
+
+                    <div className="mt-4 grid gap-4 lg:grid-cols-3">
+                      <MetaBlock title="Impact" value={factor.impact} />
+                      <MetaBlock title="Likelihood" value={factor.likelihood} />
+                      <MetaBlock title="Evidence" value={factor.evidence} />
+                    </div>
+
+                    <div className="mt-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-4">
+                      <div className="text-sm font-semibold text-emerald-300">
+                        Recommended Action
+                      </div>
+                      <p className="mt-2 text-sm leading-6 text-slate-300">
+                        {factor.recommendation}
+                      </p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -614,42 +662,31 @@ export default function RiskReportPage() {
               />
 
               <div className="mt-5 grid gap-4">
-                {report.actions.length > 0 ? (
-                  report.actions.map((action) => (
-                    <div
-                      key={action.id}
-                      className="rounded-2xl border border-white/10 bg-slate-950/40 p-5"
-                    >
-                      <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
-                        <div>
-                          <div className="mb-2 flex flex-wrap items-center gap-2">
-                            <span
-                              className={`rounded-full border px-2.5 py-1 text-xs font-medium ${getPriorityTone(
-                                action.priority
-                              )}`}
-                            >
-                              {action.priority}
-                            </span>
-                            <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-slate-300">
-                              Owner: {action.owner}
-                            </span>
-                            <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-slate-300">
-                              {action.timeline}
-                            </span>
-                          </div>
-                          <h3 className="text-base font-semibold text-white">
-                            {action.title}
-                          </h3>
-                          <p className="mt-2 text-sm leading-6 text-slate-300">
-                            {action.description}
-                          </p>
-                        </div>
-                      </div>
+                {report.actions.map((action) => (
+                  <div
+                    key={action.id}
+                    className="rounded-2xl border border-white/10 bg-slate-950/40 p-5"
+                  >
+                    <div className="mb-2 flex flex-wrap items-center gap-2">
+                      <span
+                        className={`rounded-full border px-2.5 py-1 text-xs font-medium ${getPriorityTone(
+                          action.priority
+                        )}`}
+                      >
+                        {action.priority}
+                      </span>
+                      <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-slate-300">
+                        Owner: {action.owner}
+                      </span>
+                      <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-slate-300">
+                        {action.timeline}
+                      </span>
                     </div>
-                  ))
-                ) : (
-                  <EmptyState text="No action plan received from the API yet." />
-                )}
+
+                    <h3 className="text-base font-semibold text-white">{action.title}</h3>
+                    <p className="mt-2 text-sm leading-6 text-slate-300">{action.description}</p>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -675,9 +712,7 @@ export default function RiskReportPage() {
               </div>
 
               <div className="mt-6 rounded-2xl border border-white/10 bg-slate-950/50 p-5">
-                <div className="text-sm font-semibold text-white">
-                  Monetization Logic
-                </div>
+                <div className="text-sm font-semibold text-white">Monetization Logic</div>
                 <p className="mt-2 text-sm leading-6 text-slate-300">
                   {report.premium_preview.commercial_note}
                 </p>
@@ -722,154 +757,5 @@ export default function RiskReportPage() {
         </section>
       </div>
     </main>
-  );
-}
-
-function SectionTitle({
-  title,
-  subtitle,
-}: {
-  title: string;
-  subtitle: string;
-}) {
-  return (
-    <div>
-      <h2 className="text-xl font-semibold tracking-tight text-white">
-        {title}
-      </h2>
-      <p className="mt-1 text-sm text-slate-400">{subtitle}</p>
-    </div>
-  );
-}
-
-function InfoChip({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-      <div className="text-xs uppercase tracking-wide text-slate-500">
-        {label}
-      </div>
-      <div className="mt-1 text-sm font-medium text-slate-200">{value}</div>
-    </div>
-  );
-}
-
-function MetaBlock({ title, value }: { title: string; value: string }) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-      <div className="text-xs uppercase tracking-wide text-slate-500">
-        {title}
-      </div>
-      <div className="mt-2 text-sm leading-6 text-slate-300">{value}</div>
-    </div>
-  );
-}
-
-function EmptyState({ text }: { text: string }) {
-  return (
-    <div className="rounded-2xl border border-dashed border-white/15 bg-slate-950/30 p-8 text-center text-sm text-slate-400">
-      {text}
-    </div>
-  );
-}
-
-function ValueCard({ title, text }: { title: string; text: string }) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-slate-950/50 p-5">
-      <div className="text-sm font-semibold text-white">{title}</div>
-      <p className="mt-2 text-sm leading-6 text-slate-300">{text}</p>
-    </div>
-  );
-}
-
-function LockedCard({
-  title,
-  description,
-}: {
-  title: string;
-  description: string;
-}) {
-  return (
-    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-slate-950/60 p-5">
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-slate-950/10 to-slate-950/30 backdrop-blur-[2px]" />
-      <div className="relative">
-        <div className="mb-2 flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-white">{title}</h3>
-          <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-2 py-1 text-[11px] font-medium text-cyan-300">
-            Premium
-          </span>
-        </div>
-        <p className="text-sm leading-6 text-slate-300">{description}</p>
-        <div className="mt-4">
-          <button className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white hover:bg-white/10">
-            Unlock Module
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function MiniRiskBar({ score }: { score: number }) {
-  return (
-    <div className="w-full max-w-[160px]">
-      <div className="mb-2 flex items-center justify-between text-xs text-slate-400">
-        <span>Exposure</span>
-        <span>{score}/100</span>
-      </div>
-      <div className="h-2 overflow-hidden rounded-full bg-white/10">
-        <div
-          className={`h-full rounded-full ${getScoreColor(score)}`}
-          style={{ width: `${Math.max(4, Math.min(score, 100))}%` }}
-        />
-      </div>
-    </div>
-  );
-}
-
-function ScoreDial({ score, grade }: { score: number; grade: string }) {
-  const normalized = Math.max(0, Math.min(score, 100));
-  const degrees = (normalized / 100) * 270 - 135;
-
-  return (
-    <div className="flex flex-col items-center">
-      <div className="relative mt-2 h-56 w-56">
-        <div className="absolute inset-0 rounded-full border-[18px] border-white/10" />
-        <div
-          className="absolute left-1/2 top-1/2 h-24 w-1.5 origin-bottom rounded-full bg-white shadow-[0_0_15px_rgba(255,255,255,0.35)]"
-          style={{
-            transform: `translate(-50%, -100%) rotate(${degrees}deg)`,
-          }}
-        />
-        <div className="absolute inset-6 rounded-full bg-slate-950 ring-1 ring-white/10" />
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <div className="text-xs uppercase tracking-[0.22em] text-slate-500">
-            Score
-          </div>
-          <div className="mt-1 text-5xl font-semibold">{score}</div>
-          <div className="mt-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-sm text-slate-300">
-            Grade {grade}
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-3 w-full max-w-[260px]">
-        <div className="mb-2 flex justify-between text-[11px] uppercase tracking-wide text-slate-500">
-          <span>A</span>
-          <span>B</span>
-          <span>C</span>
-          <span>D</span>
-          <span>E</span>
-        </div>
-        <div className="h-3 overflow-hidden rounded-full bg-white/10">
-          <div className="flex h-full">
-            <div className="h-full w-1/5 bg-emerald-500" />
-            <div className="h-full w-1/5 bg-lime-500" />
-            <div className="h-full w-1/5 bg-amber-500" />
-            <div className="h-full w-1/5 bg-orange-500" />
-            <div className="h-full w-1/5 bg-red-500" />
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }
