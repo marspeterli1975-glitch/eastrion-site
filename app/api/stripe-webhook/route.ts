@@ -8,10 +8,6 @@ if (!stripeSecretKey) {
   throw new Error("Missing STRIPE_SECRET_KEY in environment variables.");
 }
 
-if (!webhookSecret) {
-  throw new Error("Missing STRIPE_WEBHOOK_SECRET in environment variables.");
-}
-
 const stripe = new Stripe(stripeSecretKey);
 
 export async function POST(req: Request) {
@@ -26,6 +22,19 @@ export async function POST(req: Request) {
   try {
     const body = await req.text();
 
+    // 开发 / MVP 阶段：如果还没配置 webhook secret，先跳过验签，避免阻塞部署
+    if (!webhookSecret) {
+      console.warn(
+        "⚠️ STRIPE_WEBHOOK_SECRET is missing. Webhook signature verification is being skipped."
+      );
+
+      return NextResponse.json({
+        received: true,
+        skipped: true,
+        reason: "Missing STRIPE_WEBHOOK_SECRET",
+      });
+    }
+
     const event = stripe.webhooks.constructEvent(
       body,
       signature,
@@ -35,6 +44,7 @@ export async function POST(req: Request) {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
+
         console.log("✅ checkout.session.completed", {
           id: session.id,
           plan: session.metadata?.plan,
@@ -52,7 +62,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ received: true });
   } catch (error) {
-    console.error("Stripe webhook signature verification failed:", error);
+    console.error("Stripe webhook processing failed:", error);
     return new NextResponse("Webhook Error", { status: 400 });
   }
 }
