@@ -91,11 +91,21 @@ export default function Navbar() {
             minWidth: "280px",
           }}
         >
-          <Link href="/" style={navLinkStyle}>Home</Link>
-          <Link href="/about" style={navLinkStyle}>About</Link>
-          <Link href="/solutions" style={navLinkStyle}>Solutions</Link>
-          <Link href="/riskatlas" style={navLinkStyle}>RiskAtlas</Link>
-          <Link href="/contact" style={navLinkStyle}>Contact</Link>
+          <Link href="/" style={navLinkStyle}>
+            Home
+          </Link>
+          <Link href="/about" style={navLinkStyle}>
+            Why Eastrion
+          </Link>
+          <Link href="/solutions" style={navLinkStyle}>
+            Services
+          </Link>
+          <Link href="/riskatlas" style={navLinkStyle}>
+            RiskAtlas
+          </Link>
+          <Link href="/contact" style={navLinkStyle}>
+            Contact
+          </Link>
         </nav>
 
         <div style={{ minWidth: "fit-content" }}>
@@ -116,7 +126,7 @@ export default function Navbar() {
               whiteSpace: "nowrap",
             }}
           >
-            Try RiskAtlas
+            Start Risk Assessment
           </Link>
         </div>
       </div>
