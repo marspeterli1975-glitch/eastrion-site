@@ -1,9 +1,8 @@
-import Link from "next/link";
+iimport Link from "next/link";
 
 export default function HomePage() {
   return (
     <main className="min-h-screen bg-[#0b1020] text-white">
-      {/* Section 1: Product-first Hero */}
       <section className="relative overflow-hidden border-b border-white/10 bg-gradient-to-b from-[#0f172a] via-[#0b1020] to-[#0b1020]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.18),transparent_28%),radial-gradient(circle_at_left,rgba(16,185,129,0.14),transparent_24%)]" />
         <div className="relative mx-auto max-w-7xl px-6 py-20 md:px-8 lg:px-10">
@@ -29,7 +28,7 @@ export default function HomePage() {
                   href="/riskatlas"
                   className="inline-flex items-center justify-center rounded-xl bg-cyan-400 px-6 py-3.5 text-base font-semibold text-slate-950 transition hover:bg-cyan-300"
                 >
-                  Enter RiskAtlas
+                  Start Risk Assessment
                 </Link>
 
                 <Link
@@ -66,9 +65,9 @@ export default function HomePage() {
               <div className="space-y-4">
                 <div className="rounded-2xl border border-white/10 bg-[#10182b] p-4">
                   <p className="text-sm font-semibold text-cyan-300">Step 1 · Entry</p>
-                  <h3 className="mt-1 text-lg font-semibold">Run Free Risk Scan</h3>
+                  <h3 className="mt-1 text-lg font-semibold">Initial Risk Signal</h3>
                   <p className="mt-2 text-sm leading-6 text-slate-300">
-                    Start with a lightweight exposure scan to frame where the main
+                    Start with a lightweight exposure review to frame where the main
                     supply chain risks may be concentrated.
                   </p>
                 </div>
@@ -97,13 +96,13 @@ export default function HomePage() {
                   href="/riskatlas"
                   className="inline-flex items-center justify-center rounded-xl bg-white px-4 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
                 >
-                  Open RiskAtlas
+                  Enter RiskAtlas
                 </Link>
                 <Link
                   href="/solutions"
                   className="inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
                 >
-                  View Solutions
+                  Services
                 </Link>
               </div>
             </div>
@@ -111,7 +110,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Section 2: Why Eastrion */}
       <section className="border-b border-white/10 bg-[#0d1326]">
         <div className="mx-auto max-w-7xl px-6 py-16 md:px-8 lg:px-10">
           <div className="max-w-3xl">
@@ -166,7 +164,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Section 3: Solutions */}
       <section className="border-b border-white/10 bg-[#0b1020]">
         <div className="mx-auto max-w-7xl px-6 py-16 md:px-8 lg:px-10">
           <div className="max-w-3xl">
@@ -174,7 +171,7 @@ export default function HomePage() {
               Solutions
             </p>
             <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
-              Eastrion supports the workflow beyond the scan.
+              Eastrion supports the workflow beyond the assessment.
             </h2>
             <p className="mt-4 text-base leading-8 text-slate-300">
               RiskAtlas is the entry point, but not the whole business. For qualified
@@ -198,7 +195,7 @@ export default function HomePage() {
                   href="/riskatlas"
                   className="text-sm font-semibold text-cyan-300 hover:text-cyan-200"
                 >
-                  Open RiskAtlas →
+                  Enter RiskAtlas →
                 </Link>
               </div>
             </div>
@@ -217,7 +214,7 @@ export default function HomePage() {
                   href="/contact"
                   className="text-sm font-semibold text-emerald-300 hover:text-emerald-200"
                 >
-                  Discuss sourcing needs →
+                  Contact Eastrion →
                 </Link>
               </div>
             </div>
@@ -244,7 +241,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Section 4: CTA */}
       <section className="bg-white/[0.03]">
         <div className="mx-auto max-w-7xl px-6 py-16 md:px-8 lg:px-10">
           <div className="rounded-3xl border border-white/10 bg-gradient-to-r from-cyan-500/10 via-slate-900 to-emerald-500/10 p-8 md:p-10">
@@ -282,7 +278,7 @@ export default function HomePage() {
                   href="/contact"
                   className="inline-flex items-center justify-center rounded-xl border border-emerald-400/25 bg-emerald-400/10 px-6 py-3.5 text-base font-semibold text-emerald-200 transition hover:bg-emerald-400/15"
                 >
-                  Contact Eastrion for Service Support
+                  Contact Eastrion
                 </Link>
               </div>
             </div>

@@ -94,8 +94,8 @@ export default function Navbar() {
           <Link href="/" style={navLinkStyle}>
             Home
           </Link>
-          <Link href="/about" style={navLinkStyle}>
-            Why Eastrion
+          <Link href="/why-eastrion" style={navLinkStyle}>
+          Why Eastrion
           </Link>
           <Link href="/solutions" style={navLinkStyle}>
             Services

@@ -13,15 +13,14 @@ export default function RiskAtlasPage() {
               </div>
 
               <h1 className="max-w-4xl text-4xl font-bold leading-tight tracking-tight md:text-5xl lg:text-6xl">
-                Turn supply chain uncertainty into a structured, paid risk
-                intelligence workflow.
+                Turn supply chain uncertainty into a structured, paid risk intelligence workflow.
               </h1>
 
               <p className="mt-6 max-w-3xl text-base leading-8 text-slate-300 md:text-lg">
-                RiskAtlas helps importers, exporters, sourcing teams and
-                logistics operators quickly identify exposure across supplier,
-                route, country and execution layers — starting with a free scan,
-                then upgrading into a professional decision-ready report.
+                RiskAtlas helps importers, exporters, sourcing teams and logistics operators
+                quickly identify exposure across supplier, route, country and execution layers
+                — starting with an initial assessment, then upgrading into a professional
+                decision-ready report.
               </p>
 
               <div className="mt-8 flex flex-col gap-4 sm:flex-row">
@@ -29,7 +28,7 @@ export default function RiskAtlasPage() {
                   href="/riskatlas/report"
                   className="inline-flex items-center justify-center rounded-xl bg-cyan-400 px-6 py-3.5 text-base font-semibold text-slate-950 transition hover:bg-cyan-300"
                 >
-                  Run Free Risk Scan
+                  Start Risk Assessment
                 </Link>
 
                 <Link
@@ -42,7 +41,7 @@ export default function RiskAtlasPage() {
 
               <div className="mt-6 flex flex-wrap gap-3 text-sm text-slate-400">
                 <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
-                  Free entry point
+                  Initial risk signal
                 </span>
                 <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">
                   Paid report conversion
@@ -60,7 +59,7 @@ export default function RiskAtlasPage() {
                     Commercial Flow
                   </p>
                   <h2 className="mt-2 text-2xl font-semibold text-white">
-                    From free scan to paid action
+                    From initial signal to paid action
                   </h2>
                 </div>
               </div>
@@ -70,14 +69,14 @@ export default function RiskAtlasPage() {
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <p className="text-sm font-semibold text-cyan-300">
-                        Step 1 · Free
+                        Step 1 · Entry
                       </p>
                       <h3 className="mt-1 text-lg font-semibold">
-                        Run Free Risk Scan
+                        Initial Risk Signal
                       </h3>
                       <p className="mt-2 text-sm leading-6 text-slate-300">
-                        Get a quick initial view of your supply chain exposure
-                        and see the structure of your risk report.
+                        Get a quick initial view of your supply chain exposure and see the
+                        structure of your risk report.
                       </p>
                     </div>
                     <span className="rounded-full bg-cyan-400/15 px-3 py-1 text-xs font-medium text-cyan-200">
@@ -96,9 +95,8 @@ export default function RiskAtlasPage() {
                         Unlock Full Report
                       </h3>
                       <p className="mt-2 text-sm leading-6 text-slate-300">
-                        Access score explanation, executive summary, factor
-                        breakdown, priority action plan and premium module
-                        preview.
+                        Access score explanation, executive summary, factor breakdown,
+                        priority action plan and premium module preview.
                       </p>
                     </div>
                     <span className="rounded-full bg-emerald-400/15 px-3 py-1 text-xs font-medium text-emerald-200">
@@ -117,9 +115,8 @@ export default function RiskAtlasPage() {
                         Execution Upgrade
                       </h3>
                       <p className="mt-2 text-sm leading-6 text-slate-300">
-                        Go beyond diagnosis with stronger execution guidance,
-                        recommended next actions and deeper operational
-                        prioritization.
+                        Go beyond diagnosis with stronger execution guidance, recommended
+                        next actions and deeper operational prioritization.
                       </p>
                     </div>
                     <span className="rounded-full bg-amber-400/15 px-3 py-1 text-xs font-medium text-amber-200">
@@ -134,13 +131,13 @@ export default function RiskAtlasPage() {
                   href="/riskatlas/pricing"
                   className="inline-flex items-center justify-center rounded-xl bg-white px-4 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-100"
                 >
-                  See Paid Plans
+                  View Pricing
                 </Link>
                 <Link
                   href="/riskatlas/report"
                   className="inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
                 >
-                  Try Free Scan
+                  Enter RiskAtlas
                 </Link>
               </div>
             </div>
@@ -157,29 +154,26 @@ export default function RiskAtlasPage() {
             One entry page, three conversion layers
           </h2>
           <p className="mt-4 text-base leading-8 text-slate-300">
-            Your current issue is not that Pricing does not exist. It is that
-            users who land on RiskAtlas are not clearly told where the paid
-            value begins. This page should now act as the bridge between free
-            curiosity and paid confidence.
+            Users need a clear path from an initial assessment into a paid report and,
+            where relevant, into execution-grade support.
           </p>
         </div>
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
             <div className="mb-4 inline-flex rounded-full bg-cyan-400/10 px-3 py-1 text-sm font-medium text-cyan-200">
-              Free Scan
+              Initial Signal
             </div>
             <h3 className="text-xl font-semibold">Low-friction entry</h3>
             <p className="mt-3 text-sm leading-7 text-slate-300">
-              Let users experience the product immediately. No payment barrier,
-              no confusion, no extra explanation needed.
+              Let users experience the product immediately with a structured starting point.
             </p>
             <div className="mt-6">
               <Link
                 href="/riskatlas/report"
                 className="text-sm font-semibold text-cyan-300 hover:text-cyan-200"
               >
-                Run Free Risk Scan →
+                Start Risk Assessment →
               </Link>
             </div>
           </div>
@@ -190,16 +184,15 @@ export default function RiskAtlasPage() {
             </div>
             <h3 className="text-xl font-semibold">Decision-ready output</h3>
             <p className="mt-3 text-sm leading-7 text-slate-300">
-              Convert interest into revenue by showing exactly what becomes
-              available after upgrade: explanation, breakdown, priorities and
-              stronger clarity.
+              Show exactly what becomes available after upgrade: explanation, breakdown,
+              priorities and stronger clarity.
             </p>
             <div className="mt-6">
               <Link
                 href="/riskatlas/pricing"
                 className="text-sm font-semibold text-emerald-300 hover:text-emerald-200"
               >
-                Unlock Full Report →
+                View Pricing →
               </Link>
             </div>
           </div>
@@ -210,16 +203,15 @@ export default function RiskAtlasPage() {
             </div>
             <h3 className="text-xl font-semibold">Higher-value monetization</h3>
             <p className="mt-3 text-sm leading-7 text-slate-300">
-              Give serious buyers a second step above the report, so RiskAtlas
-              is not only a scanning tool, but the beginning of an execution
-              service ladder.
+              Give serious buyers a second step above the report, so RiskAtlas becomes the
+              beginning of an execution service ladder.
             </p>
             <div className="mt-6">
               <Link
                 href="/riskatlas/pricing"
                 className="text-sm font-semibold text-amber-300 hover:text-amber-200"
               >
-                See Execution Upgrade →
+                Unlock Full Report →
               </Link>
             </div>
           </div>
@@ -237,9 +229,9 @@ export default function RiskAtlasPage() {
                 RiskAtlas is not just a scan. It is a value ladder.
               </h2>
               <p className="mt-4 text-base leading-8 text-slate-300">
-                The page should educate users in seconds:
-                free scan for discovery, paid report for structured insight,
-                execution upgrade for stronger operational actionability.
+                The page should educate users in seconds: initial assessment for discovery,
+                paid report for structured insight, execution upgrade for stronger operational
+                actionability.
               </p>
             </div>
 
@@ -258,8 +250,7 @@ export default function RiskAtlasPage() {
                   2. Pay for structured clarity
                 </h3>
                 <p className="mt-2 text-sm leading-7 text-slate-300">
-                  The report becomes the product users are paying for, not
-                  merely the scan result.
+                  The report becomes the product users are paying for, not merely the signal.
                 </p>
               </div>
 
@@ -268,8 +259,7 @@ export default function RiskAtlasPage() {
                   3. Upgrade for execution support
                 </h3>
                 <p className="mt-2 text-sm leading-7 text-slate-300">
-                  Premium monetization comes from helping users act, not only
-                  observe.
+                  Premium monetization comes from helping users act, not only observe.
                 </p>
               </div>
             </div>
@@ -288,9 +278,9 @@ export default function RiskAtlasPage() {
                 Choose your path inside RiskAtlas
               </h2>
               <p className="mt-4 max-w-2xl text-base leading-8 text-slate-300">
-                Start with the free scan if you want a quick signal. Go straight
-                to pricing if you already understand the value of deeper supply
-                chain risk intelligence.
+                Start with an initial assessment if you want a quick signal. Go straight to
+                pricing if you already understand the value of deeper supply chain risk
+                intelligence.
               </p>
             </div>
 
@@ -299,7 +289,7 @@ export default function RiskAtlasPage() {
                 href="/riskatlas/report"
                 className="inline-flex items-center justify-center rounded-xl bg-cyan-400 px-6 py-3.5 text-base font-semibold text-slate-950 transition hover:bg-cyan-300"
               >
-                Run Free Risk Scan
+                Enter RiskAtlas
               </Link>
 
               <Link
