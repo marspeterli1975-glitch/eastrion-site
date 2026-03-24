@@ -26,7 +26,7 @@ export default function SolutionsPage() {
             marginBottom: "20px",
           }}
         >
-          Solutions
+          Services
         </div>
 
         <h1
