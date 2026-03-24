@@ -5,7 +5,7 @@ export default function SolutionsPage() {
     <main className="content-page">
       <section className="content-hero">
         <div className="content-shell">
-          <p className="content-eyebrow">Solutions</p>
+          <p className="content-eyebrow">Services</p>
           <h1 className="content-title">
             Structured supply chain support for global SMEs.
           </h1>

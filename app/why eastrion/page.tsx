@@ -64,7 +64,7 @@ export default function WhyEastrionPage() {
             marginTop: "28px",
           }}
         >
-          <Link href="/solutions" style={primaryBtn}>
+          <Link href="/services" style={primaryBtn}>
             Explore Services
           </Link>
 
