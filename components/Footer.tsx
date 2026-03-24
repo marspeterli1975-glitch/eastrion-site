@@ -73,10 +73,10 @@ export default function Footer() {
               <Link href="/" style={footerLinkStyle}>
                 Home
               </Link>
-              <Link href="/about" style={footerLinkStyle}>
+              <Link href="/why Eastrion" style={footerLinkStyle}>
                 Why Eastrion
               </Link>
-              <Link href="/solutions" style={footerLinkStyle}>
+              <Link href="/services" style={footerLinkStyle}>
                 Services
               </Link>
               <Link href="/riskatlas" style={footerLinkStyle}>
