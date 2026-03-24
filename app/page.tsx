@@ -10,17 +10,21 @@ export default function HomePage() {
       }}
     >
       <section
-        style={{
-          background:
-            "radial-gradient(circle at top right, rgba(37, 99, 235, 0.35), transparent 28%), linear-gradient(135deg, #020817 0%, #031033 52%, #071a3d 100%)",
-          borderBottom: "1px solid rgba(148, 163, 184, 0.12)",
-        }}
-      >
+  style={{
+    minHeight: "calc(100vh - 80px)", // ⭐关键
+    display: "flex",
+    alignItems: "center",
+
+    background:
+      "radial-gradient(circle at top right, rgba(37, 99, 235, 0.35), transparent 28%), linear-gradient(135deg, #020817 0%, #031033 52%, #071a3d 100%)",
+    borderBottom: "1px solid rgba(148, 163, 184, 0.12)",
+  }}
+>
         <div
           style={{
             maxWidth: "1280px",
             margin: "0 auto",
-            padding: "78px 24px 72px",
+            ppadding: "40px 24px 40px",
             display: "grid",
             gridTemplateColumns: "1.1fr 0.9fr",
             gap: "42px",
