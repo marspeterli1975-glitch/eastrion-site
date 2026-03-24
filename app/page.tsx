@@ -24,7 +24,7 @@ export default function HomePage() {
           style={{
             maxWidth: "1280px",
             margin: "0 auto",
-            ppadding: "40px 24px 40px",
+            padding: "40px 24px 40px",
             display: "grid",
             gridTemplateColumns: "1.1fr 0.9fr",
             gap: "42px",
