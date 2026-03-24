@@ -64,7 +64,7 @@ export default function WhyEastrionPage() {
             marginTop: "28px",
           }}
         >
-          <Link href="/services" style={primaryBtn}>
+          <Link href="/solutions" style={primaryBtn}>
             Explore Services
           </Link>
 
@@ -117,83 +117,6 @@ export default function WhyEastrionPage() {
               need better structure across suppliers, corridors, execution and
               risk communication.
             </p>
-          </div>
-        </div>
-      </section>
-
-      <section
-        style={{
-          maxWidth: "1280px",
-          margin: "0 auto",
-          padding: "0 24px 72px",
-        }}
-      >
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1.2fr 0.8fr",
-            gap: "28px",
-            alignItems: "start",
-          }}
-        >
-          <div>
-            <div style={labelStyle}>Why it matters</div>
-            <h2
-              style={{
-                fontSize: "44px",
-                lineHeight: 1.15,
-                fontWeight: 650,
-                margin: "12px 0 18px",
-                letterSpacing: "-0.03em",
-              }}
-            >
-              Why Eastrion can do what a generic software layer cannot.
-            </h2>
-
-            <p
-              style={{
-                fontSize: "18px",
-                lineHeight: 1.9,
-                color: "#475569",
-                margin: 0,
-              }}
-            >
-              RiskAtlas is not positioned as an isolated software widget. It is
-              grounded in real cross-border supply chain work, where supplier
-              ambiguity, logistics disruption, corridor volatility and execution
-              friction directly affect commercial outcomes.
-            </p>
-          </div>
-
-          <div
-            style={{
-              display: "grid",
-              gap: "18px",
-            }}
-          >
-            <div style={infoBoxStyle}>
-              <div style={infoTitleStyle}>What it solves</div>
-              <div style={infoTextStyle}>
-                It helps clients move from fragmented signals toward a more
-                structured risk conversation.
-              </div>
-            </div>
-
-            <div style={infoBoxStyle}>
-              <div style={infoTitleStyle}>What it is not</div>
-              <div style={infoTextStyle}>
-                It is not legal advice, investment advice, or a substitute for
-                full due diligence.
-              </div>
-            </div>
-
-            <div style={infoBoxStyle}>
-              <div style={infoTitleStyle}>Why it matters</div>
-              <div style={infoTextStyle}>
-                It gives SMEs a more credible way to frame exposure before deeper
-                commercial commitments.
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -258,24 +181,4 @@ const cardTextStyle = {
   lineHeight: 1.85,
   color: "#64748b",
   margin: 0,
-};
-
-const infoBoxStyle = {
-  background: "rgba(255,255,255,0.72)",
-  borderRadius: "28px",
-  padding: "24px 24px 22px",
-  border: "1px solid rgba(15, 23, 42, 0.05)",
-};
-
-const infoTitleStyle = {
-  fontSize: "20px",
-  fontWeight: 700,
-  color: "#0f172a",
-  marginBottom: "10px",
-};
-
-const infoTextStyle = {
-  fontSize: "16px",
-  lineHeight: 1.8,
-  color: "#64748b",
 };
