@@ -1,528 +1,407 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 
 type UnlockState = {
   pro?: boolean;
   execution?: boolean;
   lastSessionId?: string;
   lastPaidAt?: string;
-  unlockedAt?: string;
-  sessionId?: string;
 };
 
+type CheckoutResponse = {
+  url?: string;
+  checkoutUrl?: string;
+};
+
+function getRiskBand(score: number) {
+  if (score <= 20) {
+    return { grade: "A", label: "Low", color: "text-emerald-400", ring: "ring-emerald-500/30" };
+  }
+  if (score <= 40) {
+    return { grade: "B", label: "Guarded", color: "text-lime-400", ring: "ring-lime-500/30" };
+  }
+  if (score <= 60) {
+    return { grade: "C", label: "Moderate", color: "text-amber-400", ring: "ring-amber-500/30" };
+  }
+  if (score <= 80) {
+    return { grade: "D", label: "High", color: "text-orange-400", ring: "ring-orange-500/30" };
+  }
+  return { grade: "E", label: "Critical", color: "text-red-400", ring: "ring-red-500/30" };
+}
+
 export default function RiskAtlasReportPage() {
-  const [isUnlocked, setIsUnlocked] = useState(false);
-  const [unlockState, setUnlockState] = useState<UnlockState | null>(null);
-  const [isHydrated, setIsHydrated] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [unlockState, setUnlockState] = useState<UnlockState>({});
+  const [isPaying, setIsPaying] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+
     try {
       const raw = localStorage.getItem("riskatlas_unlock_state");
-      if (!raw) {
-        setIsHydrated(true);
-        return;
-      }
-
-      const parsed = JSON.parse(raw) as UnlockState;
-      setUnlockState(parsed);
-
-      if (parsed?.pro === true) {
-        setIsUnlocked(true);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        setUnlockState(parsed || {});
       }
     } catch (error) {
-      console.error("Failed to read riskatlas unlock state:", error);
-    } finally {
-      setIsHydrated(true);
+      console.error("Failed to read unlock state:", error);
     }
   }, []);
 
-  const grade = "B";
+  const overallScore = 38;
 
-  const headline = isUnlocked
-    ? "Your current structure shows moderate exposure with identifiable execution risks, concentrated dependency pressure and visible improvement priorities."
-    : "Your current structure shows moderate exposure with hidden execution risks. Most issues are not yet visible, but they are forming.";
+  const band = useMemo(() => getRiskBand(overallScore), [overallScore]);
 
-  const executiveSummary = isUnlocked
-    ? "The route remains commercially usable, but resilience is weakened by supplier concentration, corridor friction and limited execution buffer. The current configuration does not indicate critical breakdown, but it does indicate a higher probability of avoidable cost, delay and coordination stress if disruption intensifies."
-    : "This preview confirms that risk is present, but not yet fully diagnosed. The free version is designed to show signal, not complete explanation.";
+  const isProUnlocked = !!unlockState?.pro;
 
-  const freeInsights = [
-    "Country-level risk exposure detected",
-    "Supplier dependency risk identified",
-    "Logistics corridor volatility present",
-  ];
+  async function handleUnlockProfessional() {
+    try {
+      setIsPaying(true);
 
-  const lockedFeatures = [
-    "Why this score is B rather than A",
-    "Risk factor weight breakdown",
-    "Supplier-specific vulnerability analysis",
-    "Route-level disruption scenarios",
-    "Priority action plan",
-  ];
+      const response = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          product: "riskatlas_professional_report",
+          plan: "professional",
+          amount: 49,
+          currency: "usd",
+        }),
+      });
 
-  const proInsights = [
-    {
-      title: "Score explanation",
-      body: "The current grade reflects moderate structural exposure. The route remains operable, but supplier concentration and execution dependency reduce resilience.",
-    },
-    {
-      title: "Primary risk drivers",
-      body: "The largest pressure points come from concentrated supplier reliance, unstable logistics sequencing and insufficient execution buffer across the delivery chain.",
-    },
-    {
-      title: "Supplier vulnerability",
-      body: "The supplier layer appears functional, but dependency concentration suggests limited fallback capacity if lead time, compliance or production continuity weakens.",
-    },
-    {
-      title: "Route scenario outlook",
-      body: "The route is not critically exposed, but corridor volatility can amplify cost, delay and coordination friction if external disruption intensifies.",
-    },
-    {
-      title: "Priority action plan",
-      body: "Reduce single-point dependency, define an alternate supplier path, strengthen shipment sequencing control and pre-define response logic for corridor disruption.",
-    },
-    {
-      title: "Commercial implication",
-      body: "This is not yet a failure scenario, but it is a margin erosion scenario. The structure is workable today, but vulnerable under pressure.",
-    },
-  ];
+      if (!response.ok) {
+        throw new Error("Failed to create checkout session.");
+      }
 
-  const statusBadge = useMemo(() => {
-    if (!isHydrated) return "Loading Report State";
-    if (isUnlocked) return "Professional Report Unlocked";
-    return "Free Preview";
-  }, [isHydrated, isUnlocked]);
+      const data: CheckoutResponse = await response.json();
+      const redirectUrl = data.url || data.checkoutUrl;
+
+      if (!redirectUrl) {
+        throw new Error("Checkout URL not returned.");
+      }
+
+      window.location.href = redirectUrl;
+    } catch (error) {
+      console.error(error);
+      alert("Unable to start checkout. Please try again.");
+    } finally {
+      setIsPaying(false);
+    }
+  }
+
+  if (!mounted) {
+    return (
+      <main className="min-h-screen bg-[#07111f] text-white">
+        <div className="mx-auto max-w-7xl px-6 py-24">
+          <div className="animate-pulse space-y-6">
+            <div className="h-8 w-56 rounded bg-white/10" />
+            <div className="h-28 rounded-2xl bg-white/10" />
+            <div className="grid gap-6 lg:grid-cols-3">
+              <div className="h-40 rounded-2xl bg-white/10" />
+              <div className="h-40 rounded-2xl bg-white/10" />
+              <div className="h-40 rounded-2xl bg-white/10" />
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
-    <main
-      style={{
-        minHeight: "calc(100vh - 96px)",
-        background:
-          "linear-gradient(135deg, #020617 0%, #08112f 55%, #10265c 100%)",
-        color: "#f8fafc",
-      }}
-    >
-      <section
-        style={{
-          maxWidth: "1280px",
-          margin: "0 auto",
-          padding: "56px 24px 96px",
-        }}
-      >
-        <div
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            padding: "10px 18px",
-            borderRadius: "999px",
-            background: isUnlocked
-              ? "rgba(34, 197, 94, 0.14)"
-              : "rgba(56, 189, 248, 0.14)",
-            color: isUnlocked ? "#86efac" : "#7dd3fc",
-            border: "1px solid rgba(148, 163, 184, 0.18)",
-            fontWeight: 700,
-            fontSize: "15px",
-            marginBottom: "28px",
-          }}
-        >
-          {statusBadge}
-        </div>
+    <main className="min-h-screen bg-[#07111f] text-white">
+      <section className="border-b border-white/10 bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.18),_transparent_30%),radial-gradient(circle_at_top_right,_rgba(16,185,129,0.12),_transparent_28%),linear-gradient(180deg,#08111f_0%,#07111f_100%)]">
+        <div className="mx-auto max-w-7xl px-6 py-16 md:py-20">
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-3xl">
+              <div className="mb-4 inline-flex items-center rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs font-medium tracking-[0.2em] text-cyan-300 uppercase">
+                RiskAtlas Beta Report
+              </div>
 
-        <div
-          style={{
-            marginBottom: "18px",
-            fontSize: "56px",
-            lineHeight: 1.02,
-            letterSpacing: "-0.04em",
-            fontWeight: 800,
-            color: "#f8fafc",
-          }}
-        >
-          Your Supply Chain Risk Score
-        </div>
+              <h1 className="text-3xl font-semibold tracking-tight md:text-5xl">
+                Supply Chain Risk Exposure Scan
+              </h1>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "160px 1fr",
-            gap: "24px",
-            alignItems: "start",
-            marginBottom: "26px",
-          }}
-        >
-          <div
-            style={{
-              fontSize: "94px",
-              lineHeight: 1,
-              fontWeight: 900,
-              letterSpacing: "-0.06em",
-              color: "#f6c445",
-            }}
-          >
-            {grade}
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300 md:text-base">
+                This page is the commercial report layer of RiskAtlas Beta. Users can review a free strategic preview,
+                then unlock the Professional Report for a deeper operational and decision-oriented view.
+              </p>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2 lg:min-w-[360px]">
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-400">Unlock status</div>
+                <div className="mt-2 text-lg font-semibold">
+                  {isProUnlocked ? "Professional Unlocked" : "Preview Only"}
+                </div>
+                <div className="mt-1 text-sm text-slate-400">
+                  {isProUnlocked
+                    ? `Paid${
+                        unlockState?.lastPaidAt ? ` · ${new Date(unlockState.lastPaidAt).toLocaleString()}` : ""
+                      }`
+                    : "US$49 to unlock full professional report"}
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-400">Commercial mode</div>
+                <div className="mt-2 text-lg font-semibold">Beta monetization live</div>
+                <div className="mt-1 text-sm text-slate-400">
+                  Frontend unlock works via browser local storage for now.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 py-10">
+        <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
+          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 md:p-8">
+            <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+              <div>
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-400">Executive result</div>
+                <h2 className="mt-2 text-2xl font-semibold">Initial Supply Chain Risk Reading</h2>
+                <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">
+                  The current route sits in a guarded zone. It is not a breakdown scenario, but it is not a clean
+                  low-risk channel either. The main commercial implication is that margin planning, timing confidence,
+                  and execution resilience are not yet strong enough to support aggressive commitments without further validation.
+                </p>
+              </div>
+
+              <div className={`rounded-3xl border border-white/10 bg-[#0b1628] p-6 text-center shadow-2xl ring-1 ${band.ring}`}>
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Overall score</div>
+                <div className="mt-3 text-5xl font-semibold">{overallScore}</div>
+                <div className={`mt-3 text-2xl font-semibold ${band.color}`}>{band.grade}</div>
+                <div className="mt-1 text-sm text-slate-400">{band.label}</div>
+              </div>
+            </div>
+
+            <div className="mt-8 grid gap-4 md:grid-cols-4">
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Band A</div>
+                <div className="mt-2 text-sm font-medium text-white">0–20 Low</div>
+                <p className="mt-2 text-xs leading-6 text-slate-400">Routine exposure. Usually manageable with standard controls.</p>
+              </div>
+
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Band B</div>
+                <div className="mt-2 text-sm font-medium text-white">21–40 Guarded</div>
+                <p className="mt-2 text-xs leading-6 text-slate-400">Watch list exposure. Decisions remain viable, but should not be complacent.</p>
+              </div>
+
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Band C</div>
+                <div className="mt-2 text-sm font-medium text-white">41–60 Moderate</div>
+                <p className="mt-2 text-xs leading-6 text-slate-400">Meaningful pressure across execution, cost, or reliability dimensions.</p>
+              </div>
+
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Band D / E</div>
+                <div className="mt-2 text-sm font-medium text-white">61–100 High / Critical</div>
+                <p className="mt-2 text-xs leading-6 text-slate-400">Requires strong intervention, rerouting, renegotiation, or contingency action.</p>
+              </div>
+            </div>
           </div>
 
-          <div>
-            <p
-              style={{
-                margin: "8px 0 0",
-                fontSize: "24px",
-                lineHeight: 1.55,
-                color: "#e2e8f0",
-                maxWidth: "980px",
-              }}
-            >
-              {headline}
+          <div className="rounded-3xl border border-cyan-400/20 bg-gradient-to-b from-cyan-400/10 to-transparent p-6 md:p-8">
+            <div className="text-xs uppercase tracking-[0.18em] text-cyan-300">Commercial access layer</div>
+            <h3 className="mt-3 text-2xl font-semibold">Professional Report</h3>
+            <p className="mt-3 text-sm leading-7 text-slate-300">
+              Unlock the full report to access the decision note, premium risk interpretation, scenario view,
+              supplier-port exposure summary, and recommended actions in a boardroom-ready format.
+            </p>
+
+            <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-sm text-slate-400">Price</div>
+                  <div className="mt-1 text-3xl font-semibold">US$49</div>
+                </div>
+                <div className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs font-medium text-cyan-300">
+                  Beta Offer
+                </div>
+              </div>
+
+              <div className="mt-5 space-y-3 text-sm text-slate-300">
+                <div>• Executive summary with commercial interpretation</div>
+                <div>• Premium report blocks visibly separated from preview content</div>
+                <div>• Stronger decision-support language for paid users</div>
+                <div>• Better perceived value for future PDF and enterprise layers</div>
+              </div>
+
+              <div className="mt-6">
+                {isProUnlocked ? (
+                  <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-300">
+                    Professional access is active on this browser.
+                  </div>
+                ) : (
+                  <button
+                    onClick={handleUnlockProfessional}
+                    disabled={isPaying}
+                    className="w-full rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {isPaying ? "Redirecting to Checkout..." : "Unlock Professional Report"}
+                  </button>
+                )}
+              </div>
+
+              <div className="mt-4 text-xs leading-6 text-slate-500">
+                Checkout is handled by Stripe Hosted Checkout. Access is currently unlocked on this browser via local storage.
+              </div>
+            </div>
+
+            <div className="mt-5">
+              <Link
+                href="/riskatlas"
+                className="inline-flex items-center text-sm text-slate-300 transition hover:text-white"
+              >
+                ← Back to RiskAtlas
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-7xl px-6 pb-10">
+        <div className="grid gap-6 lg:grid-cols-3">
+          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6">
+            <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Preview insight 01</div>
+            <h3 className="mt-3 text-lg font-semibold">Primary reading</h3>
+            <p className="mt-3 text-sm leading-7 text-slate-300">
+              The current risk level is not severe enough to force immediate avoidance, but it is high enough to justify
+              tighter controls around supplier reliability, timing exposure, and cost discipline.
+            </p>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6">
+            <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Preview insight 02</div>
+            <h3 className="mt-3 text-lg font-semibold">Commercial implication</h3>
+            <p className="mt-3 text-sm leading-7 text-slate-300">
+              A guarded route can still be commercially workable, but quoted margins and promised timelines should not be
+              positioned as if the corridor were stable and low-volatility.
+            </p>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6">
+            <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Preview insight 03</div>
+            <h3 className="mt-3 text-lg font-semibold">Decision posture</h3>
+            <p className="mt-3 text-sm leading-7 text-slate-300">
+              Proceeding is possible, but the route should be treated as a managed decision rather than a default one.
+              That distinction is where premium interpretation starts to matter.
             </p>
           </div>
         </div>
+      </section>
 
-        <div
-          style={{
-            maxWidth: "980px",
-            marginBottom: "42px",
-          }}
-        >
-          <p
-            style={{
-              margin: 0,
-              fontSize: "19px",
-              lineHeight: 1.9,
-              color: "#cbd5e1",
-            }}
-          >
-            {executiveSummary}
-          </p>
-
-          {isUnlocked && unlockState?.lastPaidAt && (
-            <div
-              style={{
-                marginTop: "18px",
-                color: "#94a3b8",
-                fontSize: "15px",
-              }}
-            >
-              Unlock recorded: {unlockState.lastPaidAt}
+      <section className="mx-auto max-w-7xl px-6 pb-12">
+        <div className="rounded-3xl border border-white/10 bg-[#0a1526] p-6 md:p-8">
+          <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
+            <div>
+              <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Professional report layer</div>
+              <h2 className="mt-2 text-2xl font-semibold">Paid content block</h2>
+              <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-300">
+                This section is intentionally designed to make the difference between free preview and paid report obvious.
+                Even before PDF export and backend persistence are added, users should feel that the paid layer is a more serious product.
+              </p>
             </div>
-          )}
-        </div>
 
-        <div
-          style={{
-            marginBottom: "38px",
-          }}
-        >
-          <h2
-            style={{
-              fontSize: "42px",
-              lineHeight: 1.08,
-              letterSpacing: "-0.03em",
-              fontWeight: 800,
-              margin: "0 0 18px",
-              color: "#f8fafc",
-            }}
-          >
-            Free Insight
-          </h2>
+            {!isProUnlocked && (
+              <div className="rounded-2xl border border-amber-400/20 bg-amber-400/10 px-4 py-2 text-sm text-amber-300">
+                Locked until Professional Report is purchased
+              </div>
+            )}
+          </div>
 
-          <ul
-            style={{
-              margin: 0,
-              paddingLeft: "24px",
-              color: "#cbd5e1",
-              fontSize: "18px",
-              lineHeight: 1.9,
-            }}
-          >
-            {freeInsights.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </div>
-
-        {!isUnlocked && (
-          <div style={{ marginBottom: "44px" }}>
-            <h2
-              style={{
-                fontSize: "42px",
-                lineHeight: 1.08,
-                letterSpacing: "-0.03em",
-                fontWeight: 800,
-                margin: "0 0 18px",
-                color: "#f8fafc",
-              }}
-            >
-              🔒 Full Risk Breakdown (Locked)
-            </h2>
-
-            <div
-              style={{
-                borderRadius: "22px",
-                background: "rgba(15, 23, 42, 0.52)",
-                border: "1px solid rgba(148, 163, 184, 0.14)",
-                padding: "28px 28px 30px",
-                color: "#cbd5e1",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "18px",
-                  marginBottom: "14px",
-                  color: "#94a3b8",
-                }}
-              >
-                Upgrade to unlock:
+          {isProUnlocked ? (
+            <div className="mt-8 grid gap-6 lg:grid-cols-2">
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Executive summary</div>
+                <p className="mt-4 text-sm leading-7 text-slate-300">
+                  The assessed route currently falls within the guarded band, indicating a viable but non-trivial exposure profile.
+                  This is a zone where deals can still move, but where management quality, supplier discipline, and execution structure
+                  materially affect outcome quality. The key commercial risk is not necessarily a visible breakdown event; it is the
+                  accumulation of friction, delay, cost leakage, and confidence erosion across the chain.
+                </p>
               </div>
 
-              <ul
-                style={{
-                  margin: 0,
-                  paddingLeft: "22px",
-                  fontSize: "18px",
-                  lineHeight: 1.9,
-                }}
-              >
-                {lockedFeatures.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        )}
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Decision note</div>
+                <p className="mt-4 text-sm leading-7 text-slate-300">
+                  Recommended posture: proceed selectively, but avoid overcommitting on delivery confidence, margin assumptions,
+                  or single-point supplier dependence. The route is commercially acceptable only when paired with tighter verification,
+                  disciplined escalation rules, and contingency thinking on both supplier and logistics execution.
+                </p>
+              </div>
 
-        {isUnlocked && (
-          <div style={{ marginBottom: "44px" }}>
-            <h2
-              style={{
-                fontSize: "42px",
-                lineHeight: 1.08,
-                letterSpacing: "-0.03em",
-                fontWeight: 800,
-                margin: "0 0 18px",
-                color: "#86efac",
-              }}
-            >
-              Professional Report
-            </h2>
-
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-                gap: "18px",
-              }}
-            >
-              {proInsights.map((item) => (
-                <div
-                  key={item.title}
-                  style={{
-                    borderRadius: "22px",
-                    background: "rgba(15, 23, 42, 0.52)",
-                    border: "1px solid rgba(148, 163, 184, 0.14)",
-                    padding: "24px",
-                  }}
-                >
-                  <h3
-                    style={{
-                      margin: "0 0 12px",
-                      fontSize: "24px",
-                      lineHeight: 1.2,
-                      color: "#f8fafc",
-                      fontWeight: 800,
-                    }}
-                  >
-                    {item.title}
-                  </h3>
-                  <p
-                    style={{
-                      margin: 0,
-                      fontSize: "17px",
-                      lineHeight: 1.8,
-                      color: "#cbd5e1",
-                    }}
-                  >
-                    {item.body}
-                  </p>
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Key premium factors</div>
+                <div className="mt-4 space-y-3 text-sm text-slate-300">
+                  <div>• Supplier reliability has a larger downstream effect than visible route noise.</div>
+                  <div>• Cost volatility may remain tolerable, but timing slippage can damage credibility faster than margin.</div>
+                  <div>• A guarded score often hides execution fragility rather than headline-level disruption.</div>
+                  <div>• Commercial teams should avoid quoting the corridor as if it were structurally stable.</div>
                 </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <div style={{ marginBottom: "42px" }}>
-          <h2
-            style={{
-              fontSize: "42px",
-              lineHeight: 1.08,
-              letterSpacing: "-0.03em",
-              fontWeight: 800,
-              margin: "0 0 18px",
-              color: "#f8fafc",
-            }}
-          >
-            Free vs Professional Report
-          </h2>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "20px",
-            }}
-          >
-            <div
-              style={{
-                borderRadius: "22px",
-                background: "rgba(15, 23, 42, 0.52)",
-                border: "1px solid rgba(148, 163, 184, 0.14)",
-                padding: "28px",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "32px",
-                  lineHeight: 1.1,
-                  fontWeight: 800,
-                  color: "#f8fafc",
-                  marginBottom: "16px",
-                }}
-              >
-                Free
               </div>
-              <div
-                style={{
-                  color: "#cbd5e1",
-                  fontSize: "17px",
-                  lineHeight: 1.9,
-                }}
-              >
-                ✓ Basic risk signal
-                <br />
-                ✓ Early-stage visibility
-                <br />
-                ✓ Grade and summary view
-                <br />
-                ✕ Full explanation
-                <br />
-                ✕ Supplier breakdown
-                <br />
-                ✕ Route scenario logic
-                <br />
-                ✕ Priority action plan
+
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Recommended actions</div>
+                <div className="mt-4 space-y-3 text-sm text-slate-300">
+                  <div>1. Reconfirm supplier readiness before locking commercial commitments.</div>
+                  <div>2. Build a delivery buffer into customer-facing timing assumptions.</div>
+                  <div>3. Use alternative execution scenarios for margin-sensitive opportunities.</div>
+                  <div>4. Treat route planning and supplier validation as one integrated risk control task.</div>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-5 lg:col-span-2">
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Premium positioning note</div>
+                <p className="mt-4 text-sm leading-7 text-slate-300">
+                  This unlocked section is the foundation for your later commercial upgrades: richer factor logic,
+                  stronger consulting language, PDF generation, paid token verification, and backend persistence.
+                  In other words, this page is no longer just a test result page — it is becoming the paid product surface itself.
+                </p>
               </div>
             </div>
+          ) : (
+            <div className="mt-8 rounded-3xl border border-dashed border-white/15 bg-white/[0.03] p-8">
+              <div className="max-w-3xl">
+                <h3 className="text-xl font-semibold">Professional content is locked</h3>
+                <p className="mt-3 text-sm leading-7 text-slate-300">
+                  The free preview shows the headline score and strategic reading. The paid layer adds the more commercially useful part:
+                  decision note, interpretation depth, premium factors, and recommended action structure.
+                </p>
 
-            <div
-              style={{
-                borderRadius: "22px",
-                background: "rgba(8, 47, 73, 0.46)",
-                border: "1px solid rgba(34, 197, 94, 0.18)",
-                padding: "28px",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "32px",
-                  lineHeight: 1.1,
-                  fontWeight: 800,
-                  color: "#67e8f9",
-                  marginBottom: "16px",
-                }}
-              >
-                Professional ($49)
-              </div>
-              <div
-                style={{
-                  color: "#d1fae5",
-                  fontSize: "17px",
-                  lineHeight: 1.9,
-                }}
-              >
-                ✓ Full explanation
-                <br />
-                ✓ Score logic visibility
-                <br />
-                ✓ Supplier vulnerability insight
-                <br />
-                ✓ Route-level disruption framing
-                <br />
-                ✓ Priority action plan
-                <br />
-                ✓ Stronger decision support
-                <br />
-                {isUnlocked ? "✓ Unlocked on this browser" : "→ Unlock after payment"}
+                <div className="mt-6 grid gap-4 md:grid-cols-2">
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-slate-400">
+                    Executive summary
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-slate-400">
+                    Decision note
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-slate-400">
+                    Premium factors
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-slate-400">
+                    Recommended actions
+                  </div>
+                </div>
+
+                <div className="mt-6">
+                  <button
+                    onClick={handleUnlockProfessional}
+                    disabled={isPaying}
+                    className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {isPaying ? "Redirecting to Checkout..." : "Pay US$49 to Unlock"}
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            gap: "16px",
-            flexWrap: "wrap",
-          }}
-        >
-          {!isUnlocked && (
-            <Link
-              href="/riskatlas/pricing"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: "16px 28px",
-                borderRadius: "16px",
-                background: "linear-gradient(135deg, #5fd4f5 0%, #8be0b5 100%)",
-                color: "#0f172a",
-                textDecoration: "none",
-                fontWeight: 800,
-                fontSize: "18px",
-              }}
-            >
-              Unlock Full Report
-            </Link>
           )}
-
-          {isUnlocked && (
-            <Link
-              href="/riskatlas/success"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: "16px 28px",
-                borderRadius: "16px",
-                background: "linear-gradient(135deg, #5fd4f5 0%, #8be0b5 100%)",
-                color: "#0f172a",
-                textDecoration: "none",
-                fontWeight: 800,
-                fontSize: "18px",
-              }}
-            >
-              View Unlock Status
-            </Link>
-          )}
-
-          <Link
-            href="/riskatlas"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: "16px 28px",
-              borderRadius: "16px",
-              border: "1px solid rgba(148, 163, 184, 0.2)",
-              background: "rgba(15, 23, 42, 0.52)",
-              color: "#f8fafc",
-              textDecoration: "none",
-              fontWeight: 700,
-              fontSize: "18px",
-            }}
-          >
-            Back to RiskAtlas
-          </Link>
         </div>
       </section>
     </main>
