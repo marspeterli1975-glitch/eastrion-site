@@ -30,38 +30,64 @@ export default function SuccessPage() {
   useEffect(() => {
     async function verifyPayment() {
       if (!sessionId) {
+        console.log("❌ Missing session_id in URL");
         setVerifyState("failed");
         return;
       }
 
       try {
-        const response = await fetch(`/api/verify-checkout-session?session_id=${encodeURIComponent(sessionId)}`, {
-          method: "GET",
-          cache: "no-store",
-        });
+        console.log("🔍 Verifying session:", sessionId);
+
+        const response = await fetch(
+          `/api/verify-checkout-session?session_id=${encodeURIComponent(sessionId)}`,
+          {
+            method: "GET",
+            cache: "no-store",
+          }
+        );
+
+        console.log("🔍 Verify response status:", response.status);
 
         if (!response.ok) {
+          console.log("❌ Verify API returned non-OK response");
           setVerifyState("failed");
           return;
         }
 
         const data = await response.json();
+        console.log("🔍 Verify API data:", data);
 
         if (data?.paid === true) {
+          const unlockPayload = {
+            pro: true,
+            unlockedAt: new Date().toISOString(),
+            sessionId,
+          };
+
+          console.log("🟡 About to write localStorage:", unlockPayload);
+
           localStorage.setItem(
             "riskatlas_unlock_state",
-            JSON.stringify({
-              pro: true,
-              unlockedAt: new Date().toISOString(),
-              sessionId,
-            })
+            JSON.stringify(unlockPayload)
           );
+
+          const storedValue = localStorage.getItem("riskatlas_unlock_state");
+          console.log("✅ localStorage after write:", storedValue);
+
+          if (!storedValue) {
+            console.log("❌ localStorage write failed unexpectedly");
+            setVerifyState("failed");
+            return;
+          }
+
           setVerifyState("success");
           return;
         }
 
+        console.log("❌ Payment not verified as paid");
         setVerifyState("failed");
-      } catch {
+      } catch (error) {
+        console.log("❌ verifyPayment exception:", error);
         setVerifyState("failed");
       }
     }
@@ -73,7 +99,8 @@ export default function SuccessPage() {
     <main
       style={{
         minHeight: "calc(100vh - 96px)",
-        background: "linear-gradient(135deg, #020617 0%, #08112f 55%, #10265c 100%)",
+        background:
+          "linear-gradient(135deg, #020617 0%, #08112f 55%, #10265c 100%)",
         color: "#f8fafc",
       }}
     >
