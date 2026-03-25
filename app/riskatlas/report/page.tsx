@@ -317,56 +317,92 @@ export default function RiskAtlasReportPage() {
           </div>
 
           {isProUnlocked ? (
-            <div className="mt-8 grid gap-6 lg:grid-cols-2">
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Executive summary</div>
-                <p className="mt-4 text-sm leading-7 text-slate-300">
-                  The assessed route currently falls within the guarded band, indicating a viable but non-trivial exposure profile.
-                  This is a zone where deals can still move, but where management quality, supplier discipline, and execution structure
-                  materially affect outcome quality. The key commercial risk is not necessarily a visible breakdown event; it is the
-                  accumulation of friction, delay, cost leakage, and confidence erosion across the chain.
-                </p>
-              </div>
+  <div className="mt-8 space-y-6">
 
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Decision note</div>
-                <p className="mt-4 text-sm leading-7 text-slate-300">
-                  Recommended posture: proceed selectively, but avoid overcommitting on delivery confidence, margin assumptions,
-                  or single-point supplier dependence. The route is commercially acceptable only when paired with tighter verification,
-                  disciplined escalation rules, and contingency thinking on both supplier and logistics execution.
-                </p>
-              </div>
+    {/* Strategic Recommendation Layer */}
+    <div className="rounded-3xl border border-cyan-400/20 bg-cyan-400/5 p-6 md:p-8">
+      <div className="text-xs uppercase tracking-[0.18em] text-cyan-300">
+        Strategic Recommendation Layer
+      </div>
+      <h3 className="mt-2 text-xl font-semibold">
+        Structured Advisory Output (Non-deterministic)
+      </h3>
+      <p className="mt-3 text-sm text-slate-400 leading-7">
+        This section provides a structured recommendation framework based on the current risk exposure.
+        It is designed to support decision-making, not to replace it.
+      </p>
+    </div>
 
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Key premium factors</div>
-                <div className="mt-4 space-y-3 text-sm text-slate-300">
-                  <div>• Supplier reliability has a larger downstream effect than visible route noise.</div>
-                  <div>• Cost volatility may remain tolerable, but timing slippage can damage credibility faster than margin.</div>
-                  <div>• A guarded score often hides execution fragility rather than headline-level disruption.</div>
-                  <div>• Commercial teams should avoid quoting the corridor as if it were structurally stable.</div>
-                </div>
-              </div>
+    <div className="grid gap-6 lg:grid-cols-2">
 
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Recommended actions</div>
-                <div className="mt-4 space-y-3 text-sm text-slate-300">
-                  <div>1. Reconfirm supplier readiness before locking commercial commitments.</div>
-                  <div>2. Build a delivery buffer into customer-facing timing assumptions.</div>
-                  <div>3. Use alternative execution scenarios for margin-sensitive opportunities.</div>
-                  <div>4. Treat route planning and supplier validation as one integrated risk control task.</div>
-                </div>
-              </div>
+      {/* Strategic View */}
+      <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+        <div className="text-xs uppercase tracking-[0.18em] text-slate-500">
+          Strategic View
+        </div>
+        <p className="mt-4 text-sm leading-7 text-slate-300">
+          The current route should be treated as a controlled execution channel rather than a default expansion corridor.
+          From a strategic perspective, the priority is not aggressive scaling, but maintaining execution reliability
+          under moderate exposure conditions.
+        </p>
+      </div>
 
-              <div className="rounded-2xl border border-white/10 bg-black/20 p-5 lg:col-span-2">
-                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Premium positioning note</div>
-                <p className="mt-4 text-sm leading-7 text-slate-300">
-                  This unlocked section is the foundation for your later commercial upgrades: richer factor logic,
-                  stronger consulting language, PDF generation, paid token verification, and backend persistence.
-                  In other words, this page is no longer just a test result page — it is becoming the paid product surface itself.
-                </p>
-              </div>
-            </div>
-          ) : (
+      {/* Tactical Focus */}
+      <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+        <div className="text-xs uppercase tracking-[0.18em] text-slate-500">
+          Tactical Focus
+        </div>
+        <div className="mt-4 space-y-3 text-sm text-slate-300">
+          <div>• Strengthen supplier readiness verification before commitment</div>
+          <div>• Protect margin assumptions under cost variability</div>
+          <div>• Design delivery buffers to absorb timing uncertainty</div>
+          <div>• Monitor execution volatility rather than relying on baseline expectations</div>
+        </div>
+      </div>
+
+      {/* Execution Actions */}
+      <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+        <div className="text-xs uppercase tracking-[0.18em] text-slate-500">
+          Execution Actions
+        </div>
+        <div className="mt-4 space-y-3 text-sm text-slate-300">
+          <div>1. Conduct secondary validation of supplier production stability</div>
+          <div>2. Adjust customer-facing lead time expectations</div>
+          <div>3. Prepare alternative routing scenarios for sensitive shipments</div>
+          <div>4. Avoid single-point dependency in execution planning</div>
+        </div>
+      </div>
+
+      {/* Risk Considerations */}
+      <div className="rounded-2xl border border-amber-400/20 bg-amber-400/5 p-5">
+        <div className="text-xs uppercase tracking-[0.18em] text-amber-300">
+          Risk Considerations
+        </div>
+        <div className="mt-4 space-y-3 text-sm text-slate-300">
+          <div>• This assessment reflects a relative positioning, not a deterministic outcome</div>
+          <div>• External volatility (policy, logistics, pricing) may alter execution conditions</div>
+          <div>• Results should be integrated with contractual, operational, and commercial context</div>
+          <div>• This report is designed as a decision-support layer, not a substitute for professional judgment</div>
+        </div>
+      </div>
+
+    </div>
+
+    {/* Premium Positioning */}
+    <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+      <div className="text-xs uppercase tracking-[0.18em] text-slate-500">
+        Premium Positioning Note
+      </div>
+      <p className="mt-4 text-sm leading-7 text-slate-300">
+        This structured advisory layer is designed to emulate consulting-style outputs,
+        bridging the gap between raw risk scoring and real-world execution decisions.
+        It represents the foundation for future upgrades including scenario modeling,
+        PDF reporting, and enterprise-level analytics.
+      </p>
+    </div>
+
+  </div>
+) : (
             <div className="mt-8 rounded-3xl border border-dashed border-white/15 bg-white/[0.03] p-8">
               <div className="max-w-3xl">
                 <h3 className="text-xl font-semibold">Professional content is locked</h3>
