@@ -1,331 +1,285 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-type Tier = {
-  name: string;
-  price: string;
-  subtitle: string;
-  idealFor: string;
-  features: string[];
-  cta: string;
-  plan?: string;
-  highlight?: boolean;
-};
-
-const tiers: Tier[] = [
-  {
-    name: "Preview",
-    price: "Free",
-    subtitle: "Entry-level exposure scan",
-    idealFor: "For first-time visitors and early qualification",
-    features: [
-      "Basic risk preview",
-      "Score + grade + summary",
-      "Initial factor breakdown",
-      "Limited report visibility",
-    ],
-    cta: "Current Entry Point",
-  },
-  {
-    name: "Professional Report",
-    price: "US$49",
-    subtitle: "Commercial decision preview",
-    idealFor: "For SMEs validating a route, supplier, or product exposure",
-    features: [
-      "Full report unlock",
-      "Expanded executive summary",
-      "Priority action plan",
-      "Full factor interpretation",
-      "Commercial-grade presentation",
-      "Download-ready report structure",
-    ],
-    cta: "Upgrade to Full Report",
-    plan: "pro",
-    highlight: true,
-  },
-  {
-    name: "Execution Upgrade",
-    price: "US$149",
-    subtitle: "Risk + loading-plan linkage",
-    idealFor: "For actual shipment planning and operational execution",
-    features: [
-      "Loading plan linkage",
-      "Scenario analysis",
-      "Supplier × route × product exposure view",
-      "Execution-oriented planning logic",
-      "Designed for commercial operations",
-    ],
-    cta: "Unlock Execution Layer",
-    plan: "execution",
-  },
-];
-
-const faqs = [
-  {
-    q: "Why charge for this instead of giving everything free?",
-    a: "Because the paid layer is not just a score. It translates supply-chain exposure into decision logic, execution priorities, and a presentation standard a customer can actually use internally.",
-  },
-  {
-    q: "What is the difference between the free preview and the paid report?",
-    a: "The free preview proves relevance. The paid report unlocks the full interpretive layer: deeper conclusions, action priorities, and the modules that connect risk insight to execution planning.",
-  },
-  {
-    q: "Why is the execution layer priced higher?",
-    a: "Because this is where risk stops being descriptive and becomes operational. Once loading constraints, scenario choices, and execution tradeoffs are added, the output starts affecting real shipment planning and commercial decisions.",
-  },
-];
-
-function FaqItem({ q, a }: { q: string; a: string }) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
-      <div className="text-base font-semibold text-white">{q}</div>
-      <p className="mt-3 text-sm leading-7 text-slate-300">{a}</p>
-    </div>
-  );
-}
+type PlanType = "pro" | "execution";
 
 export default function RiskAtlasPricingPage() {
-  const router = useRouter();
+  const [loadingPlan, setLoadingPlan] = useState<PlanType | null>(null);
+  const [error, setError] = useState("");
+
+  const handleCheckout = async (plan: PlanType) => {
+    try {
+      setError("");
+      setLoadingPlan(plan);
+
+      const res = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ plan }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data?.error || "Failed to create checkout session.");
+      }
+
+      if (!data?.url) {
+        throw new Error("Missing checkout URL.");
+      }
+
+      window.location.href = data.url;
+    } catch (err) {
+      console.error("Checkout error:", err);
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Unable to start checkout. Please try again."
+      );
+      setLoadingPlan(null);
+    }
+  };
+
+  const isLoading = (plan: PlanType) => loadingPlan === plan;
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white">
-      <div className="mx-auto max-w-7xl px-6 py-10">
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <div className="mb-3 flex items-center gap-2">
-              <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs font-semibold tracking-wide text-cyan-300">
-                RiskAtlas Pricing
-              </span>
-              <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300">
-                MVP → Paid Conversion
-              </span>
+    <main className="min-h-screen bg-[#020b2a] text-white">
+      <section className="border-b border-white/10 bg-gradient-to-r from-[#020b2a] via-[#04144d] to-[#0d235f]">
+        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-24">
+          <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+            <div>
+              <div className="inline-flex rounded-full border border-cyan-400/20 bg-cyan-500/10 px-4 py-2 text-sm font-medium text-cyan-200">
+                RiskAtlas · Paid conversion layer
+              </div>
+
+              <h1 className="mt-6 max-w-4xl text-5xl font-semibold leading-tight tracking-tight text-white lg:text-7xl">
+                Move from initial signal to paid commercial clarity.
+              </h1>
+
+              <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
+                RiskAtlas is designed to convert an initial supply chain signal
+                into a structured, decision-ready report. Choose the right
+                commercial layer below and continue into paid analysis or
+                execution-grade support.
+              </p>
+
+              <div className="mt-8 flex flex-wrap gap-4">
+                <button
+                  onClick={() => handleCheckout("pro")}
+                  disabled={loadingPlan !== null}
+                  className="rounded-2xl bg-cyan-400 px-6 py-4 text-base font-semibold text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  {isLoading("pro") ? "Redirecting..." : "Unlock Full Report · US$49"}
+                </button>
+
+                <button
+                  onClick={() => handleCheckout("execution")}
+                  disabled={loadingPlan !== null}
+                  className="rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-base font-semibold text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  {isLoading("execution")
+                    ? "Redirecting..."
+                    : "Execution Upgrade · US$149"}
+                </button>
+
+                <Link
+                  href="/riskatlas/report"
+                  className="rounded-2xl border border-white/10 bg-transparent px-6 py-4 text-base font-medium text-slate-300 transition hover:bg-white/5 hover:text-white"
+                >
+                  Return to Preview
+                </Link>
+              </div>
+
+              {error ? (
+                <div className="mt-5 rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+                  {error}
+                </div>
+              ) : null}
+
+              <div className="mt-8 flex flex-wrap gap-3 text-sm text-slate-400">
+                <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2">
+                  Stripe checkout session
+                </span>
+                <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2">
+                  Success URL with session_id
+                </span>
+                <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2">
+                  Paid unlock flow
+                </span>
+              </div>
             </div>
 
-            <h1 className="text-4xl font-semibold tracking-tight lg:text-5xl">
-              Turn exposure insight into a paid decision product
-            </h1>
-            <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-300">
-              The goal of this pricing structure is not to sell a generic report.
-              It is to monetize the transition from “interesting risk signal” to
-              “actionable commercial and operational guidance.”
-            </p>
-          </div>
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl shadow-cyan-900/10">
+              <div className="text-sm uppercase tracking-[0.2em] text-slate-400">
+                Commercial flow
+              </div>
+              <h2 className="mt-4 text-4xl font-semibold leading-tight text-white">
+                One pricing page, two paid paths
+              </h2>
 
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/riskatlas/report"
-              className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white hover:bg-white/10"
-            >
-              Back to Report
-            </Link>
-            <Link
-              href="/riskatlas"
-              className="rounded-2xl bg-cyan-500 px-4 py-3 text-sm font-semibold text-slate-950 hover:bg-cyan-400"
-            >
-              Run Another Scan
-            </Link>
+              <div className="mt-8 space-y-4">
+                <div className="rounded-2xl border border-cyan-400/20 bg-[#0f172a] p-5">
+                  <div className="text-sm font-semibold text-cyan-300">
+                    Step 1 · US$49
+                  </div>
+                  <h3 className="mt-2 text-2xl font-semibold text-white">
+                    Professional Report
+                  </h3>
+                  <p className="mt-3 text-sm leading-7 text-slate-300">
+                    Unlock score explanation, executive summary, factor
+                    breakdown, route and supplier exposure framing, and priority
+                    action recommendations.
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-amber-400/20 bg-[#0f172a] p-5">
+                  <div className="text-sm font-semibold text-amber-300">
+                    Step 2 · US$149
+                  </div>
+                  <h3 className="mt-2 text-2xl font-semibold text-white">
+                    Execution Upgrade
+                  </h3>
+                  <p className="mt-3 text-sm leading-7 text-slate-300">
+                    Go beyond diagnosis with deeper execution prioritization,
+                    loading-plan linkage, and stronger actionability for real
+                    operating cases.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+      </section>
 
-        <section className="rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 p-6">
-          <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr]">
-            <div>
-              <h2 className="text-2xl font-semibold text-white">
-                Why the model can work for supply chain buyers
-              </h2>
-              <p className="mt-4 text-sm leading-7 text-slate-300">
-                Most companies do not buy “risk” as an abstract concept. They buy
-                clarity when risk affects supplier selection, shipment execution,
-                route choice, loading feasibility, or internal decision confidence.
-                That is why this structure is layered.
-              </p>
-
-              <div className="mt-6 grid gap-4 md:grid-cols-3">
-                <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
-                  <div className="text-sm font-semibold text-white">Signal</div>
-                  <p className="mt-2 text-sm leading-6 text-slate-300">
-                    Free preview proves relevance and gets the user into the funnel.
-                  </p>
-                </div>
-
-                <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
-                  <div className="text-sm font-semibold text-white">Interpretation</div>
-                  <p className="mt-2 text-sm leading-6 text-slate-300">
-                    Paid report turns raw exposure into commercial reading and action logic.
-                  </p>
-                </div>
-
-                <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
-                  <div className="text-sm font-semibold text-white">Execution</div>
-                  <p className="mt-2 text-sm leading-6 text-slate-300">
-                    Premium execution layer connects risk with shipment and loading decisions.
-                  </p>
-                </div>
+      <section className="border-b border-white/10">
+        <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
+          <div className="grid gap-6 lg:grid-cols-3">
+            <div className="rounded-3xl border border-white/10 bg-[#0f172a] p-7">
+              <div className="inline-flex rounded-full bg-cyan-500/10 px-4 py-2 text-sm font-medium text-cyan-200">
+                Pro layer
               </div>
-            </div>
-
-            <div className="rounded-3xl border border-cyan-400/20 bg-cyan-400/5 p-6">
-              <div className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300">
-                Commercial logic
-              </div>
-              <div className="mt-4 text-lg font-semibold text-white">
-                Preview gets attention. Paid interpretation gets trust. Execution gets budget.
-              </div>
-              <p className="mt-4 text-sm leading-7 text-slate-300">
-                This is the product ladder. The first conversion is not the final
-                business model; it is the bridge toward higher-value workflow
-                products such as Loading Plan, Operational Risk, and shipment
-                execution guidance.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section className="mt-8 grid gap-6 xl:grid-cols-3">
-          {tiers.map((tier) => (
-            <div
-              key={tier.name}
-              className={`rounded-3xl border p-6 ${
-                tier.highlight
-                  ? "border-cyan-400/30 bg-gradient-to-b from-cyan-500/10 to-slate-950"
-                  : "border-white/10 bg-slate-950/70"
-              }`}
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <div className="text-sm font-medium uppercase tracking-[0.2em] text-slate-400">
-                    {tier.name}
-                  </div>
-                  <div className="mt-3 text-4xl font-semibold text-white">{tier.price}</div>
-                  <div className="mt-2 text-sm text-slate-300">{tier.subtitle}</div>
-                </div>
-
-                {tier.highlight && (
-                  <span className="rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs font-semibold text-cyan-300">
-                    Recommended
-                  </span>
-                )}
-              </div>
-
-              <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-4">
-                <div className="text-xs uppercase tracking-wide text-slate-500">Best for</div>
-                <div className="mt-2 text-sm leading-6 text-slate-200">{tier.idealFor}</div>
-              </div>
-
-              <div className="mt-6 space-y-3">
-                {tier.features.map((feature) => (
-                  <div
-                    key={feature}
-                    className="rounded-2xl border border-white/10 bg-slate-900/70 px-4 py-3 text-sm text-slate-200"
-                  >
-                    {feature}
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-6">
-                {tier.plan ? (
-                  <button
-                    onClick={() => router.push(`/riskatlas/checkout?plan=${tier.plan}`)}
-                    className={`w-full rounded-2xl px-4 py-3 text-sm font-semibold transition ${
-                      tier.highlight
-                        ? "bg-cyan-500 text-slate-950 hover:bg-cyan-400"
-                        : "border border-white/10 bg-white/5 text-white hover:bg-white/10"
-                    }`}
-                  >
-                    {tier.cta}
-                  </button>
-                ) : (
-                  <button
-                    disabled
-                    className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-semibold text-white opacity-80"
-                  >
-                    {tier.cta}
-                  </button>
-                )}
-              </div>
-            </div>
-          ))}
-        </section>
-
-        <section className="mt-8 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-          <div className="rounded-3xl border border-white/10 bg-slate-900 p-6">
-            <h2 className="text-2xl font-semibold text-white">Pricing rationale</h2>
-            <div className="mt-5 space-y-4">
-              <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
-                <div className="text-base font-semibold text-white">
-                  Free should prove value, not replace value
-                </div>
-                <p className="mt-2 text-sm leading-7 text-slate-300">
-                  The free layer should be strong enough to feel real, but incomplete
-                  enough that operational users still need the paid interpretation.
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
-                <div className="text-base font-semibold text-white">
-                  The first paid tier should be easy to say yes to
-                </div>
-                <p className="mt-2 text-sm leading-7 text-slate-300">
-                  US$49 is not the end state. It is an entry point for teams that
-                  want a more credible read before a real shipment, sourcing move,
-                  or route decision.
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-5">
-                <div className="text-base font-semibold text-white">
-                  The execution tier is where B2B value expands
-                </div>
-                <p className="mt-2 text-sm leading-7 text-slate-300">
-                  Once the product influences container planning, dispatch logic,
-                  supplier readiness, and execution tradeoffs, it becomes easier to
-                  justify a higher price or a consulting-backed offering.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="rounded-3xl border border-white/10 bg-slate-900 p-6">
-            <h2 className="text-2xl font-semibold text-white">FAQ</h2>
-            <div className="mt-5 space-y-4">
-              {faqs.map((item) => (
-                <FaqItem key={item.q} q={item.q} a={item.a} />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="mt-8 rounded-3xl border border-cyan-400/20 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 p-6">
-          <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
-            <div>
-              <h2 className="text-2xl font-semibold text-white">
-                Current implementation note
-              </h2>
-              <p className="mt-3 text-sm leading-7 text-slate-300">
-                This page is currently the conversion layer before payment
-                integration. The next step is to connect the highlighted upgrade
-                actions to Stripe checkout and then unlock the corresponding paid
-                modules.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap gap-3 lg:justify-end">
-              <button className="rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-slate-950 hover:bg-slate-200">
-                Connect Stripe Next
+              <h3 className="mt-5 text-3xl font-semibold text-white">
+                Professional ($49)
+              </h3>
+              <ul className="mt-5 space-y-3 text-sm leading-7 text-slate-300">
+                <li>✓ Score explanation and interpretation</li>
+                <li>✓ Risk factor breakdown</li>
+                <li>✓ Executive summary</li>
+                <li>✓ Priority action framing</li>
+                <li>✓ Clearer commercial conversation</li>
+              </ul>
+              <button
+                onClick={() => handleCheckout("pro")}
+                disabled={loadingPlan !== null}
+                className="mt-8 w-full rounded-2xl bg-cyan-400 px-5 py-4 text-base font-semibold text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                {isLoading("pro") ? "Redirecting..." : "Buy Professional Report"}
               </button>
+            </div>
+
+            <div className="rounded-3xl border border-emerald-400/20 bg-gradient-to-b from-emerald-500/10 to-cyan-500/10 p-7 shadow-xl shadow-emerald-900/10">
+              <div className="inline-flex rounded-full bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-200">
+                Best starting point
+              </div>
+              <h3 className="mt-5 text-3xl font-semibold text-white">
+                Professional first, then upgrade
+              </h3>
+              <p className="mt-5 text-sm leading-7 text-slate-200">
+                For most new users, the right path is to first unlock the paid
+                report, validate the structure and then move into execution
+                support only when the case genuinely requires it.
+              </p>
+              <div className="mt-8 rounded-2xl border border-white/10 bg-[#0f172a]/60 p-5 text-sm leading-7 text-slate-300">
+                This keeps conversion clean:
+                <br />
+                Initial signal → paid clarity → higher-value execution support
+              </div>
               <Link
                 href="/riskatlas/report"
-                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white hover:bg-white/10"
+                className="mt-8 inline-flex w-full items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-base font-medium text-white transition hover:bg-white/10"
               >
-                Return to Preview
+                Review current preview
               </Link>
             </div>
+
+            <div className="rounded-3xl border border-white/10 bg-[#0f172a] p-7">
+              <div className="inline-flex rounded-full bg-amber-500/10 px-4 py-2 text-sm font-medium text-amber-200">
+                Execution layer
+              </div>
+              <h3 className="mt-5 text-3xl font-semibold text-white">
+                Execution Upgrade ($149)
+              </h3>
+              <ul className="mt-5 space-y-3 text-sm leading-7 text-slate-300">
+                <li>✓ Stronger actionability</li>
+                <li>✓ Execution prioritization</li>
+                <li>✓ Loading-plan linkage</li>
+                <li>✓ Higher-value commercial output</li>
+                <li>✓ Better bridge into real service work</li>
+              </ul>
+              <button
+                onClick={() => handleCheckout("execution")}
+                disabled={loadingPlan !== null}
+                className="mt-8 w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-base font-semibold text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                {isLoading("execution") ? "Redirecting..." : "Buy Execution Upgrade"}
+              </button>
+            </div>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
+
+      <section>
+        <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
+          <div className="rounded-3xl border border-white/10 bg-gradient-to-r from-cyan-500/10 to-emerald-500/10 p-8">
+            <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+              <div>
+                <div className="text-sm uppercase tracking-[0.2em] text-cyan-300">
+                  Start here
+                </div>
+                <h2 className="mt-4 text-4xl font-semibold text-white">
+                  Choose the right paid entry point.
+                </h2>
+                <p className="mt-4 max-w-3xl text-base leading-8 text-slate-300">
+                  Use Professional if you need structured clarity first. Use
+                  Execution Upgrade if you already know the case needs deeper
+                  execution support.
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                <button
+                  onClick={() => handleCheckout("pro")}
+                  disabled={loadingPlan !== null}
+                  className="rounded-2xl bg-cyan-400 px-6 py-4 text-base font-semibold text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  {isLoading("pro") ? "Redirecting..." : "Unlock Full Report"}
+                </button>
+
+                <button
+                  onClick={() => handleCheckout("execution")}
+                  disabled={loadingPlan !== null}
+                  className="rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-base font-semibold text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  {isLoading("execution")
+                    ? "Redirecting..."
+                    : "Upgrade to Execution Layer"}
+                </button>
+
+                <Link
+                  href="/contact"
+                  className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 px-6 py-4 text-center text-base font-semibold text-emerald-200 transition hover:bg-emerald-500/15"
+                >
+                  Contact Eastrion for service support
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
