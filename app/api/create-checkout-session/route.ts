@@ -2,7 +2,8 @@ import Stripe from "stripe";
 import { NextResponse } from "next/server";
 
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+const siteUrl = rawSiteUrl.replace(/\/+$/, "");
 
 if (!stripeSecretKey) {
   throw new Error("Missing STRIPE_SECRET_KEY in environment variables.");
