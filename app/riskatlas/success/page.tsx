@@ -13,7 +13,7 @@ type UnlockState = {
 type VerifyResponse = {
   paid?: boolean;
   status?: string;
-  sessionId?: string;
+ sessionId?: string;
   customerEmail?: string | null;
 };
 
@@ -40,17 +40,19 @@ export default function RiskAtlasSuccessPage() {
           return;
         }
 
-        const response = await fetch(`/api/verify-checkout-session?session_id=${encodeURIComponent(session)}`, {
-          method: "GET",
-          cache: "no-store",
-        });
+        const response = await fetch(
+          `/api/verify-checkout-session?session_id=${encodeURIComponent(session)}`,
+          {
+            method: "GET",
+            cache: "no-store",
+          }
+        );
 
         if (!response.ok) {
           throw new Error("Failed to verify checkout session.");
         }
 
         const data: VerifyResponse = await response.json();
-
         const paid = !!data?.paid || data?.status === "paid";
 
         if (!paid) {
@@ -134,7 +136,7 @@ export default function RiskAtlasSuccessPage() {
             {verifying
               ? "Please wait while RiskAtlas confirms your Stripe checkout session and activates your Professional access on this browser."
               : verified
-              ? "Your payment has been confirmed. The Professional Report is now active in this browser, and you can open the unlocked report immediately."
+              ? "Your payment has been confirmed. The Professional Report is now active in this browser. You can open the unlocked report immediately below."
               : "We could not fully confirm your payment status from this page. Your checkout may still be valid, but this session needs verification before access can be confirmed."}
           </p>
         </div>
@@ -143,43 +145,63 @@ export default function RiskAtlasSuccessPage() {
       <section className="mx-auto max-w-5xl px-6 py-10">
         {verifying ? (
           <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-8">
-            <div className="text-sm text-slate-300">Checking Stripe session and updating access state...</div>
+            <div className="text-sm text-slate-300">
+              Checking Stripe session and updating access state...
+            </div>
           </div>
         ) : verified ? (
           <div className="space-y-6">
             <div className="rounded-3xl border border-emerald-400/20 bg-emerald-400/10 p-6 md:p-8">
-              <div className="text-xs uppercase tracking-[0.18em] text-emerald-300">Payment confirmed</div>
-              <h2 className="mt-2 text-2xl font-semibold">Professional access is active</h2>
+              <div className="text-xs uppercase tracking-[0.18em] text-emerald-300">
+                Payment confirmed
+              </div>
+              <h2 className="mt-2 text-2xl font-semibold">
+                Professional access is active
+              </h2>
               <p className="mt-3 text-sm leading-7 text-slate-200">
                 Your US$49 purchase has unlocked the Professional Report. This browser now has access to the paid report layer.
               </p>
 
               <div className="mt-6 grid gap-4 md:grid-cols-2">
                 <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Session ID</div>
+                  <div className="text-xs uppercase tracking-[0.18em] text-slate-500">
+                    Session ID
+                  </div>
                   <div className="mt-2 break-all text-sm text-slate-200">
                     {sessionId || "Not available"}
                   </div>
                 </div>
 
                 <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                  <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Activated at</div>
-                  <div className="mt-2 text-sm text-slate-200">{paidAtDisplay || "Just now"}</div>
+                  <div className="text-xs uppercase tracking-[0.18em] text-slate-500">
+                    Activated at
+                  </div>
+                  <div className="mt-2 text-sm text-slate-200">
+                    {paidAtDisplay || "Just now"}
+                  </div>
                 </div>
 
                 <div className="rounded-2xl border border-white/10 bg-black/20 p-4 md:col-span-2">
-                  <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Customer email</div>
-                  <div className="mt-2 text-sm text-slate-200">{customerEmail || "Not returned by checkout session"}</div>
+                  <div className="text-xs uppercase tracking-[0.18em] text-slate-500">
+                    Customer email
+                  </div>
+                  <div className="mt-2 text-sm text-slate-200">
+                    {customerEmail || "Not returned by checkout session"}
+                  </div>
                 </div>
               </div>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
               <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6">
-                <div className="text-xs uppercase tracking-[0.18em] text-cyan-300">Next action</div>
-                <h3 className="mt-3 text-xl font-semibold">Open your unlocked report</h3>
+                <div className="text-xs uppercase tracking-[0.18em] text-cyan-300">
+                  Next action
+                </div>
+                <h3 className="mt-3 text-xl font-semibold">
+                  Open your unlocked report
+                </h3>
                 <p className="mt-3 text-sm leading-7 text-slate-300">
-                  The main deliverable is now available inside the report page. Open it to view the Professional content block and structured advisory layer.
+                  The main deliverable in this beta is the unlocked online Professional Report. Open it to view the paid advisory layer and full structured content.
                 </p>
 
                 <div className="mt-6">
@@ -193,10 +215,14 @@ export default function RiskAtlasSuccessPage() {
               </div>
 
               <div className="rounded-3xl border border-amber-400/20 bg-amber-400/5 p-6">
-                <div className="text-xs uppercase tracking-[0.18em] text-amber-300">Download status</div>
-                <h3 className="mt-3 text-xl font-semibold">PDF download is not live yet</h3>
+                <div className="text-xs uppercase tracking-[0.18em] text-amber-300">
+                  Export status
+                </div>
+                <h3 className="mt-3 text-xl font-semibold">
+                  PDF export is coming next
+                </h3>
                 <p className="mt-3 text-sm leading-7 text-slate-300">
-                  Your purchase currently unlocks the browser-based Professional Report view. A direct downloadable PDF output has not yet been wired into this beta flow.
+                  Your purchase currently unlocks the browser-based Professional Report view. A direct downloadable PDF file is not yet active in this beta flow.
                 </p>
 
                 <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-slate-300">
@@ -208,17 +234,27 @@ export default function RiskAtlasSuccessPage() {
                   </div>
                 </div>
 
-                <div className="mt-4 text-sm text-slate-400">
-                  The next product step is to add a true report export layer with a download button.
+                <div className="mt-5">
+                  <button
+                    type="button"
+                    disabled
+                    className="inline-flex cursor-not-allowed items-center justify-center rounded-2xl border border-white/10 px-5 py-3 text-sm font-semibold text-slate-500 opacity-70"
+                  >
+                    PDF Export Coming Soon
+                  </button>
                 </div>
               </div>
             </div>
 
             <div className="rounded-3xl border border-white/10 bg-[#0a1526] p-6 md:p-8">
-              <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Beta clarification</div>
-              <h3 className="mt-3 text-xl font-semibold">What the customer receives right now</h3>
+              <div className="text-xs uppercase tracking-[0.18em] text-slate-500">
+                Beta clarification
+              </div>
+              <h3 className="mt-3 text-xl font-semibold">
+                What the customer receives right now
+              </h3>
               <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-300">
-                In the current beta, payment unlocks the enhanced report experience rather than generating a downloadable file. This is commercially acceptable for an early paid beta, but the next upgrade should add a visible export or download action so the product feels more complete after checkout.
+                In the current beta, payment unlocks the enhanced online report experience rather than generating a downloadable report file. This is the correct product behavior today, and the next upgrade will add a true export layer.
               </p>
 
               <div className="mt-6 flex flex-wrap gap-4">
@@ -226,7 +262,7 @@ export default function RiskAtlasSuccessPage() {
                   href="/riskatlas/report"
                   className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-200"
                 >
-                  Go to Report
+                  View Report Online
                 </Link>
 
                 <Link
@@ -241,8 +277,12 @@ export default function RiskAtlasSuccessPage() {
         ) : (
           <div className="space-y-6">
             <div className="rounded-3xl border border-red-400/20 bg-red-400/10 p-6 md:p-8">
-              <div className="text-xs uppercase tracking-[0.18em] text-red-300">Verification incomplete</div>
-              <h2 className="mt-2 text-2xl font-semibold">We could not confirm this checkout session</h2>
+              <div className="text-xs uppercase tracking-[0.18em] text-red-300">
+                Verification incomplete
+              </div>
+              <h2 className="mt-2 text-2xl font-semibold">
+                We could not confirm this checkout session
+              </h2>
               <p className="mt-3 text-sm leading-7 text-slate-200">
                 {errorMessage || "The payment status could not be confirmed from this page."}
               </p>
@@ -250,7 +290,9 @@ export default function RiskAtlasSuccessPage() {
 
             <div className="grid gap-6 md:grid-cols-2">
               <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6">
-                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Troubleshooting</div>
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">
+                  Troubleshooting
+                </div>
                 <div className="mt-4 space-y-3 text-sm text-slate-300">
                   <div>• Refresh this page once</div>
                   <div>• Return to the report page and check whether Professional access is already active</div>
@@ -259,7 +301,9 @@ export default function RiskAtlasSuccessPage() {
               </div>
 
               <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6">
-                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Next actions</div>
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">
+                  Next actions
+                </div>
                 <div className="mt-6 flex flex-wrap gap-4">
                   <Link
                     href="/riskatlas/report"
