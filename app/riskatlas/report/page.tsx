@@ -5,29 +5,48 @@ import { useEffect, useMemo, useState } from "react";
 
 type UnlockState = {
   pro?: boolean;
+  execution?: boolean;
+  lastSessionId?: string;
+  lastPaidAt?: string;
   unlockedAt?: string;
   sessionId?: string;
 };
 
 export default function RiskAtlasReportPage() {
   const [isUnlocked, setIsUnlocked] = useState(false);
+  const [unlockState, setUnlockState] = useState<UnlockState | null>(null);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
     try {
       const raw = localStorage.getItem("riskatlas_unlock_state");
-      if (!raw) return;
+      if (!raw) {
+        setIsHydrated(true);
+        return;
+      }
 
       const parsed = JSON.parse(raw) as UnlockState;
+      setUnlockState(parsed);
+
       if (parsed?.pro === true) {
         setIsUnlocked(true);
       }
-    } catch {}
+    } catch (error) {
+      console.error("Failed to read riskatlas unlock state:", error);
+    } finally {
+      setIsHydrated(true);
+    }
   }, []);
 
   const grade = "B";
+
   const headline = isUnlocked
-    ? "Your structure shows moderate exposure with identifiable execution risks and concentrated dependency pressure."
+    ? "Your current structure shows moderate exposure with identifiable execution risks, concentrated dependency pressure and visible improvement priorities."
     : "Your current structure shows moderate exposure with hidden execution risks. Most issues are not yet visible, but they are forming.";
+
+  const executiveSummary = isUnlocked
+    ? "The route remains commercially usable, but resilience is weakened by supplier concentration, corridor friction and limited execution buffer. The current configuration does not indicate critical breakdown, but it does indicate a higher probability of avoidable cost, delay and coordination stress if disruption intensifies."
+    : "This preview confirms that risk is present, but not yet fully diagnosed. The free version is designed to show signal, not complete explanation.";
 
   const freeInsights = [
     "Country-level risk exposure detected",
@@ -36,7 +55,7 @@ export default function RiskAtlasReportPage() {
   ];
 
   const lockedFeatures = [
-    "Score explanation and why this outcome is not A",
+    "Why this score is B rather than A",
     "Risk factor weight breakdown",
     "Supplier-specific vulnerability analysis",
     "Route-level disruption scenarios",
@@ -64,18 +83,24 @@ export default function RiskAtlasReportPage() {
       title: "Priority action plan",
       body: "Reduce single-point dependency, define an alternate supplier path, strengthen shipment sequencing control and pre-define response logic for corridor disruption.",
     },
+    {
+      title: "Commercial implication",
+      body: "This is not yet a failure scenario, but it is a margin erosion scenario. The structure is workable today, but vulnerable under pressure.",
+    },
   ];
 
   const statusBadge = useMemo(() => {
+    if (!isHydrated) return "Loading Report State";
     if (isUnlocked) return "Professional Report Unlocked";
     return "Free Preview";
-  }, [isUnlocked]);
+  }, [isHydrated, isUnlocked]);
 
   return (
     <main
       style={{
         minHeight: "calc(100vh - 96px)",
-        background: "linear-gradient(135deg, #020617 0%, #08112f 55%, #10265c 100%)",
+        background:
+          "linear-gradient(135deg, #020617 0%, #08112f 55%, #10265c 100%)",
         color: "#f8fafc",
       }}
     >
@@ -92,7 +117,9 @@ export default function RiskAtlasReportPage() {
             alignItems: "center",
             padding: "10px 18px",
             borderRadius: "999px",
-            background: isUnlocked ? "rgba(34, 197, 94, 0.14)" : "rgba(56, 189, 248, 0.14)",
+            background: isUnlocked
+              ? "rgba(34, 197, 94, 0.14)"
+              : "rgba(56, 189, 248, 0.14)",
             color: isUnlocked ? "#86efac" : "#7dd3fc",
             border: "1px solid rgba(148, 163, 184, 0.18)",
             fontWeight: 700,
@@ -105,11 +132,24 @@ export default function RiskAtlasReportPage() {
 
         <div
           style={{
+            marginBottom: "18px",
+            fontSize: "56px",
+            lineHeight: 1.02,
+            letterSpacing: "-0.04em",
+            fontWeight: 800,
+            color: "#f8fafc",
+          }}
+        >
+          Your Supply Chain Risk Score
+        </div>
+
+        <div
+          style={{
             display: "grid",
             gridTemplateColumns: "160px 1fr",
             gap: "24px",
             alignItems: "start",
-            marginBottom: "30px",
+            marginBottom: "26px",
           }}
         >
           <div
@@ -129,9 +169,9 @@ export default function RiskAtlasReportPage() {
               style={{
                 margin: "8px 0 0",
                 fontSize: "24px",
-                lineHeight: 1.6,
+                lineHeight: 1.55,
                 color: "#e2e8f0",
-                maxWidth: "940px",
+                maxWidth: "980px",
               }}
             >
               {headline}
@@ -141,16 +181,46 @@ export default function RiskAtlasReportPage() {
 
         <div
           style={{
+            maxWidth: "980px",
+            marginBottom: "42px",
+          }}
+        >
+          <p
+            style={{
+              margin: 0,
+              fontSize: "19px",
+              lineHeight: 1.9,
+              color: "#cbd5e1",
+            }}
+          >
+            {executiveSummary}
+          </p>
+
+          {isUnlocked && unlockState?.lastPaidAt && (
+            <div
+              style={{
+                marginTop: "18px",
+                color: "#94a3b8",
+                fontSize: "15px",
+              }}
+            >
+              Unlock recorded: {unlockState.lastPaidAt}
+            </div>
+          )}
+        </div>
+
+        <div
+          style={{
             marginBottom: "38px",
           }}
         >
           <h2
             style={{
-              fontSize: "48px",
-              lineHeight: 1.05,
+              fontSize: "42px",
+              lineHeight: 1.08,
               letterSpacing: "-0.03em",
               fontWeight: 800,
-              margin: "0 0 20px",
+              margin: "0 0 18px",
               color: "#f8fafc",
             }}
           >
@@ -321,7 +391,13 @@ export default function RiskAtlasReportPage() {
               >
                 Free
               </div>
-              <div style={{ color: "#cbd5e1", fontSize: "17px", lineHeight: 1.9 }}>
+              <div
+                style={{
+                  color: "#cbd5e1",
+                  fontSize: "17px",
+                  lineHeight: 1.9,
+                }}
+              >
                 ✓ Basic risk signal
                 <br />
                 ✓ Early-stage visibility
@@ -357,7 +433,13 @@ export default function RiskAtlasReportPage() {
               >
                 Professional ($49)
               </div>
-              <div style={{ color: "#d1fae5", fontSize: "17px", lineHeight: 1.9 }}>
+              <div
+                style={{
+                  color: "#d1fae5",
+                  fontSize: "17px",
+                  lineHeight: 1.9,
+                }}
+              >
                 ✓ Full explanation
                 <br />
                 ✓ Score logic visibility
@@ -400,6 +482,26 @@ export default function RiskAtlasReportPage() {
               }}
             >
               Unlock Full Report
+            </Link>
+          )}
+
+          {isUnlocked && (
+            <Link
+              href="/riskatlas/success"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "16px 28px",
+                borderRadius: "16px",
+                background: "linear-gradient(135deg, #5fd4f5 0%, #8be0b5 100%)",
+                color: "#0f172a",
+                textDecoration: "none",
+                fontWeight: 800,
+                fontSize: "18px",
+              }}
+            >
+              View Unlock Status
             </Link>
           )}
 
