@@ -150,6 +150,19 @@ export async function POST(req: NextRequest) {
   try {
     const data = (await req.json()) as RiskScanResult;
 
+    const safe = (text: string) =>
+      text ? text.replace(/[^\x00-\x7F]/g, "") : "";
+
+    data.country = safe(data.country);
+    data.industry = safe(data.industry);
+    data.grade = safe(data.grade);
+    data.level = safe(data.level);
+    data.disclaimer = safe(data.disclaimer);
+
+    if (data.risk_factors) {
+      data.risk_factors = data.risk_factors.map((f: string) => safe(f));
+    }
+
     const pdfDoc = await PDFDocument.create();
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
     const bold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
