@@ -123,6 +123,7 @@ function getRiskConsiderations() {
   ];
 }
 
+
 function getUseBoundaryText() {
   return "This report is provided for analytical and informational purposes only. It does not constitute legal, financial, or investment advice. Users remain responsible for integrating this analysis with their own contractual frameworks, operating controls, and commercial judgment.";
 }
@@ -674,7 +675,7 @@ export async function POST(req: NextRequest) {
       drawFooter(page, 4);
     }
 
-    /* ---------- PAGE 5: STRUCTURED ADVISORY LAYER ---------- */
+   /* ---------- PAGE 5: STRUCTURED ADVISORY LAYER ---------- */
 {
   const page = addPage();
   drawSectionTitle(page, "Structured Advisory Layer", 770);
