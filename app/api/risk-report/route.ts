@@ -767,18 +767,18 @@ export async function POST(req: NextRequest) {
 
 const pdfBytes = await pdfDoc.save();
 
-  return new Response(pdfBytes, {
-    status: 200,
-    headers: {
-      "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename="riskatlas-report-${data.country}-${data.industry}.pdf"`,
-    },
-  });
+    return new Response(pdfBytes, {
+      status: 200,
+      headers: {
+        "Content-Type": "application/pdf",
+        "Content-Disposition": `attachment; filename="riskatlas-report-${data.country}-${data.industry}.pdf"`,
+      },
+    });
+  } catch (error) {
+    console.error("risk-report error:", error);
 
-} catch (error) {
-  console.error("risk-report error:", error);
-
-  return new Response("Failed to generate PDF report.", {
-    status: 500,
-  });
+    return new Response("Failed to generate PDF report.", {
+      status: 500,
+    });
+  }
 }
