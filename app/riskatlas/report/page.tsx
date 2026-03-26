@@ -271,14 +271,58 @@ export default function RiskAtlasReportPage() {
                       Professional access is active on this browser.
                     </div>
 
-                    <a
-                      href="/sample-riskatlas-report.pdf"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block w-full rounded-2xl bg-white px-5 py-3 text-center text-sm font-semibold text-slate-900 transition hover:bg-slate-200"
-                    >
-                      Download PDF Report
-                    </a>
+                   <button
+  onClick={async () => {
+    try {
+      const res = await fetch("/api/risk-report", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          country: "China → India",
+          industry: "Battery Materials",
+          risk_score: 38,
+          grade: "B",
+          level: "Guarded",
+
+          breakdown: {
+            country_risk: 42,
+            industry_risk: 36,
+            logistics_risk: 48,
+            event_risk: 30,
+          },
+
+          risk_factors: [
+            "Supplier concentration risk",
+            "Logistics corridor dependency",
+            "Regulatory variability",
+          ],
+
+          disclaimer:
+            "This report is for analytical purposes only and does not constitute legal, financial, or investment advice.",
+        }),
+      });
+
+      if (!res.ok) throw new Error("PDF failed");
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "riskatlas-report.pdf";
+      a.click();
+
+      window.URL.revokeObjectURL(url);
+    } catch (e) {
+      alert("PDF export failed");
+    }
+  }}
+  className="block w-full rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-200"
+>
+  Download PDF Report
+</button>
 
                     <div className="text-xs text-slate-500">
                       PDF export (beta version). Full dynamic report generation will be upgraded in the next phase.
