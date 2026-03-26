@@ -95,10 +95,13 @@ export default function Navbar() {
             Home
           </Link>
           <Link href="/why-eastrion" style={navLinkStyle}>
-          Why Eastrion
+            Why Eastrion
           </Link>
           <Link href="/solutions" style={navLinkStyle}>
             Services
+          </Link>
+          <Link href="/load-planning" style={navLinkStyle}>
+            Load Planning
           </Link>
           <Link href="/riskatlas" style={navLinkStyle}>
             RiskAtlas
