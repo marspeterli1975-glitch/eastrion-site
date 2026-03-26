@@ -56,16 +56,19 @@ export default function RiskAtlasPricingPage() {
                 RiskAtlas · Paid conversion layer
               </div>
 
-              <h1 className="mt-6 max-w-4xl text-5xl font-semibold leading-tight tracking-tight text-white lg:text-7xl">
-                Move from initial signal to paid commercial clarity.
-              </h1>
+             <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">
+  Supply Chain Risk Assessment Report
+</h1>
+
+<p className="mt-4 text-slate-400 max-w-2xl">
+  A structured, consulting-style risk assessment designed to support real operational and commercial decisions across sourcing, logistics, and cross-border execution.
+</p>
 
               <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
-                RiskAtlas is designed to convert an initial supply chain signal
-                into a structured, decision-ready report. Choose the right
-                commercial layer below and continue into paid analysis or
-                execution-grade support.
-              </p>
+  RiskAtlas converts an initial supply chain signal into a structured,
+  decision-ready report. Choose the right paid layer below to unlock
+  consulting-style analysis or move into execution-grade support.
+</p>
 
               <div className="mt-8 flex flex-wrap gap-4">
                 <button
@@ -159,27 +162,32 @@ export default function RiskAtlasPricingPage() {
         <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
           <div className="grid gap-6 lg:grid-cols-3">
             <div className="rounded-3xl border border-white/10 bg-[#0f172a] p-7">
-              <div className="inline-flex rounded-full bg-cyan-500/10 px-4 py-2 text-sm font-medium text-cyan-200">
-                Pro layer
-              </div>
-              <h3 className="mt-5 text-3xl font-semibold text-white">
-                Professional ($49)
-              </h3>
-              <ul className="mt-5 space-y-3 text-sm leading-7 text-slate-300">
-                <li>✓ Score explanation and interpretation</li>
-                <li>✓ Risk factor breakdown</li>
-                <li>✓ Executive summary</li>
-                <li>✓ Priority action framing</li>
-                <li>✓ Clearer commercial conversation</li>
-              </ul>
-              <button
-                onClick={() => handleCheckout("pro")}
-                disabled={loadingPlan !== null}
-                className="mt-8 w-full rounded-2xl bg-cyan-400 px-5 py-4 text-base font-semibold text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-70"
-              >
-                {isLoading("pro") ? "Redirecting..." : "Buy Professional Report"}
-              </button>
-            </div>
+  <div className="inline-flex rounded-full bg-cyan-500/10 px-4 py-2 text-sm font-medium text-cyan-200">
+    Pro layer
+  </div>
+  <h3 className="mt-5 text-3xl font-semibold text-white">
+    Professional ($49)
+  </h3>
+  <ul className="mt-5 space-y-3 text-sm leading-7 text-slate-300">
+    <li>✓ Structured risk scoring across geopolitical, logistics, supplier, and execution dimensions</li>
+    <li>✓ Consulting-style advisory layer: Strategic / Tactical / Execution / Risk</li>
+    <li>✓ Clear risk exposure classification (Low → Critical)</li>
+    <li>✓ Practical execution guidance for supply chain decision-making</li>
+    <li>✓ Professional PDF report for internal use and stakeholder alignment</li>
+  </ul>
+  <button
+    onClick={() => handleCheckout("pro")}
+    disabled={loadingPlan !== null}
+    className="mt-8 w-full rounded-2xl bg-cyan-400 px-5 py-4 text-base font-semibold text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-70"
+  >
+    {isLoading("pro") ? "Redirecting..." : "Buy Professional Report"}
+  </button>
+
+  <p className="mt-6 text-xs leading-6 text-slate-500">
+    This report is designed as a decision-support tool. It does not constitute legal, financial, or investment advice.
+    Users should integrate the output with their own contractual frameworks and operational judgment.
+  </p>
+</div>
 
             <div className="rounded-3xl border border-emerald-400/20 bg-gradient-to-b from-emerald-500/10 to-cyan-500/10 p-7 shadow-xl shadow-emerald-900/10">
               <div className="inline-flex rounded-full bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-200">
@@ -198,11 +206,12 @@ export default function RiskAtlasPricingPage() {
                 <br />
                 Initial signal → paid clarity → higher-value execution support
               </div>
-              <Link
-                href="/riskatlas/report"
-                className="mt-8 inline-flex w-full items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-base font-medium text-white transition hover:bg-white/10"
+          <Link
+  href="/riskatlas/report"
+  className="mt-8 inline-flex w-full items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-base font-medium text-white transition hover:bg-white/10"
+>
               >
-                Review current preview
+               Back to Risk Preview
               </Link>
             </div>
 
