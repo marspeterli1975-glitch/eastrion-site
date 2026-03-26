@@ -274,37 +274,44 @@ export default function RiskAtlasReportPage() {
                    <button
   onClick={async () => {
     try {
+      const payload = {
+        country: "China → India",
+        industry: "Battery Materials",
+        risk_score: 38,
+        grade: "B",
+        level: "Guarded",
+
+        breakdown: {
+          country_risk: 42,
+          industry_risk: 36,
+          logistics_risk: 48,
+          event_risk: 30,
+        },
+
+        risk_factors: [
+          "Supplier concentration risk",
+          "Logistics corridor dependency",
+          "Regulatory variability",
+        ],
+
+        disclaimer:
+          "This report is for analytical purposes only and does not constitute legal, financial, or investment advice.",
+      };
+
       const res = await fetch("/api/risk-report", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          country: "China → India",
-          industry: "Battery Materials",
-          risk_score: 38,
-          grade: "B",
-          level: "Guarded",
-
-          breakdown: {
-            country_risk: 42,
-            industry_risk: 36,
-            logistics_risk: 48,
-            event_risk: 30,
-          },
-
-          risk_factors: [
-            "Supplier concentration risk",
-            "Logistics corridor dependency",
-            "Regulatory variability",
-          ],
-
-          disclaimer:
-            "This report is for analytical purposes only and does not constitute legal, financial, or investment advice.",
-        }),
+        body: JSON.stringify(payload),
       });
 
-      if (!res.ok) throw new Error("PDF failed");
+      if (!res.ok) {
+        const text = await res.text();
+        console.error("PDF API ERROR:", text);
+        alert(`PDF export failed: ${text}`);
+        return;
+      }
 
       const blob = await res.blob();
       const url = window.URL.createObjectURL(blob);
@@ -316,6 +323,7 @@ export default function RiskAtlasReportPage() {
 
       window.URL.revokeObjectURL(url);
     } catch (e) {
+      console.error("PDF FETCH ERROR:", e);
       alert("PDF export failed");
     }
   }}
