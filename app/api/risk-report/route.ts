@@ -777,7 +777,10 @@ const pdfBytes = await pdfDoc.save();
   } catch (error) {
     console.error("risk-report error:", error);
 
-    return new Response("Failed to generate PDF report.", {
+    const message =
+      error instanceof Error ? error.message : "Unknown server error";
+
+    return new Response(`Failed to generate PDF report: ${message}`, {
       status: 500,
     });
   }
