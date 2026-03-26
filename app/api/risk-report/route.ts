@@ -70,6 +70,63 @@ function getDetailedActions(data: RiskScanResult) {
   return base;
 }
 
+function getStrategicView(data: RiskScanResult) {
+  const lvl = data.level.toLowerCase();
+
+  if (lvl === "high" || lvl === "critical") {
+    return "The route should be treated as a controlled execution channel rather than a default expansion corridor. Management priority should be placed on exposure containment, execution resilience, and protection of commercial downside before scaling commitments.";
+  }
+
+  if (lvl === "moderate") {
+    return "The route should be treated as a managed operating channel. Priority should be placed on maintaining execution reliability, protecting margin assumptions, and reinforcing resilience before wider commercial expansion.";
+  }
+
+  return "The route remains commercially usable, but it should not be treated as frictionless. Priority should be placed on disciplined execution, monitoring continuity signals, and preserving reliability as transaction volume grows.";
+}
+
+function getTacticalFocus(data: RiskScanResult) {
+  const base = [
+    "Strengthen supplier readiness validation before commitment.",
+    "Protect margin assumptions under cost and timing variability.",
+    "Introduce delivery buffers for operational uncertainty.",
+    "Monitor execution volatility instead of relying on baseline assumptions.",
+  ];
+
+  if (data.level.toLowerCase() === "high" || data.level.toLowerCase() === "critical") {
+    base.push("Escalate exception handling and leadership review before scaling exposure.");
+  }
+
+  return base;
+}
+
+function getExecutionActions(data: RiskScanResult) {
+  const base = [
+    "Conduct secondary validation of supplier production stability.",
+    "Adjust customer-facing lead-time expectations where required.",
+    "Prepare alternative routing scenarios for sensitive shipments.",
+    "Avoid single-point dependency in execution planning.",
+  ];
+
+  if (data.level.toLowerCase() === "high" || data.level.toLowerCase() === "critical") {
+    base.push("Trigger pre-shipment escalation review for material exposure changes.");
+  }
+
+  return base;
+}
+
+function getRiskConsiderations() {
+  return [
+    "This assessment reflects a relative positioning, not a deterministic outcome.",
+    "External volatility in policy, logistics, pricing, or operating conditions may alter execution performance.",
+    "Results should be integrated with contractual, commercial, and operational context.",
+    "This report is designed as a decision-support layer, not a substitute for professional judgment.",
+  ];
+}
+
+function getUseBoundaryText() {
+  return "This report is provided for analytical and informational purposes only. It does not constitute legal, financial, or investment advice. Users remain responsible for integrating this analysis with their own contractual frameworks, operating controls, and commercial judgment.";
+}
+
 function getMethodologyText() {
   return [
     "Country Risk × 30%",
@@ -604,102 +661,106 @@ export async function POST(req: NextRequest) {
       drawFooter(page, 4);
     }
 
-    /* ---------- PAGE 5: INTERPRETATION & ACTIONS ---------- */
-    {
-      const page = addPage();
-      drawSectionTitle(page, "Strategic Interpretation and Actions", 770);
+    /* ---------- PAGE 5: STRUCTURED ADVISORY LAYER ---------- */
+{
+  const page = addPage();
+  drawSectionTitle(page, "Structured Advisory Layer", 770);
 
-      let y = 724;
+  let y = 724;
 
-      page.drawText("Strategic Interpretation", {
-        x: marginX,
-        y,
-        size: 14,
-        font: bold,
-        color: rgb(...COLORS.text),
-      });
+  y = drawParagraph(
+    page,
+    "This section translates the current exposure profile into a structured recommendation layer designed to support practical commercial and operating decisions.",
+    marginX,
+    y,
+    92,
+    11,
+    COLORS.text,
+    7
+  );
 
-      y -= 22;
-      y = drawParagraph(page, getStrategicInterpretation(), marginX, y, 92, 11, COLORS.text, 7);
+  y -= 18;
 
-      y -= 18;
+  page.drawText("Strategic View", {
+    x: marginX,
+    y,
+    size: 14,
+    font: bold,
+    color: rgb(...COLORS.text),
+  });
 
-      page.drawText("Suggested Strategic Actions", {
-        x: marginX,
-        y,
-        size: 14,
-        font: bold,
-        color: rgb(...COLORS.text),
-      });
+  y -= 22;
+  y = drawParagraph(
+    page,
+    getStrategicView(data),
+    marginX,
+    y,
+    92,
+    11,
+    COLORS.text,
+    7
+  );
 
-      y -= 22;
-      y = drawBulletList(page, getDetailedActions(data), marginX, y, 82);
+  y -= 18;
 
-      y -= 10;
+  page.drawText("Tactical Focus", {
+    x: marginX,
+    y,
+    size: 14,
+    font: bold,
+    color: rgb(...COLORS.text),
+  });
 
-      page.drawText("Methodology", {
-        x: marginX,
-        y,
-        size: 14,
-        font: bold,
-        color: rgb(...COLORS.text),
-      });
+  y -= 22;
+  y = drawBulletList(page, getTacticalFocus(data), marginX, y, 82);
 
-      y -= 24;
+  y -= 10;
 
-      getMethodologyText().forEach((line) => {
-        page.drawText(line, {
-          x: marginX,
-          y,
-          size: 11,
-          font,
-          color: rgb(...COLORS.text),
-        });
-        y -= 18;
-      });
+  page.drawText("Execution Actions", {
+    x: marginX,
+    y,
+    size: 14,
+    font: bold,
+    color: rgb(...COLORS.text),
+  });
 
-      y -= 8;
-      y = drawParagraph(
-        page,
-        "The model aggregates structured risk indicators to generate an overall exposure score ranging from 0 to 100. The report is intended to support analytical interpretation and strategic discussion, rather than substitute for legal, financial, or investment advice.",
-        marginX,
-        y,
-        92,
-        10,
-        COLORS.muted,
-        6
-      );
+  y -= 22;
+  y = drawBulletList(page, getExecutionActions(data), marginX, y, 82);
 
-      y -= 16;
+  y -= 10;
 
-      page.drawText("Disclaimer", {
-        x: marginX,
-        y,
-        size: 14,
-        font: bold,
-        color: rgb(...COLORS.text),
-      });
+  page.drawText("Risk Considerations", {
+    x: marginX,
+    y,
+    size: 14,
+    font: bold,
+    color: rgb(...COLORS.text),
+  });
 
-      y -= 22;
-      drawParagraph(page, data.disclaimer, marginX, y, 92, 10, COLORS.muted, 6);
+  y -= 22;
+  y = drawBulletList(page, getRiskConsiderations(), marginX, y, 82);
 
-      drawFooter(page, 5);
-    }
+  y -= 10;
 
-    const pdfBytes = await pdfDoc.save();
+  page.drawText("Use Boundary", {
+    x: marginX,
+    y,
+    size: 14,
+    font: bold,
+    color: rgb(...COLORS.text),
+  });
 
-    return new Response(pdfBytes, {
-      status: 200,
-      headers: {
-        "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="riskatlas-report-${data.country}-${data.industry}.pdf"`,
-      },
-    });
-  } catch (error) {
-    console.error("risk-report error:", error);
+  y -= 22;
+  y = drawParagraph(
+    page,
+    getUseBoundaryText(),
+    marginX,
+    y,
+    92,
+    10,
+    COLORS.muted,
+    6
+  );
 
-    return new Response("Failed to generate PDF report.", {
-      status: 500,
-    });
-  }
+  drawFooter(page, 5);
 }
