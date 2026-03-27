@@ -97,9 +97,10 @@ function getDecisionVerdict(score: number) {
     title: "Avoid",
     description:
       "Current exposure is critical. The route should not be treated as commercially reliable without major risk reduction measures.",
-    tone: "text-red-300",
-    box: "border-red-400/20 bg-red-400/10",
-  };
+      tone: "text-red-300",
+      box: "border-red-400/20 bg-red-400/10",
+    };
+  }
 }
 
 export default function RiskAtlasReportPage() {
@@ -125,6 +126,7 @@ export default function RiskAtlasReportPage() {
   const band = useMemo(() => getRiskBand(overallScore), [overallScore]);
   const verdict = useMemo(() => getDecisionVerdict(overallScore), [overallScore]);
   const isProUnlocked = !!unlockState?.pro;
+  const isExecutionUnlocked = !!unlockState?.execution;
 
   async function handleUnlockProfessional() {
     try {
@@ -137,7 +139,7 @@ export default function RiskAtlasReportPage() {
         },
         body: JSON.stringify({
           product: "riskatlas_professional_report",
-          plan: "professional",
+          plan: "pro",
           amount: 49,
           currency: "usd",
         }),
@@ -160,6 +162,114 @@ export default function RiskAtlasReportPage() {
       alert("Unable to start checkout. Please try again.");
     } finally {
       setIsPaying(false);
+    }
+  }
+
+  async function downloadProfessionalPdf() {
+    try {
+      const payload = {
+        country: "China - India",
+        industry: "Battery Materials",
+        risk_score: 38,
+        grade: "B",
+        level: "Guarded",
+        breakdown: {
+          country_risk: 42,
+          industry_risk: 36,
+          logistics_risk: 48,
+          event_risk: 30,
+        },
+        risk_factors: [
+          "Supplier concentration risk",
+          "Logistics corridor dependency",
+          "Regulatory variability",
+        ],
+        disclaimer:
+          "This report is for analytical purposes only and does not constitute legal, financial, or investment advice.",
+      };
+
+      const res = await fetch("/api/risk-report", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        console.error("PDF API ERROR:", text);
+        alert(`PDF export failed: ${text}`);
+        return;
+      }
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "riskatlas-report.pdf";
+      a.click();
+
+      window.URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error("PDF FETCH ERROR:", e);
+      alert("PDF export failed");
+    }
+  }
+
+  async function downloadExecutionPdf() {
+    try {
+      const payload = {
+        country: "China - India",
+        industry: "Battery Materials",
+        risk_score: 38,
+        grade: "B",
+        level: "Guarded",
+        breakdown: {
+          country_risk: 42,
+          industry_risk: 36,
+          logistics_risk: 48,
+          event_risk: 30,
+        },
+        risk_factors: [
+          "Supplier concentration risk",
+          "Logistics corridor dependency",
+          "Regulatory variability",
+          "Execution layer enabled",
+          "Load planning linkage required",
+        ],
+        disclaimer:
+          "This execution-layer report is for analytical and operational planning purposes only and does not constitute legal, financial, engineering, or investment advice.",
+      };
+
+      const res = await fetch("/api/risk-report", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        console.error("EXECUTION PDF API ERROR:", text);
+        alert(`Execution PDF export failed: ${text}`);
+        return;
+      }
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "riskatlas-execution-report.pdf";
+      a.click();
+
+      window.URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error("EXECUTION PDF FETCH ERROR:", e);
+      alert("Execution PDF export failed");
     }
   }
 
@@ -205,7 +315,11 @@ export default function RiskAtlasReportPage() {
               <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                 <div className="text-xs uppercase tracking-[0.18em] text-slate-400">Unlock status</div>
                 <div className="mt-2 text-lg font-semibold">
-                  {isProUnlocked ? "Professional Unlocked" : "Preview Only"}
+                  {isExecutionUnlocked
+                    ? "Execution Upgrade Unlocked"
+                    : isProUnlocked
+                    ? "Professional Unlocked"
+                    : "Preview Only"}
                 </div>
                 <div className="mt-1 text-sm text-slate-400">
                   {isProUnlocked
@@ -220,7 +334,9 @@ export default function RiskAtlasReportPage() {
 
               <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                 <div className="text-xs uppercase tracking-[0.18em] text-slate-400">Commercial mode</div>
-                <div className="mt-2 text-lg font-semibold">Beta monetization live</div>
+                <div className="mt-2 text-lg font-semibold">
+                  {isExecutionUnlocked ? "Execution layer active" : "Beta monetization live"}
+                </div>
                 <div className="mt-1 text-sm text-slate-400">
                   Frontend unlock works via browser local storage for now.
                 </div>
@@ -297,97 +413,89 @@ export default function RiskAtlasReportPage() {
 
           <div className="rounded-3xl border border-cyan-400/20 bg-gradient-to-b from-cyan-400/10 to-transparent p-6 md:p-8">
             <div className="text-xs uppercase tracking-[0.18em] text-cyan-300">Commercial access layer</div>
-            <h3 className="mt-3 text-2xl font-semibold">Professional Report</h3>
+            <h3 className="mt-3 text-2xl font-semibold">
+              {isExecutionUnlocked ? "Execution Upgrade" : "Professional Report"}
+            </h3>
             <p className="mt-3 text-sm leading-7 text-slate-300">
-              Unlock the full report to access the structured advisory layer, premium interpretation, and the professional PDF report.
+              {isExecutionUnlocked
+                ? "Your upgrade includes the structured advisory layer, execution-oriented PDF output, and access to Load Planning linkage."
+                : "Unlock the full report to access the structured advisory layer, premium interpretation, and the professional PDF report."}
             </p>
 
             <div className="mt-6 rounded-2xl border border-white/10 bg-black/20 p-5">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-sm text-slate-400">Price</div>
-                  <div className="mt-1 text-3xl font-semibold">US$49</div>
+                  <div className="mt-1 text-3xl font-semibold">
+                    {isExecutionUnlocked ? "US$149" : "US$49"}
+                  </div>
                 </div>
                 <div className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs font-medium text-cyan-300">
-                  Beta Offer
+                  {isExecutionUnlocked ? "Execution Active" : "Beta Offer"}
                 </div>
               </div>
 
               <div className="mt-5 space-y-3 text-sm text-slate-300">
-                <div>• Executive summary with commercial interpretation</div>
-                <div>• Premium report blocks visibly separated from preview content</div>
-                <div>• Structured advisory layer for paid users</div>
-                <div>• Professional PDF report for paid access</div>
+                {isExecutionUnlocked ? (
+                  <>
+                    <div>• Execution sensitivity note for operational risk exposure</div>
+                    <div>• Operational control priorities for shipment readiness and continuity</div>
+                    <div>• Load Planning linkage for packing, routing, and handling feasibility</div>
+                    <div>• Stronger execution-oriented PDF output for internal coordination</div>
+                  </>
+                ) : (
+                  <>
+                    <div>• Executive summary with commercial interpretation</div>
+                    <div>• Premium report blocks visibly separated from preview content</div>
+                    <div>• Structured advisory layer for paid users</div>
+                    <div>• Professional PDF report for paid access</div>
+                  </>
+                )}
               </div>
 
               <div className="mt-6">
                 {isProUnlocked ? (
                   <div className="space-y-3">
                     <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-300">
-                      Professional access is active on this browser.
+                      {isExecutionUnlocked
+                        ? "Execution Upgrade is active on this browser."
+                        : "Professional access is active on this browser."}
                     </div>
 
-                    <button
-                      onClick={async () => {
-                        try {
-                          const payload = {
-                            country: "China - India",
-                            industry: "Battery Materials",
-                            risk_score: 38,
-                            grade: "B",
-                            level: "Guarded",
-                            breakdown: {
-                              country_risk: 42,
-                              industry_risk: 36,
-                              logistics_risk: 48,
-                              event_risk: 30,
-                            },
-                            risk_factors: [
-                              "Supplier concentration risk",
-                              "Logistics corridor dependency",
-                              "Regulatory variability",
-                            ],
-                            disclaimer:
-                              "This report is for analytical purposes only and does not constitute legal, financial, or investment advice.",
-                          };
+                    {isExecutionUnlocked ? (
+                      <>
+                        <Link
+                          href="/load-planning"
+                          className="block w-full rounded-xl bg-white px-5 py-3 text-center text-sm font-semibold text-slate-900 hover:bg-slate-200"
+                        >
+                          Go to Load Planning
+                        </Link>
 
-                          const res = await fetch("/api/risk-report", {
-                            method: "POST",
-                            headers: {
-                              "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify(payload),
-                          });
+                        <button
+                          onClick={downloadExecutionPdf}
+                          className="block w-full rounded-xl border border-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/5"
+                        >
+                          Download Execution Report
+                        </button>
 
-                          if (!res.ok) {
-                            const text = await res.text();
-                            console.error("PDF API ERROR:", text);
-                            alert(`PDF export failed: ${text}`);
-                            return;
-                          }
+                        <div className="text-xs text-slate-500">
+                          Execution layer includes load-planning linkage and stronger operational coordination output.
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          onClick={downloadProfessionalPdf}
+                          className="block w-full rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-200"
+                        >
+                          Download PDF Report
+                        </button>
 
-                          const blob = await res.blob();
-                          const url = window.URL.createObjectURL(blob);
-
-                          const a = document.createElement("a");
-                          a.href = url;
-                          a.download = "riskatlas-report.pdf";
-                          a.click();
-
-                          window.URL.revokeObjectURL(url);
-                        } catch (e) {
-                          console.error("PDF FETCH ERROR:", e);
-                          alert("PDF export failed");
-                        }
-                      }}
-                      className="block w-full rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-200"
-                    >
-                      Download PDF Report
-                    </button>
-
-                    <div className="text-xs text-slate-500">
-                      PDF export (beta version). Full dynamic report generation will be upgraded in the next phase.
-                    </div>
+                        <div className="text-xs text-slate-500">
+                          PDF export (beta version). Full dynamic report generation will be upgraded in the next phase.
+                        </div>
+                      </>
+                    )}
                   </div>
                 ) : (
                   <button
@@ -452,11 +560,16 @@ export default function RiskAtlasReportPage() {
         <div className="rounded-3xl border border-white/10 bg-[#0a1526] p-6 md:p-8">
           <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
             <div>
-              <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Professional report layer</div>
-              <h2 className="mt-2 text-2xl font-semibold">Paid content block</h2>
+              <div className="text-xs uppercase tracking-[0.18em] text-slate-500">
+                {isExecutionUnlocked ? "Execution report layer" : "Professional report layer"}
+              </div>
+              <h2 className="mt-2 text-2xl font-semibold">
+                {isExecutionUnlocked ? "Execution content block" : "Paid content block"}
+              </h2>
               <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-300">
-                This section is intentionally designed to make the difference between free preview and paid report obvious.
-                Even before backend persistence and dynamic PDF generation are added, users should feel that the paid layer is a more serious product.
+                {isExecutionUnlocked
+                  ? "This section reflects the execution-grade layer, designed to connect risk interpretation with shipment feasibility and operational readiness."
+                  : "This section is intentionally designed to make the difference between free preview and paid report obvious. Even before backend persistence and dynamic PDF generation are added, users should feel that the paid layer is a more serious product."}
               </p>
             </div>
 
@@ -471,14 +584,17 @@ export default function RiskAtlasReportPage() {
             <div className="mt-8 space-y-6">
               <div className="rounded-3xl border border-cyan-400/20 bg-cyan-400/5 p-6 md:p-8">
                 <div className="text-xs uppercase tracking-[0.18em] text-cyan-300">
-                  Structured Advisory Layer
+                  {isExecutionUnlocked ? "Structured Execution Advisory Layer" : "Structured Advisory Layer"}
                 </div>
                 <h3 className="mt-2 text-xl font-semibold">
-                  Consulting-Style Recommendation Output
+                  {isExecutionUnlocked
+                    ? "Execution-Oriented Recommendation Output"
+                    : "Consulting-Style Recommendation Output"}
                 </h3>
                 <p className="mt-3 text-sm leading-7 text-slate-400">
-                  This section translates the current exposure profile into a structured recommendation layer
-                  designed to support practical commercial and operating decisions.
+                  {isExecutionUnlocked
+                    ? "This section translates the current exposure profile into a structured recommendation layer for commercial decisions, execution planning, and shipment feasibility."
+                    : "This section translates the current exposure profile into a structured recommendation layer designed to support practical commercial and operating decisions."}
                 </p>
               </div>
 
@@ -531,6 +647,37 @@ export default function RiskAtlasReportPage() {
                   with their own contractual frameworks, operating controls, and commercial judgment.
                 </p>
               </div>
+
+              {isExecutionUnlocked && (
+                <div className="rounded-3xl border border-emerald-400/20 bg-emerald-400/5 p-6 md:p-8">
+                  <div className="text-xs uppercase tracking-[0.18em] text-emerald-300">
+                    Execution Upgrade Active
+                  </div>
+                  <h3 className="mt-2 text-xl font-semibold">
+                    Operational Execution Layer Enabled
+                  </h3>
+                  <p className="mt-3 text-sm leading-7 text-slate-300">
+                    Your upgrade includes execution-level considerations, including shipment feasibility,
+                    operational controls, and load planning linkage.
+                  </p>
+
+                  <div className="mt-6 grid gap-4 md:grid-cols-2">
+                    <Link
+                      href="/load-planning"
+                      className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-200"
+                    >
+                      Go to Load Planning
+                    </Link>
+
+                    <button
+                      onClick={downloadExecutionPdf}
+                      className="inline-flex items-center justify-center rounded-2xl border border-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/5"
+                    >
+                      Download Execution Report
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div className="mt-8 rounded-3xl border border-dashed border-white/15 bg-white/[0.03] p-8">
