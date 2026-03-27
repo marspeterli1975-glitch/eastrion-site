@@ -101,6 +101,48 @@ function getDecisionVerdict(score: number) {
     box: "border-red-400/20 bg-red-400/10",
   };
 }
+
+const executionControlPriorities = [
+  "Validate supplier production readiness before shipment booking is locked.",
+  "Protect margin and timeline assumptions against corridor volatility.",
+  "Introduce operational buffers for handling, routing, and delivery uncertainty.",
+  "Avoid single-point execution dependency across supplier, route, or loading plan.",
+];
+
+const executionLinkageItems = [
+  {
+    title: "Packing Discipline",
+    text: "Translate the risk reading into shipment-level packing assumptions, especially where stack limits, outer dimensions, and handling sensitivity affect feasibility.",
+  },
+  {
+    title: "Routing Readiness",
+    text: "Use the execution layer to judge whether the planned route still supports stable dispatch, transit continuity, and customer-facing lead-time commitments.",
+  },
+  {
+    title: "Handling Control",
+    text: "Treat loading, transfer, and inland deployment as operational control points rather than downstream administrative steps.",
+  },
+];
+
+const executionLayerMetrics = [
+  {
+    label: "Execution posture",
+    value: "Managed deployment",
+  },
+  {
+    label: "Load planning linkage",
+    value: "Enabled",
+  },
+  {
+    label: "Operational readiness",
+    value: "Control-led",
+  },
+  {
+    label: "Internal coordination use",
+    value: "Expanded",
+  },
+];
+
 export default function RiskAtlasReportPage() {
   const [mounted, setMounted] = useState(false);
   const [unlockState, setUnlockState] = useState<UnlockState>({});
@@ -368,7 +410,9 @@ export default function RiskAtlasReportPage() {
                 </p>
               </div>
 
-              <div className={`rounded-3xl border border-white/10 bg-[#0b1628] p-6 text-center shadow-2xl ring-1 ${band.ring}`}>
+              <div
+                className={`rounded-3xl border border-white/10 bg-[#0b1628] p-6 text-center shadow-2xl ring-1 ${band.ring}`}
+              >
                 <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Overall score</div>
                 <div className="mt-3 text-5xl font-semibold">{overallScore}</div>
                 <div className={`mt-3 text-2xl font-semibold ${band.color}`}>{band.grade}</div>
@@ -647,34 +691,140 @@ export default function RiskAtlasReportPage() {
               </div>
 
               {isExecutionUnlocked && (
-                <div className="rounded-3xl border border-emerald-400/20 bg-emerald-400/5 p-6 md:p-8">
-                  <div className="text-xs uppercase tracking-[0.18em] text-emerald-300">
-                    Execution Upgrade Active
-                  </div>
-                  <h3 className="mt-2 text-xl font-semibold">
-                    Operational Execution Layer Enabled
-                  </h3>
-                  <p className="mt-3 text-sm leading-7 text-slate-300">
-                    Your upgrade includes execution-level considerations, including shipment feasibility,
-                    operational controls, and load planning linkage.
-                  </p>
+                <>
+                  <div className="rounded-3xl border border-emerald-400/20 bg-emerald-400/5 p-6 md:p-8">
+                    <div className="text-xs uppercase tracking-[0.18em] text-emerald-300">
+                      Execution Layer Overview
+                    </div>
+                    <h3 className="mt-2 text-xl font-semibold">
+                      Operational execution perspective is now part of the report
+                    </h3>
+                    <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-300">
+                      The 149 layer is not limited to a stronger PDF handoff. It adds an execution-facing reading of the
+                      same corridor, so the report can be used not only for commercial judgment but also for shipment readiness,
+                      planning linkage, and internal operating coordination.
+                    </p>
 
-                  <div className="mt-6 grid gap-4 md:grid-cols-2">
-                    <Link
-                      href="/load-planning"
-                      className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-200"
-                    >
-                      Go to Load Planning
-                    </Link>
-
-                    <button
-                      onClick={downloadExecutionPdf}
-                      className="inline-flex items-center justify-center rounded-2xl border border-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/5"
-                    >
-                      Download Execution Report
-                    </button>
+                    <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                      {executionLayerMetrics.map((item) => (
+                        <div
+                          key={item.label}
+                          className="rounded-2xl border border-white/10 bg-black/20 p-4"
+                        >
+                          <div className="text-xs uppercase tracking-[0.18em] text-slate-500">
+                            {item.label}
+                          </div>
+                          <div className="mt-2 text-base font-semibold text-white">{item.value}</div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
+
+                  <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+                    <div className="rounded-3xl border border-blue-400/20 bg-blue-400/5 p-6 md:p-8">
+                      <div className="text-xs uppercase tracking-[0.18em] text-blue-300">
+                        Load Planning Linkage
+                      </div>
+                      <h3 className="mt-2 text-xl font-semibold">
+                        Risk reading is connected to shipment feasibility
+                      </h3>
+                      <p className="mt-3 text-sm leading-7 text-slate-300">
+                        In the execution layer, the report is no longer a standalone interpretation page.
+                        It begins to connect risk posture with real shipment preparation, especially where packing structure,
+                        handling sensitivity, and deployment feasibility influence whether the route remains workable in practice.
+                      </p>
+
+                      <div className="mt-6 space-y-4">
+                        {executionLinkageItems.map((item) => (
+                          <div
+                            key={item.title}
+                            className="rounded-2xl border border-white/10 bg-black/20 p-4"
+                          >
+                            <div className="text-sm font-semibold text-white">{item.title}</div>
+                            <p className="mt-2 text-sm leading-7 text-slate-300">{item.text}</p>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="mt-6">
+                        <Link
+                          href="/load-planning"
+                          className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-200"
+                        >
+                          Open Load Planning
+                        </Link>
+                      </div>
+                    </div>
+
+                    <div className="rounded-3xl border border-violet-400/20 bg-violet-400/5 p-6 md:p-8">
+                      <div className="text-xs uppercase tracking-[0.18em] text-violet-300">
+                        Operational Control Priorities
+                      </div>
+                      <h3 className="mt-2 text-xl font-semibold">
+                        Minimum execution actions before scaling commitment
+                      </h3>
+                      <p className="mt-3 text-sm leading-7 text-slate-300">
+                        These priorities make the execution layer visibly different from the professional report.
+                        The objective is to convert a guarded risk reading into a controlled operating posture rather
+                        than leave it as a general advisory note.
+                      </p>
+
+                      <div className="mt-6 space-y-3">
+                        {executionControlPriorities.map((item, index) => (
+                          <div
+                            key={item}
+                            className="rounded-2xl border border-white/10 bg-black/20 p-4"
+                          >
+                            <div className="flex gap-3">
+                              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-xs font-semibold text-white">
+                                {index + 1}
+                              </div>
+                              <div className="text-sm leading-7 text-slate-300">{item}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="mt-6">
+                        <button
+                          onClick={downloadExecutionPdf}
+                          className="inline-flex items-center justify-center rounded-2xl border border-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/5"
+                        >
+                          Download Execution Report
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="rounded-3xl border border-emerald-400/20 bg-emerald-400/5 p-6 md:p-8">
+                    <div className="text-xs uppercase tracking-[0.18em] text-emerald-300">
+                      Execution Upgrade Active
+                    </div>
+                    <h3 className="mt-2 text-xl font-semibold">
+                      Operational Execution Layer Enabled
+                    </h3>
+                    <p className="mt-3 text-sm leading-7 text-slate-300">
+                      Your upgrade includes execution-level considerations, including shipment feasibility,
+                      operational controls, and load planning linkage.
+                    </p>
+
+                    <div className="mt-6 grid gap-4 md:grid-cols-2">
+                      <Link
+                        href="/load-planning"
+                        className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-200"
+                      >
+                        Go to Load Planning
+                      </Link>
+
+                      <button
+                        onClick={downloadExecutionPdf}
+                        className="inline-flex items-center justify-center rounded-2xl border border-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/5"
+                      >
+                        Download Execution Report
+                      </button>
+                    </div>
+                  </div>
+                </>
               )}
             </div>
           ) : (
