@@ -101,7 +101,6 @@ function getDecisionVerdict(score: number) {
       box: "border-red-400/20 bg-red-400/10",
     };
   }
-}
 
 const executionControlPriorities = [
   "Validate supplier production readiness before shipment booking is locked.",
