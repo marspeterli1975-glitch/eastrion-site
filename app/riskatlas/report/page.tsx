@@ -56,6 +56,52 @@ function getRiskBand(score: number) {
   };
 }
 
+function getDecisionVerdict(score: number) {
+  if (score <= 20) {
+    return {
+      title: "Proceed",
+      description:
+        "Current exposure is low. The route can be treated as commercially usable under standard monitoring.",
+      tone: "text-emerald-300",
+      box: "border-emerald-400/20 bg-emerald-400/10",
+    };
+  }
+  if (score <= 40) {
+    return {
+      title: "Proceed with Monitoring",
+      description:
+        "Current exposure remains manageable, but execution should be monitored with disciplined supplier and logistics controls.",
+      tone: "text-lime-300",
+      box: "border-lime-400/20 bg-lime-400/10",
+    };
+  }
+  if (score <= 60) {
+    return {
+      title: "Conditional",
+      description:
+        "The route remains viable, but commitments should be made selectively and supported by tighter operational safeguards.",
+      tone: "text-amber-300",
+      box: "border-amber-400/20 bg-amber-400/10",
+    };
+  }
+  if (score <= 80) {
+    return {
+      title: "High Risk",
+      description:
+        "Execution exposure is elevated. Commercial use should be limited unless controls, buffers, and alternatives are in place.",
+      tone: "text-orange-300",
+      box: "border-orange-400/20 bg-orange-400/10",
+    };
+  }
+  return {
+    title: "Avoid",
+    description:
+      "Current exposure is critical. The route should not be treated as commercially reliable without major risk reduction measures.",
+    tone: "text-red-300",
+    box: "border-red-400/20 bg-red-400/10",
+  };
+}
+
 export default function RiskAtlasReportPage() {
   const [mounted, setMounted] = useState(false);
   const [unlockState, setUnlockState] = useState<UnlockState>({});
@@ -77,6 +123,7 @@ export default function RiskAtlasReportPage() {
 
   const overallScore = 38;
   const band = useMemo(() => getRiskBand(overallScore), [overallScore]);
+  const verdict = useMemo(() => getDecisionVerdict(overallScore), [overallScore]);
   const isProUnlocked = !!unlockState?.pro;
 
   async function handleUnlockProfessional() {
@@ -190,6 +237,16 @@ export default function RiskAtlasReportPage() {
               <div>
                 <div className="text-xs uppercase tracking-[0.18em] text-slate-400">Executive result</div>
                 <h2 className="mt-2 text-2xl font-semibold">Initial Supply Chain Risk Reading</h2>
+
+                <div className={`mt-4 rounded-2xl border px-4 py-4 ${verdict.box}`}>
+                  <div className={`text-sm font-semibold ${verdict.tone}`}>
+                    Decision Verdict: {verdict.title}
+                  </div>
+                  <p className="mt-2 text-sm leading-7 text-slate-200">
+                    {verdict.description}
+                  </p>
+                </div>
+
                 <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">
                   The current route sits in a guarded zone. It is not a breakdown scenario, but it is not a clean
                   low-risk channel either. The main commercial implication is that margin planning, timing confidence,
@@ -270,66 +327,63 @@ export default function RiskAtlasReportPage() {
                       Professional access is active on this browser.
                     </div>
 
-                   <button
-  onClick={async () => {
-    try {
-      const payload = {
-        country: "China → India",
-        industry: "Battery Materials",
-        risk_score: 38,
-        grade: "B",
-        level: "Guarded",
+                    <button
+                      onClick={async () => {
+                        try {
+                          const payload = {
+                            country: "China - India",
+                            industry: "Battery Materials",
+                            risk_score: 38,
+                            grade: "B",
+                            level: "Guarded",
+                            breakdown: {
+                              country_risk: 42,
+                              industry_risk: 36,
+                              logistics_risk: 48,
+                              event_risk: 30,
+                            },
+                            risk_factors: [
+                              "Supplier concentration risk",
+                              "Logistics corridor dependency",
+                              "Regulatory variability",
+                            ],
+                            disclaimer:
+                              "This report is for analytical purposes only and does not constitute legal, financial, or investment advice.",
+                          };
 
-        breakdown: {
-          country_risk: 42,
-          industry_risk: 36,
-          logistics_risk: 48,
-          event_risk: 30,
-        },
+                          const res = await fetch("/api/risk-report", {
+                            method: "POST",
+                            headers: {
+                              "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(payload),
+                          });
 
-        risk_factors: [
-          "Supplier concentration risk",
-          "Logistics corridor dependency",
-          "Regulatory variability",
-        ],
+                          if (!res.ok) {
+                            const text = await res.text();
+                            console.error("PDF API ERROR:", text);
+                            alert(`PDF export failed: ${text}`);
+                            return;
+                          }
 
-        disclaimer:
-          "This report is for analytical purposes only and does not constitute legal, financial, or investment advice.",
-      };
+                          const blob = await res.blob();
+                          const url = window.URL.createObjectURL(blob);
 
-      const res = await fetch("/api/risk-report", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
+                          const a = document.createElement("a");
+                          a.href = url;
+                          a.download = "riskatlas-report.pdf";
+                          a.click();
 
-      if (!res.ok) {
-        const text = await res.text();
-        console.error("PDF API ERROR:", text);
-        alert(`PDF export failed: ${text}`);
-        return;
-      }
-
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "riskatlas-report.pdf";
-      a.click();
-
-      window.URL.revokeObjectURL(url);
-    } catch (e) {
-      console.error("PDF FETCH ERROR:", e);
-      alert("PDF export failed");
-    }
-  }}
-  className="block w-full rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-200"
->
-  Download PDF Report
-</button>
+                          window.URL.revokeObjectURL(url);
+                        } catch (e) {
+                          console.error("PDF FETCH ERROR:", e);
+                          alert("PDF export failed");
+                        }
+                      }}
+                      className="block w-full rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-200"
+                    >
+                      Download PDF Report
+                    </button>
 
                     <div className="text-xs text-slate-500">
                       PDF export (beta version). Full dynamic report generation will be upgraded in the next phase.
@@ -413,72 +467,72 @@ export default function RiskAtlasReportPage() {
             )}
           </div>
 
-         {isProUnlocked ? (
-  <div className="mt-8 space-y-6">
-    <div className="rounded-3xl border border-cyan-400/20 bg-cyan-400/5 p-6 md:p-8">
-      <div className="text-xs uppercase tracking-[0.18em] text-cyan-300">
-        Structured Advisory Layer
-      </div>
-      <h3 className="mt-2 text-xl font-semibold">
-        Consulting-Style Recommendation Output
-      </h3>
-      <p className="mt-3 text-sm leading-7 text-slate-400">
-        This section translates the current exposure profile into a structured recommendation layer
-        designed to support practical commercial and operating decisions.
-      </p>
-    </div>
+          {isProUnlocked ? (
+            <div className="mt-8 space-y-6">
+              <div className="rounded-3xl border border-cyan-400/20 bg-cyan-400/5 p-6 md:p-8">
+                <div className="text-xs uppercase tracking-[0.18em] text-cyan-300">
+                  Structured Advisory Layer
+                </div>
+                <h3 className="mt-2 text-xl font-semibold">
+                  Consulting-Style Recommendation Output
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-slate-400">
+                  This section translates the current exposure profile into a structured recommendation layer
+                  designed to support practical commercial and operating decisions.
+                </p>
+              </div>
 
-    <div className="grid gap-6 lg:grid-cols-2">
-      <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-        <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Strategic View</div>
-        <p className="mt-4 text-sm leading-7 text-slate-300">
-          The route remains commercially usable, but it should not be treated as frictionless.
-          Priority should be placed on disciplined execution, monitoring continuity signals,
-          and preserving reliability as transaction volume grows.
-        </p>
-      </div>
+              <div className="grid gap-6 lg:grid-cols-2">
+                <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                  <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Strategic View</div>
+                  <p className="mt-4 text-sm leading-7 text-slate-300">
+                    The route remains commercially usable, but it should not be treated as frictionless.
+                    Priority should be placed on disciplined execution, monitoring continuity signals,
+                    and preserving reliability as transaction volume grows.
+                  </p>
+                </div>
 
-      <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-        <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Tactical Focus</div>
-        <div className="mt-4 space-y-3 text-sm text-slate-300">
-          <div>• Strengthen supplier readiness validation before commitment.</div>
-          <div>• Protect margin assumptions under cost and timing variability.</div>
-          <div>• Introduce delivery buffers for operational uncertainty.</div>
-          <div>• Monitor execution volatility instead of relying on baseline assumptions.</div>
-        </div>
-      </div>
+                <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                  <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Tactical Focus</div>
+                  <div className="mt-4 space-y-3 text-sm text-slate-300">
+                    <div>• Strengthen supplier readiness validation before commitment.</div>
+                    <div>• Protect margin assumptions under cost and timing variability.</div>
+                    <div>• Introduce delivery buffers for operational uncertainty.</div>
+                    <div>• Monitor execution volatility instead of relying on baseline assumptions.</div>
+                  </div>
+                </div>
 
-      <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-        <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Execution Actions</div>
-        <div className="mt-4 space-y-3 text-sm text-slate-300">
-          <div>1. Conduct secondary validation of supplier production stability.</div>
-          <div>2. Adjust customer-facing lead-time expectations where required.</div>
-          <div>3. Prepare alternative routing scenarios for sensitive shipments.</div>
-          <div>4. Avoid single-point dependency in execution planning.</div>
-        </div>
-      </div>
+                <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                  <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Execution Actions</div>
+                  <div className="mt-4 space-y-3 text-sm text-slate-300">
+                    <div>1. Conduct secondary validation of supplier production stability.</div>
+                    <div>2. Adjust customer-facing lead-time expectations where required.</div>
+                    <div>3. Prepare alternative routing scenarios for sensitive shipments.</div>
+                    <div>4. Avoid single-point dependency in execution planning.</div>
+                  </div>
+                </div>
 
-      <div className="rounded-2xl border border-amber-400/20 bg-amber-400/5 p-5">
-        <div className="text-xs uppercase tracking-[0.18em] text-amber-300">Risk Considerations</div>
-        <div className="mt-4 space-y-3 text-sm text-slate-300">
-          <div>• This assessment reflects a relative positioning, not a deterministic outcome.</div>
-          <div>• External volatility in policy, logistics, pricing, or operating conditions may alter execution performance.</div>
-          <div>• Results should be integrated with contractual, commercial, and operational context.</div>
-          <div>• This report is designed as a decision-support layer, not a substitute for professional judgment.</div>
-        </div>
-      </div>
-    </div>
+                <div className="rounded-2xl border border-amber-400/20 bg-amber-400/5 p-5">
+                  <div className="text-xs uppercase tracking-[0.18em] text-amber-300">Risk Considerations</div>
+                  <div className="mt-4 space-y-3 text-sm text-slate-300">
+                    <div>• This assessment reflects a relative positioning, not a deterministic outcome.</div>
+                    <div>• External volatility in policy, logistics, pricing, or operating conditions may alter execution performance.</div>
+                    <div>• Results should be integrated with contractual, commercial, and operational context.</div>
+                    <div>• This report is designed as a decision-support layer, not a substitute for professional judgment.</div>
+                  </div>
+                </div>
+              </div>
 
-    <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-      <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Use Boundary</div>
-      <p className="mt-4 text-sm leading-7 text-slate-300">
-        This report is provided for analytical and informational purposes only. It does not constitute
-        legal, financial, or investment advice. Users remain responsible for integrating this analysis
-        with their own contractual frameworks, operating controls, and commercial judgment.
-      </p>
-    </div>
-  </div>
-) : (
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Use Boundary</div>
+                <p className="mt-4 text-sm leading-7 text-slate-300">
+                  This report is provided for analytical and informational purposes only. It does not constitute
+                  legal, financial, or investment advice. Users remain responsible for integrating this analysis
+                  with their own contractual frameworks, operating controls, and commercial judgment.
+                </p>
+              </div>
+            </div>
+          ) : (
             <div className="mt-8 rounded-3xl border border-dashed border-white/15 bg-white/[0.03] p-8">
               <div className="max-w-3xl">
                 <h3 className="text-xl font-semibold">Professional content is locked</h3>
