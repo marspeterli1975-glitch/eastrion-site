@@ -97,12 +97,10 @@ function getDecisionVerdict(score: number) {
     title: "Avoid",
     description:
       "Current exposure is critical. The route should not be treated as commercially reliable without major risk reduction measures.",
-      tone: "text-red-300",
-      box: "border-red-400/20 bg-red-400/10",
-    };
-  }
+    tone: "text-red-300",
+    box: "border-red-400/20 bg-red-400/10",
+  };
 }
-
 export default function RiskAtlasReportPage() {
   const [mounted, setMounted] = useState(false);
   const [unlockState, setUnlockState] = useState<UnlockState>({});
