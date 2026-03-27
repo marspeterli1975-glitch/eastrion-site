@@ -11,10 +11,14 @@ type UnlockState = {
 };
 
 type VerifyResponse = {
+  ok?: boolean;
   paid?: boolean;
   status?: string;
- sessionId?: string;
+  sessionId?: string;
   customerEmail?: string | null;
+  metadata?: {
+    plan?: string;
+  };
 };
 
 export default function RiskAtlasSuccessPage() {
@@ -61,19 +65,20 @@ export default function RiskAtlasSuccessPage() {
           return;
         }
 
-        const nowIso = new Date().toISOString();
+       const nowIso = new Date().toISOString();
+const plan = data?.metadata?.plan || "pro";
 
-        const unlockState: UnlockState = {
-          pro: true,
-          execution: false,
-          lastSessionId: session,
-          lastPaidAt: nowIso,
-        };
+const unlockState: UnlockState = {
+  pro: true,
+  execution: plan === "execution",
+  lastSessionId: session,
+  lastPaidAt: nowIso,
+};
 
-        localStorage.setItem("riskatlas_unlock_state", JSON.stringify(unlockState));
+localStorage.setItem("riskatlas_unlock_state", JSON.stringify(unlockState));
 
-        setVerified(true);
-        setCustomerEmail(data?.customerEmail || null);
+setVerified(true);
+setCustomerEmail(data?.customerEmail || null);
       } catch (error) {
         console.error(error);
         setVerified(false);
@@ -128,7 +133,7 @@ export default function RiskAtlasSuccessPage() {
             {verifying
               ? "Verifying your payment..."
               : verified
-              ? "Professional Report unlocked"
+              ? "Paid access unlocked"
               : "Payment confirmation needs attention"}
           </h1>
 
@@ -136,7 +141,7 @@ export default function RiskAtlasSuccessPage() {
             {verifying
               ? "Please wait while RiskAtlas confirms your Stripe checkout session and activates your Professional access on this browser."
               : verified
-              ? "Your payment has been confirmed. The Professional Report is now active in this browser. You can open the unlocked report immediately below."
+              ? "Your payment has been confirmed. Your paid RiskAtlas access is now active in this browser. You can open the unlocked report immediately below."
               : "We could not fully confirm your payment status from this page. Your checkout may still be valid, but this session needs verification before access can be confirmed."}
           </p>
         </div>
@@ -156,10 +161,10 @@ export default function RiskAtlasSuccessPage() {
                 Payment confirmed
               </div>
               <h2 className="mt-2 text-2xl font-semibold">
-                Professional access is active
-              </h2>
+  Paid access is active
+</h2>
               <p className="mt-3 text-sm leading-7 text-slate-200">
-                Your US$49 purchase has unlocked the Professional Report. This browser now has access to the paid report layer.
+                Your payment has unlocked paid RiskAtlas access. This browser now has access to the appropriate report layer based on your selected plan.
               </p>
 
               <div className="mt-6 grid gap-4 md:grid-cols-2">
