@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type PlanningInsight = {
   recommended_container: string;
@@ -60,7 +60,18 @@ type RunRiskAtlasResponse = {
 type CargoForm = "solid" | "powder" | "liquid";
 type TransportMode = "container" | "inland_truck";
 
+type UnlockState = {
+  paid?: boolean;
+  pro?: boolean;
+  execution?: boolean;
+  plan?: string;
+  sessionId?: string;
+};
+
 export default function LoadPlanningPage() {
+  const [accessChecked, setAccessChecked] = useState(false);
+  const [hasExecutionAccess, setHasExecutionAccess] = useState(false);
+
   const [mode, setMode] = useState<"upload" | "manual">("upload");
 
   const [productName, setProductName] = useState("Battery module skid");
@@ -83,6 +94,25 @@ export default function LoadPlanningPage() {
   const [uploadSuccessMessage, setUploadSuccessMessage] = useState("");
   const [uploadResults, setUploadResults] = useState<UploadResultRow[]>([]);
   const [riskAtlasSummary, setRiskAtlasSummary] = useState<RunRiskAtlasResponse["summary"] | null>(null);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("riskatlas_unlock_state");
+      if (!raw) {
+        setHasExecutionAccess(false);
+        setAccessChecked(true);
+        return;
+      }
+
+      const parsed = JSON.parse(raw) as UnlockState;
+      setHasExecutionAccess(!!parsed?.execution);
+    } catch (error) {
+      console.error("Failed to read riskatlas_unlock_state:", error);
+      setHasExecutionAccess(false);
+    } finally {
+      setAccessChecked(true);
+    }
+  }, []);
 
   const hasUploadResults = uploadResults.length > 0;
 
@@ -202,6 +232,118 @@ export default function LoadPlanningPage() {
     return uploadResults.reduce((sum, row) => sum + (row.total_weight_kg || 0), 0);
   }, [uploadResults]);
 
+  if (!accessChecked) {
+    return (
+      <main className="min-h-screen bg-[#f4f6f8] text-slate-900">
+        <section className="mx-auto flex min-h-screen max-w-4xl items-center justify-center px-6 py-16">
+          <div className="w-full rounded-3xl border border-slate-200 bg-white p-10 text-center shadow-[0_8px_30px_rgba(15,23,42,0.05)]">
+            <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+              Access Check
+            </div>
+            <h1 className="mt-4 text-3xl font-semibold tracking-tight text-[#123b66]">
+              Checking access...
+            </h1>
+            <p className="mt-4 text-sm leading-7 text-slate-600">
+              Validating whether your current RiskAtlas unlock state includes the Execution Upgrade layer.
+            </p>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
+  if (!hasExecutionAccess) {
+    return (
+      <main className="min-h-screen bg-[#f4f6f8] text-slate-900">
+        <section className="border-b border-slate-200 bg-white">
+          <div className="mx-auto max-w-6xl px-6 py-10 lg:px-8">
+            <Link
+              href="/"
+              className="inline-flex items-center text-sm font-medium text-slate-500 transition hover:text-slate-900"
+            >
+              ← Back to Eastrion
+            </Link>
+
+            <div className="mt-4 max-w-4xl">
+              <h1 className="text-4xl font-semibold tracking-tight text-[#123b66] md:text-5xl">
+                Load Planning
+              </h1>
+              <p className="mt-4 text-base leading-8 text-slate-600 md:text-lg">
+                This execution-layer page is positioned as a controlled capability within the RiskAtlas commercial path,
+                not as a fully open public utility.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-6xl px-6 py-10 lg:px-8">
+          <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-[0_8px_30px_rgba(15,23,42,0.05)] md:p-10">
+            <div className="inline-flex rounded-full border border-amber-200 bg-amber-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-amber-800">
+              Execution Upgrade Required
+            </div>
+
+            <h2 className="mt-5 text-3xl font-semibold tracking-tight text-[#123b66]">
+              This page is reserved for the 149 Execution layer
+            </h2>
+
+            <p className="mt-4 max-w-3xl text-sm leading-8 text-slate-600 md:text-base">
+              Load Planning is no longer treated as a generic standalone page in the current Beta path.
+              It is part of the Execution Upgrade delivery layer and is intended to work together with the RiskAtlas report,
+              operational control recommendations, and shipment-level execution review.
+            </p>
+
+            <div className="mt-8 grid gap-4 md:grid-cols-3">
+              <InfoBlock
+                title="What is included"
+                text="Packing list upload, initial capacity estimation, operational risk layer, and execution-oriented planning support."
+              />
+              <InfoBlock
+                title="Why it is gated"
+                text="The purpose is to make the 149 path visibly different from the 49 report-only path during Beta commercialization."
+              />
+              <InfoBlock
+                title="Recommended path"
+                text="Complete the RiskAtlas commercial flow first, then return here through the unlocked report page."
+              />
+            </div>
+
+            <div className="mt-8 rounded-2xl border border-slate-200 bg-slate-50 p-5">
+              <div className="text-sm font-semibold text-slate-900">Current access status</div>
+              <p className="mt-2 text-sm leading-7 text-slate-600">
+                Your current browser does not show an active <span className="font-semibold text-slate-900">execution</span> unlock state in
+                <span className="font-semibold text-slate-900"> riskatlas_unlock_state</span>.
+                Until that state is present, the execution tool layer remains hidden.
+              </p>
+            </div>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                href="/riskatlas/report"
+                className="inline-flex items-center rounded-full bg-[#123b66] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#0f3153]"
+              >
+                Back to Report
+              </Link>
+
+              <Link
+                href="/riskatlas/pricing"
+                className="inline-flex items-center rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+              >
+                View Upgrade Options
+              </Link>
+
+              <Link
+                href="/riskatlas"
+                className="inline-flex items-center rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+              >
+                Explore RiskAtlas
+              </Link>
+            </div>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-[#f4f6f8] text-slate-900">
       <section className="border-b border-slate-200 bg-white">
@@ -215,7 +357,11 @@ export default function LoadPlanningPage() {
 
           <div className="mt-4 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-4xl">
-              <h1 className="text-4xl font-semibold tracking-tight text-[#123b66] md:text-5xl">
+              <div className="inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-800">
+                Execution Upgrade Unlocked
+              </div>
+
+              <h1 className="mt-4 text-4xl font-semibold tracking-tight text-[#123b66] md:text-5xl">
                 Load Planning
               </h1>
               <p className="mt-4 text-base leading-8 text-slate-600 md:text-lg">
@@ -226,7 +372,7 @@ export default function LoadPlanningPage() {
 
             <div className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 shadow-sm">
               <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                Version 1 scope
+                Execution layer scope
               </div>
               <div className="mt-2 text-sm font-medium text-slate-800">
                 Upload Packing List + Initial Capacity Estimation
@@ -476,8 +622,8 @@ export default function LoadPlanningPage() {
                         <div className="mt-3 grid gap-4 md:grid-cols-2">
                           <MiniMetric label="Recommended container" value={row.planning_insight?.recommended_container || "N/A"} />
                           <MiniMetric label="Efficiency band" value={row.planning_insight?.efficiency_band || "N/A"} />
-                          <MiniMetric label="Volume utilization" value={`${(((row.planning_insight?.volume_utilization || 0) * 100)).toFixed(1)}%`} />
-                          <MiniMetric label="Weight utilization" value={`${(((row.planning_insight?.weight_utilization || 0) * 100)).toFixed(1)}%`} />
+                          <MiniMetric label="Volume utilization" value={`${((row.planning_insight?.volume_utilization || 0) * 100).toFixed(1)}%`} />
+                          <MiniMetric label="Weight utilization" value={`${((row.planning_insight?.weight_utilization || 0) * 100).toFixed(1)}%`} />
                         </div>
                       </div>
 
@@ -563,22 +709,22 @@ export default function LoadPlanningPage() {
 
               <div className="mt-5 space-y-4 text-sm leading-7 text-slate-600">
                 <p>
-                  <span className="font-semibold text-slate-800">Current live path:</span> Upload Packing List → CSV parsing → planning recommendation → operational risk evaluation → RiskAtlas merged output.
+                  <span className="font-semibold text-slate-800">Current live path:</span> Report unlock with Execution Upgrade → Load Planning access → CSV parsing → planning recommendation → operational risk evaluation → RiskAtlas merged output.
                 </p>
                 <p>
-                  <span className="font-semibold text-slate-800">Already connected:</span> template download, local front-end entry, Render planning API, operational risk layer, and RiskAtlas summary route.
+                  <span className="font-semibold text-slate-800">Already connected:</span> template download, execution-layer front-end gating, local front-end entry, Render planning API, operational risk layer, and RiskAtlas summary route.
                 </p>
                 <p>
-                  <span className="font-semibold text-slate-800">Next step:</span> connect country / route variables from RiskAtlas core engine, then add paid PDF and Stripe gating.
+                  <span className="font-semibold text-slate-800">Current positioning:</span> this page is treated as an execution-layer delivery component within the commercial Beta, not as a broad public utility page.
                 </p>
               </div>
 
               <div className="mt-6">
                 <Link
-                  href="/riskatlas"
+                  href="/riskatlas/report"
                   className="inline-flex items-center rounded-full bg-[#123b66] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[#0f3153]"
                 >
-                  Explore RiskAtlas
+                  Back to RiskAtlas Report
                 </Link>
               </div>
             </Card>
@@ -635,6 +781,21 @@ function ActionCard({
       <div className="text-sm font-semibold text-slate-900">{title}</div>
       <div className="mt-2 text-sm leading-6 text-slate-600">{description}</div>
       <div className="mt-4">{action}</div>
+    </div>
+  );
+}
+
+function InfoBlock({
+  title,
+  text,
+}: {
+  title: string;
+  text: string;
+}) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+      <div className="text-sm font-semibold text-slate-900">{title}</div>
+      <div className="mt-2 text-sm leading-7 text-slate-600">{text}</div>
     </div>
   );
 }
