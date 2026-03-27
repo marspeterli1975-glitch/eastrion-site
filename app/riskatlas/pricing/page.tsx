@@ -210,9 +210,8 @@ export default function RiskAtlasPricingPage() {
   href="/riskatlas/report"
   className="mt-8 inline-flex w-full items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-base font-medium text-white transition hover:bg-white/10"
 >
-              >
-               Back to Risk Preview
-              </Link>
+  Back to Risk Preview
+</Link>
             </div>
 
             <div className="rounded-3xl border border-white/10 bg-[#0f172a] p-7">
