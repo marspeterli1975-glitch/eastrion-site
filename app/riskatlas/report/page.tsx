@@ -97,9 +97,10 @@ function getDecisionVerdict(score: number) {
     title: "Avoid",
     description:
       "Current exposure is critical. The route should not be treated as commercially reliable without major risk reduction measures.",
-    tone: "text-red-300",
-    box: "border-red-400/20 bg-red-400/10",
-  };
+      tone: "text-red-300",
+      box: "border-red-400/20 bg-red-400/10",
+    };
+  }
 }
 
 const executionControlPriorities = [
@@ -423,31 +424,31 @@ export default function RiskAtlasReportPage() {
             <div className="mt-8 grid gap-4 md:grid-cols-5">
               <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                 <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Band A</div>
-                <div className="mt-2 text-sm font-medium text-white">0–20 Low</div>
+                <div className="mt-2 text-sm font-medium text-white">0-20 Low</div>
                 <p className="mt-2 text-xs text-slate-400">Routine exposure. Stable and manageable.</p>
               </div>
 
               <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                 <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Band B</div>
-                <div className="mt-2 text-sm font-medium text-white">21–40 Guarded</div>
+                <div className="mt-2 text-sm font-medium text-white">21-40 Guarded</div>
                 <p className="mt-2 text-xs text-slate-400">Watch list exposure. Requires attention.</p>
               </div>
 
               <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                 <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Band C</div>
-                <div className="mt-2 text-sm font-medium text-white">41–60 Moderate</div>
+                <div className="mt-2 text-sm font-medium text-white">41-60 Moderate</div>
                 <p className="mt-2 text-xs text-slate-400">Meaningful operational pressure.</p>
               </div>
 
               <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                 <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Band D</div>
-                <div className="mt-2 text-sm font-medium text-white">61–80 High</div>
+                <div className="mt-2 text-sm font-medium text-white">61-80 High</div>
                 <p className="mt-2 text-xs text-slate-400">Execution risk is elevated.</p>
               </div>
 
               <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
                 <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Band E</div>
-                <div className="mt-2 text-sm font-medium text-white">81–100 Critical</div>
+                <div className="mt-2 text-sm font-medium text-white">81-100 Critical</div>
                 <p className="mt-2 text-xs text-slate-400">Severe disruption risk.</p>
               </div>
             </div>
