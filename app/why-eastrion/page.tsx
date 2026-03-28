@@ -32,21 +32,21 @@ export default function WhyEastrionPage() {
 
         <h1
           style={{
-            fontSize: "76px",
-            lineHeight: 1.05,
+            fontSize: "72px",
+            lineHeight: 1.06,
             fontWeight: 500,
             letterSpacing: "-0.04em",
             margin: 0,
-            maxWidth: "1100px",
+            maxWidth: "1120px",
           }}
         >
-          From fragmented execution to structured supply chain visibility.
+          From fragmented execution to structured, decision-ready supply chain visibility.
         </h1>
 
         <p
           style={{
             marginTop: "28px",
-            maxWidth: "920px",
+            maxWidth: "980px",
             fontSize: "20px",
             lineHeight: 1.8,
             color: "#475569",
@@ -54,7 +54,23 @@ export default function WhyEastrionPage() {
         >
           Eastrion is positioned as a global supply chain infrastructure and risk
           intelligence partner for SMEs that need stronger sourcing visibility,
-          operational coordination and clearer risk signals.
+          operational coordination, and clearer risk signals before commercial
+          exposure turns into execution problems.
+        </p>
+
+        <p
+          style={{
+            marginTop: "12px",
+            maxWidth: "980px",
+            fontSize: "16px",
+            lineHeight: 1.85,
+            color: "#64748b",
+          }}
+        >
+          In 2026, volatility across Red Sea routing, Panama Canal constraints,
+          regulatory shifts, and corridor-level disruption is reshaping how small
+          and mid-sized businesses make sourcing, logistics, and execution
+          decisions.
         </p>
 
         <div
@@ -96,8 +112,9 @@ export default function WhyEastrionPage() {
               Expert-led, partner-enabled, execution-focused
             </h3>
             <p style={cardTextStyle}>
-              We work through a flexible model supported by specialist partners
-              across sourcing, logistics, quality and cross-border execution.
+              We operate from Shanghai with China-linked supply chain experience,
+              supported by specialist partners across sourcing, logistics, quality,
+              and cross-border execution.
             </p>
           </div>
 
@@ -106,8 +123,8 @@ export default function WhyEastrionPage() {
             <h3 style={cardTitleStyle}>Cost · Quality · Time · Risk</h3>
             <p style={cardTextStyle}>
               We do not treat supply chain support as a single quotation exercise.
-              We frame it through execution quality, operational timing and
-              concentrated exposure points.
+              We frame it through execution quality, operational timing,
+              concentrated exposure points, and commercial downside visibility.
             </p>
           </div>
 
@@ -116,10 +133,30 @@ export default function WhyEastrionPage() {
             <h3 style={cardTitleStyle}>SME supply chain performance</h3>
             <p style={cardTextStyle}>
               Our work is most relevant where smaller and mid-sized businesses
-              need better structure across suppliers, corridors, execution and
-              risk communication.
+              need better structure across suppliers, corridors, execution, and
+              risk communication before shipment commitments are locked in.
             </p>
           </div>
+        </div>
+
+        <div
+          style={{
+            marginTop: "28px",
+            maxWidth: "980px",
+            padding: "20px 22px",
+            borderRadius: "18px",
+            background: "rgba(15, 23, 42, 0.04)",
+            border: "1px solid rgba(15, 23, 42, 0.06)",
+            color: "#475569",
+            fontSize: "15px",
+            lineHeight: 1.75,
+          }}
+        >
+          <strong style={{ color: "#0f172a" }}>Case snapshot:</strong> A
+          China-based battery exporter used Eastrion’s structured framework to
+          reduce route-level exposure points from 7 to 2 across Southeast Asia
+          execution planning, avoiding an estimated US$9,800 in potential
+          logistics loss.
         </div>
       </section>
 
@@ -134,7 +171,7 @@ export default function WhyEastrionPage() {
         <div
           style={{
             marginBottom: "28px",
-            maxWidth: "900px",
+            maxWidth: "980px",
           }}
         >
           <div style={labelStyle}>Decision framework</div>
@@ -145,6 +182,7 @@ export default function WhyEastrionPage() {
               fontWeight: 600,
               letterSpacing: "-0.03em",
               margin: "12px 0",
+              lineHeight: 1.2,
             }}
           >
             Vertical Opportunity & Investability Framework
@@ -160,7 +198,21 @@ export default function WhyEastrionPage() {
             Before execution, the primary question is not how to deliver — but
             whether the opportunity itself is structurally sound. This framework
             provides a structured approach to evaluate commercial viability,
-            operational feasibility and exposure conditions in a consistent way.
+            operational feasibility, and exposure conditions in a consistent way.
+          </p>
+
+          <p
+            style={{
+              marginTop: "12px",
+              fontSize: "15px",
+              color: "#64748b",
+              lineHeight: 1.8,
+              maxWidth: "940px",
+            }}
+          >
+            Most SMEs begin with RiskAtlas Scan to structure exposure quickly at
+            Stage 1–3, then move into deeper execution support when Stage 4–6
+            becomes relevant to real shipment, sourcing, or operating decisions.
           </p>
         </div>
 
@@ -197,7 +249,7 @@ export default function WhyEastrionPage() {
             color: "white",
             fontSize: "20px",
             lineHeight: 1.6,
-            maxWidth: "900px",
+            maxWidth: "980px",
           }}
         >
           Most failures are not execution failures — but failures in defining the
@@ -205,9 +257,19 @@ export default function WhyEastrionPage() {
         </div>
 
         {/* 引导到 RiskAtlas */}
-        <div style={{ marginTop: "32px" }}>
+        <div style={{ marginTop: "24px" }}>
+          <div
+            style={{
+              fontSize: "14px",
+              color: "#64748b",
+              marginBottom: "12px",
+            }}
+          >
+            Most SMEs start here: free scan first, then structured paid clarity if needed.
+          </div>
+
           <Link href="/riskatlas" style={primaryBtn}>
-            Run RiskAtlas Scan →
+            Run RiskAtlas Scan → (Free • 30 seconds)
           </Link>
         </div>
       </section>
