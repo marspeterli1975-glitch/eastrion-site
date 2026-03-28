@@ -77,6 +77,10 @@ export default function RiskAtlasPricingPage() {
                 only when shipment planning and operating control require deeper support.
               </div>
 
+              <div className="mt-3 text-sm leading-7 text-slate-300">
+                Commonly used before supplier confirmation, route commitment, or execution-sensitive shipment planning.
+              </div>
+
               <div className="mt-8 flex flex-wrap gap-4">
                 <button
                   onClick={() => handleCheckout("pro")}
@@ -170,14 +174,14 @@ export default function RiskAtlasPricingPage() {
       <section className="border-b border-white/10">
         <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
           <div className="grid gap-6 lg:grid-cols-3">
-            <div className="rounded-3xl border border-cyan-400/25 bg-[#0f172a] p-7 shadow-xl shadow-cyan-950/10">
-              <div className="inline-flex rounded-full bg-cyan-500/10 px-4 py-2 text-sm font-medium text-cyan-200">
-                Most exporters start here
+            <div className="rounded-3xl border border-cyan-300/35 bg-[#0f172a] p-7 shadow-2xl shadow-cyan-950/20 ring-1 ring-cyan-400/10">
+              <div className="inline-flex rounded-full bg-cyan-500/15 px-4 py-2 text-sm font-medium text-cyan-100">
+                Most Popular · Best Starting Point
               </div>
               <h3 className="mt-5 text-3xl font-semibold text-white">
                 Professional Report ($49)
               </h3>
-              <p className="mt-3 text-sm leading-7 text-slate-400">
+              <p className="mt-3 text-sm leading-7 text-slate-300">
                 Built for fast, structured clarity before deeper execution work begins.
               </p>
               <ul className="mt-5 space-y-3 text-sm leading-7 text-slate-300">
@@ -185,7 +189,7 @@ export default function RiskAtlasPricingPage() {
                 <li>✓ Translate uncertainty into a consulting-style advisory layer for internal decision alignment</li>
                 <li>✓ Clarify whether current exposure remains guarded, moderate, high, or critical before commitment</li>
                 <li>✓ Reduce avoidable delay and coordination risk through clearer commercial visibility</li>
-                <li>✓ Download a professional PDF report for internal use, review, and stakeholder discussion</li>
+                <li>✓ Download a professional PDF report for internal review and stakeholder discussion</li>
               </ul>
               <button
                 onClick={() => handleCheckout("pro")}
@@ -246,10 +250,10 @@ export default function RiskAtlasPricingPage() {
               </p>
               <ul className="mt-5 space-y-3 text-sm leading-7 text-slate-200">
                 <li>✓ Everything included in the Professional Report</li>
-                <li>✓ Add execution-layer interpretation for operational sensitivity and shipment readiness</li>
-                <li>✓ Surface control priorities for continuity, handling feasibility, and route-linked execution risk</li>
+                <li>✓ Add execution clarity for shipment readiness and operating continuity</li>
+                <li>✓ Clarify control priorities for continuity, handling, and route-linked execution risk</li>
                 <li>✓ Link into Load Planning for packing, routing, and handling logic before execution</li>
-                <li>✓ Generate a stronger execution-oriented PDF output for internal coordination and shipment planning</li>
+                <li>✓ Generate a stronger execution-oriented PDF for coordination and shipment planning</li>
               </ul>
               <button
                 onClick={() => handleCheckout("execution")}
