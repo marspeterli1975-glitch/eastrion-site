@@ -11,6 +11,11 @@ export default function ContactPage() {
             Eastrion should be positioned as a commercial and strategic counterpart, not just a quotation
             inbox. The focus is use case fit, operating friction and the next step for engagement.
           </p>
+          <p className="content-subtitle" style={{ marginTop: "12px", maxWidth: "980px" }}>
+            In 2026, corridor volatility, freight spikes, supplier ambiguity and cross-border execution
+            friction can usually be framed more clearly through a structured first discussion. The objective
+            is not just to ask a question, but to define the next workable step.
+          </p>
         </div>
       </section>
 
@@ -20,10 +25,26 @@ export default function ContactPage() {
             <div className="content-card">
               <span className="content-kicker">Typical Discussion Themes</span>
               <ul className="content-list">
-                <li>Supplier sourcing and filtration</li>
-                <li>Industrial component and project support</li>
-                <li>Cross-border operational coordination</li>
-                <li>Supply chain risk visibility and RiskAtlas</li>
+                <li>
+                  <strong>Supplier sourcing and filtration</strong>
+                  <br />
+                  Used when supplier quality, credibility or execution fit is still unclear.
+                </li>
+                <li>
+                  <strong>Industrial component and project support</strong>
+                  <br />
+                  Relevant where technical coordination or project-driven procurement needs more structure.
+                </li>
+                <li>
+                  <strong>Cross-border operational coordination</strong>
+                  <br />
+                  Best for cases involving routing, documentation, shipment execution or delivery friction.
+                </li>
+                <li>
+                  <strong>Supply chain risk visibility and RiskAtlas</strong>
+                  <br />
+                  Suitable for early-stage corridor, route, supplier or execution exposure screening.
+                </li>
               </ul>
             </div>
 
@@ -34,6 +55,8 @@ export default function ContactPage() {
                 <li>Company: Shanghai Eastrion Information Science &amp; Technology Co., Ltd</li>
                 <li>Location: Shanghai, China</li>
                 <li>Flagship product: RiskAtlas</li>
+                <li>Expected response: within 24 hours for a first review of your business context</li>
+                <li>Best starting input: a short summary of your current supplier, route or execution issue</li>
               </ul>
             </div>
           </div>
@@ -51,20 +74,32 @@ export default function ContactPage() {
                 We position the business as a global supply chain infrastructure and risk intelligence partner
                 for companies that require stronger sourcing visibility, operational coordination and clearer risk signals.
               </p>
+              <p style={{ marginTop: "14px" }}>
+                The strongest fit is where a business issue still feels fragmented — supplier uncertainty,
+                corridor dependency, execution ambiguity or shipment-level risk — and needs to be translated
+                into a clearer commercial next step.
+              </p>
             </div>
 
             <div className="content-bullets">
               <div className="bullet-card">
                 <strong>Commercial dialogue</strong>
-                <p>Use the contact page to frame a real business problem, not just a product inquiry.</p>
+                <p>
+                  Use the first contact to frame a real business problem, not just request a quotation.
+                </p>
               </div>
               <div className="bullet-card">
                 <strong>Best fit</strong>
-                <p>The strongest use cases are those involving sourcing friction, execution ambiguity or corridor risk.</p>
+                <p>
+                  Best fit for cases involving sourcing ambiguity, route dependency, supplier validation or execution-sensitive shipments.
+                </p>
               </div>
               <div className="bullet-card">
                 <strong>Next step</strong>
-                <p>Contact can remain lightweight now; a structured form can be added later if needed.</p>
+                <p>
+                  Start with a short email describing your current business context. We can then determine whether RiskAtlas,
+                  direct discussion or deeper support is the right next move.
+                </p>
               </div>
             </div>
           </div>
