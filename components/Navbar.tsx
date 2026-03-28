@@ -100,9 +100,6 @@ export default function Navbar() {
           <Link href="/solutions" style={navLinkStyle}>
             Services
           </Link>
-          <Link href="/load-planning" style={navLinkStyle}>
-            Load Planning
-          </Link>
           <Link href="/riskatlas" style={navLinkStyle}>
             RiskAtlas
           </Link>
