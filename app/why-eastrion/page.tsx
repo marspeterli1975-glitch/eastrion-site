@@ -14,7 +14,7 @@ export default function WhyEastrionPage() {
         style={{
           maxWidth: "1280px",
           margin: "0 auto",
-          padding: "64px 24px 32px",
+          padding: "32px 24px 24px",
         }}
       >
         <div
