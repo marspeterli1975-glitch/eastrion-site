@@ -15,6 +15,15 @@ type CheckoutResponse = {
   checkoutUrl?: string;
 };
 
+type MatrixItem = {
+  id: number;
+  painPoint: string;
+  trade: { score: number; note: string };
+  investment: { score: number; note: string };
+  logistics: { score: number; note: string };
+  supplyChain: { score: number; note: string };
+};
+
 function getRiskBand(score: number) {
   if (score <= 20) {
     return {
@@ -97,51 +106,281 @@ function getDecisionVerdict(score: number) {
     title: "Avoid",
     description:
       "Current exposure is critical. The route should not be treated as commercially reliable without major risk reduction measures.",
-      tone: "text-red-300",
-      box: "border-red-400/20 bg-red-400/10",
-    };
-  }
+    tone: "text-red-300",
+    box: "border-red-400/20 bg-red-400/10",
+  };
+}
 
-const executionControlPriorities = [
-  "Validate supplier production readiness before shipment booking is locked.",
-  "Protect margin and timeline assumptions against corridor volatility.",
-  "Introduce operational buffers for handling, routing, and delivery uncertainty.",
-  "Avoid single-point execution dependency across supplier, route, or loading plan.",
+const executivePainPoints = [
+  {
+    id: 1,
+    title: "Geopolitical Corridor Disruption",
+    summary:
+      "Route continuity remains exposed to chokepoints, policy intervention, and corridor-level instability rather than only supplier-side issues.",
+    linkage:
+      "Primarily linked to geopolitical exposure, route concentration, event volatility, and cross-border operating conditions within the existing 8-dimensional model.",
+  },
+  {
+    id: 2,
+    title: "Freight Cost and Margin Transmission Pressure",
+    summary:
+      "Cost shocks are difficult to transmit cleanly into pricing, which weakens margin discipline and destabilizes working-capital assumptions.",
+    linkage:
+      "Linked to cost volatility, logistics disruption sensitivity, pricing transmission weakness, and execution exposure already captured in the model base.",
+  },
+  {
+    id: 3,
+    title: "Equipment and Capacity Imbalance",
+    summary:
+      "The operating challenge is not only shortage but mismatch: timing, space, equipment, and deployment readiness can fail to align when conditions turn.",
+    linkage:
+      "Mapped to capacity tightness, route availability, operational readiness, and shipment-level execution strain inside the 8-dimensional structure.",
+  },
+  {
+    id: 4,
+    title: "Port Congestion and Fulfilment Delay",
+    summary:
+      "The real commercial loss is not limited to delay itself but extends to customer promise erosion, re-planning cost, and follow-on fulfilment instability.",
+    linkage:
+      "Connected to port exposure, transit continuity, planning disruption, and end-to-end fulfilment reliability dimensions.",
+  },
+  {
+    id: 5,
+    title: "Digital Visibility and Coordination Gaps",
+    summary:
+      "Weak visibility converts manageable volatility into decision lag, manual override dependency, and late-stage firefighting.",
+    linkage:
+      "Derived from coordination, operating predictability, planning reliability, and execution-control dimensions in the current framework.",
+  },
+  {
+    id: 6,
+    title: "Compliance and Market-Entry Friction",
+    summary:
+      "Trade friction increasingly arises from fragmented rules, documentation burdens, and cross-market compliance asymmetry rather than tariff alone.",
+    linkage:
+      "Aligned with regulatory variability, market-entry exposure, documentation complexity, and operating control dimensions.",
+  },
+  {
+    id: 7,
+    title: "Sustainability and Green-Cost Pressure",
+    summary:
+      "Green requirements are transitioning from reporting burdens into long-cycle operating constraints that affect supplier qualification and cost design.",
+    linkage:
+      "Mapped to regulatory drift, certification pressure, cost pass-through weakness, and long-horizon operating resilience.",
+  },
 ];
 
-const executionLinkageItems = [
+const executiveImpactMatrix: MatrixItem[] = [
   {
-    title: "Packing Discipline",
-    text: "Translate the risk reading into shipment-level packing assumptions, especially where stack limits, outer dimensions, and handling sensitivity affect feasibility.",
+    id: 1,
+    painPoint: "Geopolitical and corridor disruption",
+    trade: {
+      score: 92,
+      note: "Trade flow interruption and pricing instability hit order continuity directly.",
+    },
+    investment: {
+      score: 75,
+      note: "Port, route, and overseas capacity investment becomes harder to time correctly.",
+    },
+    logistics: {
+      score: 88,
+      note: "Rerouting pushes fuel, insurance, and transit complexity materially higher.",
+    },
+    supplyChain: {
+      score: 95,
+      note: "Single-point fragility becomes most visible at the end-to-end network level.",
+    },
   },
   {
-    title: "Routing Readiness",
-    text: "Use the execution layer to judge whether the planned route still supports stable dispatch, transit continuity, and customer-facing lead-time commitments.",
+    id: 2,
+    painPoint: "Freight cost and cost-pass-through pressure",
+    trade: {
+      score: 78,
+      note: "Pricing transmission lags behind volatility and compresses margin.",
+    },
+    investment: {
+      score: 65,
+      note: "Return assumptions become less stable for logistics and warehousing bets.",
+    },
+    logistics: {
+      score: 92,
+      note: "Fuel and disruption costs dominate the operating-cost stack.",
+    },
+    supplyChain: {
+      score: 82,
+      note: "Inventory pressure and cash conversion worsen under cost spikes.",
+    },
   },
   {
-    title: "Handling Control",
-    text: "Treat loading, transfer, and inland deployment as operational control points rather than downstream administrative steps.",
+    id: 3,
+    painPoint: "Capacity and equipment mismatch",
+    trade: {
+      score: 65,
+      note: "Shipment rhythm weakens when space and equipment do not align with demand.",
+    },
+    investment: {
+      score: 80,
+      note: "Overcapacity and mistimed fleet or port investment can destroy returns.",
+    },
+    logistics: {
+      score: 85,
+      note: "Slow equipment turns and repeated booking disruption reduce execution efficiency.",
+    },
+    supplyChain: {
+      score: 78,
+      note: "Multimodal coordination breaks more easily when capacity assumptions fail.",
+    },
+  },
+  {
+    id: 4,
+    painPoint: "Port congestion and end-to-end delay",
+    trade: {
+      score: 70,
+      note: "Customer confidence and fulfilment reliability deteriorate under repeated delay.",
+    },
+    investment: {
+      score: 60,
+      note: "Expansion decisions are delayed when network certainty remains weak.",
+    },
+    logistics: {
+      score: 90,
+      note: "Detention, demurrage, and queue cost escalate quickly during congestion waves.",
+    },
+    supplyChain: {
+      score: 85,
+      note: "Visibility interruption and downstream planning failure expand beyond the port itself.",
+    },
+  },
+  {
+    id: 5,
+    painPoint: "Digital visibility and control weakness",
+    trade: {
+      score: 55,
+      note: "Slow decision cycles hurt SMEs and delay corrective action.",
+    },
+    investment: {
+      score: 45,
+      note: "Digitization investment often pays back slowly without executive sponsorship.",
+    },
+    logistics: {
+      score: 80,
+      note: "Manual handling remains high and execution efficiency falls materially.",
+    },
+    supplyChain: {
+      score: 75,
+      note: "Forecast and execution variance amplify risk across the network.",
+    },
+  },
+  {
+    id: 6,
+    painPoint: "Compliance and market-entry friction",
+    trade: {
+      score: 85,
+      note: "Rule changes and certification burdens directly affect market access.",
+    },
+    investment: {
+      score: 70,
+      note: "Localization bets become policy-driven rather than purely economic.",
+    },
+    logistics: {
+      score: 70,
+      note: "Clearance and last-mile cost rise when cross-border complexity increases.",
+    },
+    supplyChain: {
+      score: 80,
+      note: "Diversification becomes more complex as regulatory asymmetry increases.",
+    },
+  },
+  {
+    id: 7,
+    painPoint: "Sustainability and green-cost pressure",
+    trade: {
+      score: 60,
+      note: "Carbon and sustainability rules indirectly influence pricing power.",
+    },
+    investment: {
+      score: 85,
+      note: "Green infrastructure and compliance investment become strategic requirements.",
+    },
+    logistics: {
+      score: 75,
+      note: "Fuel and packaging compliance add measurable operating burden.",
+    },
+    supplyChain: {
+      score: 70,
+      note: "ESG becomes a longer-cycle qualification and continuity barrier.",
+    },
   },
 ];
 
-const executionLayerMetrics = [
-  {
-    label: "Execution posture",
-    value: "Managed deployment",
-  },
-  {
-    label: "Load planning linkage",
-    value: "Enabled",
-  },
-  {
-    label: "Operational readiness",
-    value: "Control-led",
-  },
-  {
-    label: "Internal coordination use",
-    value: "Expanded",
-  },
-];
+const executiveResponseFramework = {
+  strategic: [
+    "Rebuild route resilience through corridor diversification, regional redundancy, and reduced dependency on a single geopolitical passage.",
+    "Use the 8-dimensional model as a board-level exposure lens, then link it to supplier concentration, route resilience, and market-entry strategy.",
+    "Treat green compliance, regional warehousing, and visibility infrastructure as structural capability investment rather than short-term discretionary spend.",
+  ],
+  tactical: [
+    "Create dual-path routing assumptions and predefine trigger conditions for switching between primary and backup corridor options.",
+    "Introduce margin-protection measures such as pricing review thresholds, freight renegotiation windows, and controlled contract buffers.",
+    "Run quarterly exposure reviews that translate model signals into inventory posture, supplier readiness checks, and compliance gating.",
+  ],
+  immediate: [
+    "Confirm the top three current execution vulnerabilities before the next commercial commitment cycle.",
+    "Activate weekly monitoring of route continuity, port stress, policy movement, and cost pass-through deviation.",
+    "Escalate any shipment or order set where exposure moves from guarded into execution-fragile conditions without clear fallback control.",
+  ],
+};
+
+function averageScore(items: MatrixItem[], key: keyof Omit<MatrixItem, "id" | "painPoint">) {
+  const total = items.reduce((sum, item) => sum + item[key].score, 0);
+  return Math.round(total / items.length);
+}
+
+function MatrixTable({
+  title,
+  subtitle,
+  items,
+  column,
+}: {
+  title: string;
+  subtitle: string;
+  items: MatrixItem[];
+  column: keyof Omit<MatrixItem, "id" | "painPoint">;
+}) {
+  const avg = averageScore(items, column);
+
+  return (
+    <div className="rounded-3xl border border-white/10 bg-black/20 p-5 md:p-6">
+      <div className="text-xs uppercase tracking-[0.18em] text-slate-500">{title}</div>
+      <div className="mt-2 text-sm leading-7 text-slate-400">{subtitle}</div>
+
+      <div className="mt-5 overflow-hidden rounded-2xl border border-white/10">
+        <div className="grid grid-cols-[84px_minmax(0,1fr)] border-b border-white/10 bg-white/[0.03]">
+          <div className="px-4 py-4 text-sm font-semibold text-white">No.</div>
+          <div className="px-4 py-4 text-sm font-semibold text-white">{title}</div>
+        </div>
+
+        {items.map((item) => (
+          <div
+            key={`${title}-${item.id}`}
+            className="grid grid-cols-[84px_minmax(0,1fr)] border-b border-white/10 last:border-b-0"
+          >
+            <div className="px-4 py-4 text-lg font-semibold text-white">{item.id}</div>
+            <div className="px-4 py-4">
+              <div className="text-sm font-medium text-slate-200">{item[column].score}</div>
+              <div className="mt-1 text-sm leading-7 text-slate-300">{item[column].note}</div>
+            </div>
+          </div>
+        ))}
+
+        <div className="grid grid-cols-[84px_minmax(0,1fr)] bg-white/[0.03]">
+          <div className="px-4 py-4 text-sm font-semibold text-white">AVG</div>
+          <div className="px-4 py-4 text-2xl font-semibold text-white">{avg}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function RiskAtlasReportPage() {
   const [mounted, setMounted] = useState(false);
@@ -165,6 +404,7 @@ export default function RiskAtlasReportPage() {
   const overallScore = 38;
   const band = useMemo(() => getRiskBand(overallScore), [overallScore]);
   const verdict = useMemo(() => getDecisionVerdict(overallScore), [overallScore]);
+
   const isProUnlocked = !!unlockState?.pro;
   const isExecutionUnlocked = !!unlockState?.execution;
 
@@ -276,11 +516,11 @@ export default function RiskAtlasReportPage() {
           "Supplier concentration risk",
           "Logistics corridor dependency",
           "Regulatory variability",
-          "Execution layer enabled",
-          "Load planning linkage required",
+          "Executive intelligence layer enabled",
+          "Impact matrix and response framework included",
         ],
         disclaimer:
-          "This execution-layer report is for analytical and operational planning purposes only and does not constitute legal, financial, engineering, or investment advice.",
+          "This executive-intelligence report is for analytical and operating-planning purposes only and does not constitute legal, financial, engineering, or investment advice.",
       };
 
       const res = await fetch("/api/risk-report", {
@@ -303,7 +543,7 @@ export default function RiskAtlasReportPage() {
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = "riskatlas-execution-report.pdf";
+      a.download = "riskatlas-executive-intelligence-report.pdf";
       a.click();
 
       window.URL.revokeObjectURL(url);
@@ -356,7 +596,7 @@ export default function RiskAtlasReportPage() {
                 <div className="text-xs uppercase tracking-[0.18em] text-slate-400">Unlock status</div>
                 <div className="mt-2 text-lg font-semibold">
                   {isExecutionUnlocked
-                    ? "Execution Upgrade Unlocked"
+                    ? "Executive Intelligence Active"
                     : isProUnlocked
                     ? "Professional Unlocked"
                     : "Preview Only"}
@@ -375,7 +615,7 @@ export default function RiskAtlasReportPage() {
               <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                 <div className="text-xs uppercase tracking-[0.18em] text-slate-400">Commercial mode</div>
                 <div className="mt-2 text-lg font-semibold">
-                  {isExecutionUnlocked ? "Execution layer active" : "Beta monetization live"}
+                  {isExecutionUnlocked ? "Second-layer product active" : "Beta monetization live"}
                 </div>
                 <div className="mt-1 text-sm text-slate-400">
                   Frontend unlock works via browser local storage for now.
@@ -456,11 +696,11 @@ export default function RiskAtlasReportPage() {
           <div className="rounded-3xl border border-cyan-400/20 bg-gradient-to-b from-cyan-400/10 to-transparent p-6 md:p-8">
             <div className="text-xs uppercase tracking-[0.18em] text-cyan-300">Commercial access layer</div>
             <h3 className="mt-3 text-2xl font-semibold">
-              {isExecutionUnlocked ? "Execution Upgrade" : "Professional Report"}
+              {isExecutionUnlocked ? "Executive Intelligence Layer" : "Professional Report"}
             </h3>
             <p className="mt-3 text-sm leading-7 text-slate-300">
               {isExecutionUnlocked
-                ? "Your upgrade includes the structured advisory layer, execution-oriented PDF output, and access to Load Planning linkage."
+                ? "Your current path includes the professional report plus a second-layer management-facing intelligence block for pain-point mapping, impact weighting, and executive response priorities."
                 : "Unlock the full report to access the structured advisory layer, premium interpretation, and the professional PDF report."}
             </p>
 
@@ -473,17 +713,17 @@ export default function RiskAtlasReportPage() {
                   </div>
                 </div>
                 <div className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs font-medium text-cyan-300">
-                  {isExecutionUnlocked ? "Execution Active" : "Beta Offer"}
+                  {isExecutionUnlocked ? "Second Layer Active" : "Beta Offer"}
                 </div>
               </div>
 
               <div className="mt-5 space-y-3 text-sm text-slate-300">
                 {isExecutionUnlocked ? (
                   <>
-                    <div>• Execution sensitivity note for operational risk exposure</div>
-                    <div>• Operational control priorities for shipment readiness and continuity</div>
-                    <div>• Load Planning linkage for packing, routing, and handling feasibility</div>
-                    <div>• Stronger execution-oriented PDF output for internal coordination</div>
+                    <div>• Professional report remains unchanged as the advisory base layer</div>
+                    <div>• Executive pain-point mapping translates model output into industry language</div>
+                    <div>• Impact matrix shows differentiated pressure on trade, investment, logistics, and supply chain</div>
+                    <div>• Executive response framework converts guarded exposure into management actions</div>
                   </>
                 ) : (
                   <>
@@ -500,7 +740,7 @@ export default function RiskAtlasReportPage() {
                   <div className="space-y-3">
                     <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-300">
                       {isExecutionUnlocked
-                        ? "Execution Upgrade is active on this browser."
+                        ? "Executive Intelligence Layer is active on this browser."
                         : "Professional access is active on this browser."}
                     </div>
 
@@ -510,18 +750,18 @@ export default function RiskAtlasReportPage() {
                           href="/load-planning"
                           className="block w-full rounded-xl bg-white px-5 py-3 text-center text-sm font-semibold text-slate-900 hover:bg-slate-200"
                         >
-                          Go to Load Planning
+                          Open Linked Load Planning
                         </Link>
 
                         <button
                           onClick={downloadExecutionPdf}
                           className="block w-full rounded-xl border border-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/5"
                         >
-                          Download Execution Report
+                          Download Executive Report
                         </button>
 
                         <div className="text-xs text-slate-500">
-                          Execution layer includes load-planning linkage and stronger operational coordination output.
+                          The second layer is positioned as a management-facing intelligence block rather than a longer version of the same report.
                         </div>
                       </>
                     ) : (
@@ -534,7 +774,7 @@ export default function RiskAtlasReportPage() {
                         </button>
 
                         <div className="text-xs text-slate-500">
-                          PDF export (beta version). Full dynamic report generation will be upgraded in the next phase.
+                          PDF export is currently the professional report handoff layer.
                         </div>
                       </>
                     )}
@@ -603,15 +843,15 @@ export default function RiskAtlasReportPage() {
           <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
             <div>
               <div className="text-xs uppercase tracking-[0.18em] text-slate-500">
-                {isExecutionUnlocked ? "Execution report layer" : "Professional report layer"}
+                {isExecutionUnlocked ? "Professional report complete" : "Professional report layer"}
               </div>
               <h2 className="mt-2 text-2xl font-semibold">
-                {isExecutionUnlocked ? "Execution content block" : "Paid content block"}
+                {isExecutionUnlocked ? "Professional report concludes here" : "Paid content block"}
               </h2>
               <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-300">
                 {isExecutionUnlocked
-                  ? "This section reflects the execution-grade layer, designed to connect risk interpretation with shipment feasibility and operational readiness."
-                  : "This section is intentionally designed to make the difference between free preview and paid report obvious. Even before backend persistence and dynamic PDF generation are added, users should feel that the paid layer is a more serious product."}
+                  ? "For 149 users, the advisory report remains the base layer. The next section is intentionally presented as a separate executive intelligence block rather than additional report text."
+                  : "This section is intentionally designed to make the difference between free preview and paid report obvious. The paid layer should feel materially more structured than the preview layer."}
               </p>
             </div>
 
@@ -626,17 +866,13 @@ export default function RiskAtlasReportPage() {
             <div className="mt-8 space-y-6">
               <div className="rounded-3xl border border-cyan-400/20 bg-cyan-400/5 p-6 md:p-8">
                 <div className="text-xs uppercase tracking-[0.18em] text-cyan-300">
-                  {isExecutionUnlocked ? "Structured Execution Advisory Layer" : "Structured Advisory Layer"}
+                  Structured Advisory Layer
                 </div>
                 <h3 className="mt-2 text-xl font-semibold">
-                  {isExecutionUnlocked
-                    ? "Execution-Oriented Recommendation Output"
-                    : "Consulting-Style Recommendation Output"}
+                  Consulting-Style Recommendation Output
                 </h3>
                 <p className="mt-3 text-sm leading-7 text-slate-400">
-                  {isExecutionUnlocked
-                    ? "This section translates the current exposure profile into a structured recommendation layer for commercial decisions, execution planning, and shipment feasibility."
-                    : "This section translates the current exposure profile into a structured recommendation layer designed to support practical commercial and operating decisions."}
+                  This section translates the current exposure profile into a structured recommendation layer designed to support practical commercial and operating decisions.
                 </p>
               </div>
 
@@ -689,143 +925,6 @@ export default function RiskAtlasReportPage() {
                   with their own contractual frameworks, operating controls, and commercial judgment.
                 </p>
               </div>
-
-              {isExecutionUnlocked && (
-                <>
-                  <div className="rounded-3xl border border-emerald-400/20 bg-emerald-400/5 p-6 md:p-8">
-                    <div className="text-xs uppercase tracking-[0.18em] text-emerald-300">
-                      Execution Layer Overview
-                    </div>
-                    <h3 className="mt-2 text-xl font-semibold">
-                      Operational execution perspective is now part of the report
-                    </h3>
-                    <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-300">
-                      The 149 layer is not limited to a stronger PDF handoff. It adds an execution-facing reading of the
-                      same corridor, so the report can be used not only for commercial judgment but also for shipment readiness,
-                      planning linkage, and internal operating coordination.
-                    </p>
-
-                    <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                      {executionLayerMetrics.map((item) => (
-                        <div
-                          key={item.label}
-                          className="rounded-2xl border border-white/10 bg-black/20 p-4"
-                        >
-                          <div className="text-xs uppercase tracking-[0.18em] text-slate-500">
-                            {item.label}
-                          </div>
-                          <div className="mt-2 text-base font-semibold text-white">{item.value}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-                    <div className="rounded-3xl border border-blue-400/20 bg-blue-400/5 p-6 md:p-8">
-                      <div className="text-xs uppercase tracking-[0.18em] text-blue-300">
-                        Load Planning Linkage
-                      </div>
-                      <h3 className="mt-2 text-xl font-semibold">
-                        Risk reading is connected to shipment feasibility
-                      </h3>
-                      <p className="mt-3 text-sm leading-7 text-slate-300">
-                        In the execution layer, the report is no longer a standalone interpretation page.
-                        It begins to connect risk posture with real shipment preparation, especially where packing structure,
-                        handling sensitivity, and deployment feasibility influence whether the route remains workable in practice.
-                      </p>
-
-                      <div className="mt-6 space-y-4">
-                        {executionLinkageItems.map((item) => (
-                          <div
-                            key={item.title}
-                            className="rounded-2xl border border-white/10 bg-black/20 p-4"
-                          >
-                            <div className="text-sm font-semibold text-white">{item.title}</div>
-                            <p className="mt-2 text-sm leading-7 text-slate-300">{item.text}</p>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="mt-6">
-                        <Link
-                          href="/load-planning"
-                          className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-200"
-                        >
-                          Open Load Planning
-                        </Link>
-                      </div>
-                    </div>
-
-                    <div className="rounded-3xl border border-violet-400/20 bg-violet-400/5 p-6 md:p-8">
-                      <div className="text-xs uppercase tracking-[0.18em] text-violet-300">
-                        Operational Control Priorities
-                      </div>
-                      <h3 className="mt-2 text-xl font-semibold">
-                        Minimum execution actions before scaling commitment
-                      </h3>
-                      <p className="mt-3 text-sm leading-7 text-slate-300">
-                        These priorities make the execution layer visibly different from the professional report.
-                        The objective is to convert a guarded risk reading into a controlled operating posture rather
-                        than leave it as a general advisory note.
-                      </p>
-
-                      <div className="mt-6 space-y-3">
-                        {executionControlPriorities.map((item, index) => (
-                          <div
-                            key={item}
-                            className="rounded-2xl border border-white/10 bg-black/20 p-4"
-                          >
-                            <div className="flex gap-3">
-                              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-xs font-semibold text-white">
-                                {index + 1}
-                              </div>
-                              <div className="text-sm leading-7 text-slate-300">{item}</div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="mt-6">
-                        <button
-                          onClick={downloadExecutionPdf}
-                          className="inline-flex items-center justify-center rounded-2xl border border-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/5"
-                        >
-                          Download Execution Report
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="rounded-3xl border border-emerald-400/20 bg-emerald-400/5 p-6 md:p-8">
-                    <div className="text-xs uppercase tracking-[0.18em] text-emerald-300">
-                      Execution Upgrade Active
-                    </div>
-                    <h3 className="mt-2 text-xl font-semibold">
-                      Operational Execution Layer Enabled
-                    </h3>
-                    <p className="mt-3 text-sm leading-7 text-slate-300">
-                      Your upgrade includes execution-level considerations, including shipment feasibility,
-                      operational controls, and load planning linkage.
-                    </p>
-
-                    <div className="mt-6 grid gap-4 md:grid-cols-2">
-                      <Link
-                        href="/load-planning"
-                        className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-200"
-                      >
-                        Go to Load Planning
-                      </Link>
-
-                      <button
-                        onClick={downloadExecutionPdf}
-                        className="inline-flex items-center justify-center rounded-2xl border border-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/5"
-                      >
-                        Download Execution Report
-                      </button>
-                    </div>
-                  </div>
-                </>
-              )}
             </div>
           ) : (
             <div className="mt-8 rounded-3xl border border-dashed border-white/15 bg-white/[0.03] p-8">
@@ -865,6 +964,207 @@ export default function RiskAtlasReportPage() {
           )}
         </div>
       </section>
+
+      {isExecutionUnlocked && (
+        <section className="mx-auto max-w-7xl px-6 pb-16">
+          <div className="space-y-8 rounded-3xl border border-emerald-400/20 bg-gradient-to-br from-emerald-400/8 to-cyan-400/5 p-6 md:p-8">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+              <div className="max-w-3xl">
+                <div className="inline-flex rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-emerald-300">
+                  Executive Intelligence Layer
+                </div>
+
+                <h2 className="mt-4 text-2xl font-semibold md:text-3xl">
+                  Management-facing risk translation and action framing
+                </h2>
+
+                <p className="mt-4 text-sm leading-7 text-slate-300 md:text-base">
+                  This layer does not replace the original 8-dimensional model. It translates the same model output into
+                  industry pain points, differentiated business impact, and executive action priorities so the 149 path
+                  feels like a distinct management tool rather than a slightly longer report.
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-5 lg:min-w-[280px]">
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Second layer status</div>
+                <div className="mt-2 text-lg font-semibold text-white">Active</div>
+                <div className="mt-2 text-sm leading-7 text-slate-400">
+                  Separate from the report body and designed for executive scanning, internal prioritization, and next-step decision framing.
+                </div>
+              </div>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Layer type</div>
+                <div className="mt-2 text-base font-semibold text-white">Executive intelligence</div>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Model basis</div>
+                <div className="mt-2 text-base font-semibold text-white">Original 8 dimensions retained</div>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Primary use</div>
+                <div className="mt-2 text-base font-semibold text-white">Management prioritization</div>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Linked capability</div>
+                <div className="mt-2 text-base font-semibold text-white">Load Planning available</div>
+              </div>
+            </div>
+
+            <div className="rounded-3xl border border-blue-400/20 bg-blue-400/5 p-6 md:p-8">
+              <div className="text-xs uppercase tracking-[0.18em] text-blue-300">
+                Executive Pain-Point Mapping
+              </div>
+              <h3 className="mt-2 text-xl font-semibold">
+                Industry pain points translated from the same 8-dimensional model
+              </h3>
+              <p className="mt-3 text-sm leading-7 text-slate-300">
+                The purpose of this section is not to add a new model. It is to convert the existing model output into the language
+                management teams actually use when reviewing resilience, route exposure, cost pressure, and operating fragility.
+              </p>
+
+              <div className="mt-6 space-y-4">
+                {executivePainPoints.map((item) => (
+                  <div
+                    key={item.id}
+                    className="rounded-2xl border border-white/10 bg-black/20 p-5"
+                  >
+                    <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                      <div>
+                        <div className="text-sm font-semibold text-white">
+                          {item.id}. {item.title}
+                        </div>
+                        <p className="mt-2 text-sm leading-7 text-slate-300">{item.summary}</p>
+                      </div>
+
+                      <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-slate-300">
+                        Executive translation
+                      </div>
+                    </div>
+
+                    <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm leading-7 text-slate-400">
+                      <span className="font-medium text-slate-200">Model linkage:</span> {item.linkage}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-3xl border border-violet-400/20 bg-violet-400/5 p-6 md:p-8">
+              <div className="text-xs uppercase tracking-[0.18em] text-violet-300">
+                Executive Impact Matrix
+              </div>
+              <h3 className="mt-2 text-xl font-semibold">
+                Differentiated impact by business domain
+              </h3>
+              <p className="mt-3 text-sm leading-7 text-slate-300">
+                A single score cannot show where pain is most concentrated. This matrix translates the same risk environment into domain-specific pressure on trade, investment, logistics, and the overall supply chain.
+              </p>
+
+              <div className="mt-6 grid gap-6 xl:grid-cols-2">
+                <MatrixTable
+                  title="Trade"
+                  subtitle="Export volume, pricing, and market-entry pressure"
+                  items={executiveImpactMatrix}
+                  column="trade"
+                />
+
+                <MatrixTable
+                  title="Investment"
+                  subtitle="Infrastructure, capacity, and localization investment pressure"
+                  items={executiveImpactMatrix}
+                  column="investment"
+                />
+
+                <MatrixTable
+                  title="Logistics"
+                  subtitle="Operating cost, efficiency, and execution pressure"
+                  items={executiveImpactMatrix}
+                  column="logistics"
+                />
+
+                <MatrixTable
+                  title="Supply Chain"
+                  subtitle="Network resilience, planning, and inventory pressure"
+                  items={executiveImpactMatrix}
+                  column="supplyChain"
+                />
+              </div>
+            </div>
+
+            <div className="rounded-3xl border border-amber-400/20 bg-amber-400/5 p-6 md:p-8">
+              <div className="text-xs uppercase tracking-[0.18em] text-amber-300">
+                Executive Response Framework
+              </div>
+              <h3 className="mt-2 text-xl font-semibold">
+                Strategic, tactical, and immediate management actions
+              </h3>
+              <p className="mt-3 text-sm leading-7 text-slate-300">
+                The purpose of this framework is to turn a guarded exposure reading into a management response stack. It keeps the model unchanged while improving usability for planning, budget discussion, and operating control.
+              </p>
+
+              <div className="mt-6 grid gap-6 lg:grid-cols-3">
+                <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                  <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Strategic Horizon</div>
+                  <div className="mt-3 space-y-3 text-sm text-slate-300">
+                    {executiveResponseFramework.strategic.map((item) => (
+                      <div key={item}>• {item}</div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                  <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Tactical Hedging</div>
+                  <div className="mt-3 space-y-3 text-sm text-slate-300">
+                    {executiveResponseFramework.tactical.map((item) => (
+                      <div key={item}>• {item}</div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
+                  <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Immediate Executive Actions</div>
+                  <div className="mt-3 space-y-3 text-sm text-slate-300">
+                    {executiveResponseFramework.immediate.map((item) => (
+                      <div key={item}>• {item}</div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-3xl border border-emerald-400/20 bg-emerald-400/5 p-6 md:p-8">
+              <div className="text-xs uppercase tracking-[0.18em] text-emerald-300">
+                Linked Executive Actions
+              </div>
+              <h3 className="mt-2 text-xl font-semibold">
+                Continue into execution support or export the management handoff
+              </h3>
+              <p className="mt-3 text-sm leading-7 text-slate-300">
+                The Executive Intelligence Layer should close with action. Users can either continue into linked load planning for execution support or export the stronger management-facing handoff document.
+              </p>
+
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link
+                  href="/load-planning"
+                  className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-200"
+                >
+                  Open Load Planning
+                </Link>
+
+                <button
+                  onClick={downloadExecutionPdf}
+                  className="inline-flex items-center justify-center rounded-2xl border border-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/5"
+                >
+                  Download Executive Report
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
     </main>
   );
 }
