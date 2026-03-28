@@ -68,6 +68,14 @@ type UnlockState = {
   sessionId?: string;
 };
 
+type EntryGate = {
+  allowed?: boolean;
+  ts?: number;
+};
+
+const ENTRY_GATE_KEY = "riskatlas_load_planning_entry";
+const ENTRY_GATE_VALID_MS = 10 * 60 * 1000;
+
 export default function LoadPlanningPage() {
   const [accessChecked, setAccessChecked] = useState(false);
   const [hasExecutionAccess, setHasExecutionAccess] = useState(false);
@@ -97,18 +105,34 @@ export default function LoadPlanningPage() {
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem("riskatlas_unlock_state");
-      if (!raw) {
+      const rawUnlock = localStorage.getItem("riskatlas_unlock_state");
+      const rawEntry = sessionStorage.getItem(ENTRY_GATE_KEY);
+
+      if (!rawUnlock || !rawEntry) {
         setHasExecutionAccess(false);
         setAccessChecked(true);
         return;
       }
 
-      const parsed = JSON.parse(raw) as UnlockState;
-      setHasExecutionAccess(!!parsed?.execution);
+      const parsedUnlock = JSON.parse(rawUnlock) as UnlockState;
+      const parsedEntry = JSON.parse(rawEntry) as EntryGate;
+
+      const hasExecution = !!parsedUnlock?.execution;
+      const hasEntryAllowance = !!parsedEntry?.allowed;
+      const entryTs = Number(parsedEntry?.ts || 0);
+      const entryFresh = Date.now() - entryTs <= ENTRY_GATE_VALID_MS;
+
+      setHasExecutionAccess(hasExecution && hasEntryAllowance && entryFresh);
+
+      if (!(hasExecution && hasEntryAllowance && entryFresh)) {
+        sessionStorage.removeItem(ENTRY_GATE_KEY);
+      }
     } catch (error) {
-      console.error("Failed to read riskatlas_unlock_state:", error);
+      console.error("Failed to validate load planning access:", error);
       setHasExecutionAccess(false);
+      try {
+        sessionStorage.removeItem(ENTRY_GATE_KEY);
+      } catch {}
     } finally {
       setAccessChecked(true);
     }
@@ -287,9 +311,7 @@ export default function LoadPlanningPage() {
             </h2>
 
             <p className="mt-4 max-w-3xl text-sm leading-8 text-slate-600 md:text-base">
-              Load Planning is no longer treated as a generic standalone page in the current Beta path.
-              It is part of the Execution Upgrade delivery layer and is intended to work together with the RiskAtlas report,
-              operational control recommendations, and shipment-level execution review.
+              Load Planning is only available after entering from the unlocked 149 report page. Direct front-end access is blocked in the current Beta path.
             </p>
 
             <div className="mt-8 grid gap-4 md:grid-cols-3">
@@ -299,20 +321,18 @@ export default function LoadPlanningPage() {
               />
               <InfoBlock
                 title="Why it is gated"
-                text="The purpose is to make the 149 path visibly different from the 49 report-only path during Beta commercialization."
+                text="The purpose is to keep Load Planning attached to the 149 report path rather than leave it as a directly usable public page."
               />
               <InfoBlock
                 title="Recommended path"
-                text="Complete the RiskAtlas commercial flow first, then return here through the unlocked report page."
+                text="Return to the unlocked 149 report page and enter Load Planning from the executive layer action block."
               />
             </div>
 
             <div className="mt-8 rounded-2xl border border-slate-200 bg-slate-50 p-5">
               <div className="text-sm font-semibold text-slate-900">Current access status</div>
               <p className="mt-2 text-sm leading-7 text-slate-600">
-                Your current browser does not show an active <span className="font-semibold text-slate-900">execution</span> unlock state in
-                <span className="font-semibold text-slate-900"> riskatlas_unlock_state</span>.
-                Until that state is present, the execution tool layer remains hidden.
+                Either the browser does not have a valid <span className="font-semibold text-slate-900">execution</span> unlock state, or this page was not entered from the approved 149 report path.
               </p>
             </div>
 
@@ -692,7 +712,7 @@ export default function LoadPlanningPage() {
                 <div className="mt-5 space-y-4">
                   <div className="grid gap-4 md:grid-cols-2">
                     <MetricCard label="Line count" value={`${riskAtlasSummary.line_count}`} />
-                    <MetricCard label="Overall level" value={riskAtlasSummary.overall_level} />
+                    <MetricCard label="Overall level" value={`${riskAtlasSummary.overall_level}`} />
                     <MetricCard label="Average operational risk" value={`${riskAtlasSummary.total_operational_risk_score}`} />
                     <MetricCard label="Average RiskAtlas score" value={`${riskAtlasSummary.total_final_riskatlas_score}`} />
                   </div>
@@ -712,7 +732,7 @@ export default function LoadPlanningPage() {
                   <span className="font-semibold text-slate-800">Current live path:</span> Report unlock with Execution Upgrade → Load Planning access → CSV parsing → planning recommendation → operational risk evaluation → RiskAtlas merged output.
                 </p>
                 <p>
-                  <span className="font-semibold text-slate-800">Already connected:</span> template download, execution-layer front-end gating, local front-end entry, Render planning API, operational risk layer, and RiskAtlas summary route.
+                  <span className="font-semibold text-slate-800">Already connected:</span> template download, execution-layer gated entry from the 149 report page, Render planning API, operational risk layer, and RiskAtlas summary route.
                 </p>
                 <p>
                   <span className="font-semibold text-slate-800">Current positioning:</span> this page is treated as an execution-layer delivery component within the commercial Beta, not as a broad public utility page.

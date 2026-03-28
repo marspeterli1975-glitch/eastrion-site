@@ -553,6 +553,20 @@ export default function RiskAtlasReportPage() {
     }
   }
 
+  function handleOpenLoadPlanning() {
+    try {
+      const payload = {
+        allowed: true,
+        ts: Date.now(),
+      };
+      sessionStorage.setItem("riskatlas_load_planning_entry", JSON.stringify(payload));
+    } catch (error) {
+      console.error("Failed to set load planning entry gate:", error);
+    }
+
+    window.location.href = "/load-planning";
+  }
+
   if (!mounted) {
     return (
       <main className="min-h-screen bg-[#07111f] text-white">
@@ -746,12 +760,13 @@ export default function RiskAtlasReportPage() {
 
                     {isExecutionUnlocked ? (
                       <>
-                        <Link
-                          href="/load-planning"
+                        <button
+                          type="button"
+                          onClick={handleOpenLoadPlanning}
                           className="block w-full rounded-xl bg-white px-5 py-3 text-center text-sm font-semibold text-slate-900 hover:bg-slate-200"
                         >
                           Open Linked Load Planning
-                        </Link>
+                        </button>
 
                         <button
                           onClick={downloadExecutionPdf}
@@ -1147,12 +1162,13 @@ export default function RiskAtlasReportPage() {
               </p>
 
               <div className="mt-6 flex flex-wrap gap-3">
-                <Link
-                  href="/load-planning"
+                <button
+                  type="button"
+                  onClick={handleOpenLoadPlanning}
                   className="inline-flex items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-200"
                 >
                   Open Load Planning
-                </Link>
+                </button>
 
                 <button
                   onClick={downloadExecutionPdf}
