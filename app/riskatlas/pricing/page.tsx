@@ -66,9 +66,16 @@ export default function RiskAtlasPricingPage() {
 
               <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
                 RiskAtlas converts an initial supply chain signal into a structured,
-                decision-ready report. Choose the right paid layer below to unlock
-                consulting-style analysis or move into execution-grade support.
+                decision-ready report. Start with paid clarity first, then move into
+                execution-layer support only when shipment feasibility, route choice,
+                and operating continuity need to be considered together.
               </p>
+
+              <div className="mt-4 rounded-2xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-3 text-sm leading-7 text-emerald-200">
+                Typical use case: exporters facing corridor volatility, supplier uncertainty,
+                or execution-sensitive routes use the Professional Report first, then upgrade
+                only when shipment planning and operating control require deeper support.
+              </div>
 
               <div className="mt-8 flex flex-wrap gap-4">
                 <button
@@ -76,7 +83,9 @@ export default function RiskAtlasPricingPage() {
                   disabled={loadingPlan !== null}
                   className="rounded-2xl bg-cyan-400 px-6 py-4 text-base font-semibold text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-70"
                 >
-                  {isLoading("pro") ? "Redirecting..." : "Unlock Full Report · US$49"}
+                  {isLoading("pro")
+                    ? "Redirecting..."
+                    : "Buy Professional Report → Get Instant Access"}
                 </button>
 
                 <button
@@ -86,7 +95,7 @@ export default function RiskAtlasPricingPage() {
                 >
                   {isLoading("execution")
                     ? "Redirecting..."
-                    : "Execution Upgrade · US$149"}
+                    : "Upgrade to Execution Layer → Start Planning"}
                 </button>
 
                 <Link
@@ -133,8 +142,9 @@ export default function RiskAtlasPricingPage() {
                     Professional Report
                   </h3>
                   <p className="mt-3 text-sm leading-7 text-slate-300">
-                    Start with a structured commercial risk view: score interpretation, factor breakdown,
-                    advisory layer, and a professional PDF report for internal alignment.
+                    Start with structured clarity: quantify exposure, align internal decisions,
+                    and identify where supplier, route, and execution risk may affect cost,
+                    delivery, or contract confidence.
                   </p>
                 </div>
 
@@ -146,8 +156,9 @@ export default function RiskAtlasPricingPage() {
                     Execution Upgrade
                   </h3>
                   <p className="mt-3 text-sm leading-7 text-slate-300">
-                    Move beyond diagnosis with execution prioritization, stronger actionability,
-                    and load-planning linkage for real shipment and operating cases.
+                    Move beyond diagnosis into execution control: add shipment feasibility,
+                    operational prioritization, and load-planning linkage when real dispatch
+                    and continuity decisions need stronger support.
                   </p>
                 </div>
               </div>
@@ -159,30 +170,36 @@ export default function RiskAtlasPricingPage() {
       <section className="border-b border-white/10">
         <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
           <div className="grid gap-6 lg:grid-cols-3">
-            <div className="rounded-3xl border border-white/10 bg-[#0f172a] p-7">
+            <div className="rounded-3xl border border-cyan-400/25 bg-[#0f172a] p-7 shadow-xl shadow-cyan-950/10">
               <div className="inline-flex rounded-full bg-cyan-500/10 px-4 py-2 text-sm font-medium text-cyan-200">
-                Pro layer
+                Most exporters start here
               </div>
               <h3 className="mt-5 text-3xl font-semibold text-white">
                 Professional Report ($49)
               </h3>
               <p className="mt-3 text-sm leading-7 text-slate-400">
-                Designed for fast, structured risk interpretation before deeper execution work begins.
+                Built for fast, structured clarity before deeper execution work begins.
               </p>
               <ul className="mt-5 space-y-3 text-sm leading-7 text-slate-300">
-                <li>✓ Structured risk scoring across geopolitical, logistics, supplier, and execution dimensions</li>
-                <li>✓ Consulting-style advisory layer: Strategic / Tactical / Execution / Risk</li>
-                <li>✓ Clear risk exposure classification (Low → Critical)</li>
-                <li>✓ Practical execution guidance for supply chain decision-making</li>
-                <li>✓ Professional PDF report for internal use and stakeholder alignment</li>
+                <li>✓ Identify high-risk supplier, route, logistics, and execution exposure in one structured view</li>
+                <li>✓ Translate uncertainty into a consulting-style advisory layer for internal decision alignment</li>
+                <li>✓ Clarify whether current exposure remains guarded, moderate, high, or critical before commitment</li>
+                <li>✓ Reduce avoidable delay and coordination risk through clearer commercial visibility</li>
+                <li>✓ Download a professional PDF report for internal use, review, and stakeholder discussion</li>
               </ul>
               <button
                 onClick={() => handleCheckout("pro")}
                 disabled={loadingPlan !== null}
                 className="mt-8 w-full rounded-2xl bg-cyan-400 px-5 py-4 text-base font-semibold text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-70"
               >
-                {isLoading("pro") ? "Redirecting..." : "Buy Professional Report"}
+                {isLoading("pro")
+                  ? "Redirecting..."
+                  : "Buy Professional Report → Get Instant Access"}
               </button>
+
+              <p className="mt-4 text-xs leading-6 text-emerald-200/90">
+                Best starting point for exporters, sourcing teams, and logistics operators who need structured clarity first.
+              </p>
 
               <p className="mt-6 text-xs leading-6 text-slate-500">
                 This report is designed as a decision-support tool. It does not constitute legal, financial, or investment advice.
@@ -192,20 +209,21 @@ export default function RiskAtlasPricingPage() {
 
             <div className="rounded-3xl border border-emerald-400/20 bg-gradient-to-b from-emerald-500/10 to-cyan-500/10 p-7 shadow-xl shadow-emerald-900/10">
               <div className="inline-flex rounded-full bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-200">
-                Best starting point
+                Recommended decision path
               </div>
               <h3 className="mt-5 text-3xl font-semibold text-white">
-                Choose the right layer for your decision stage
+                Start with clarity. Upgrade when execution matters.
               </h3>
               <p className="mt-5 text-sm leading-7 text-slate-200">
-                Start with the Professional Report when you need a structured risk view.
-                Upgrade to the Execution layer when shipment feasibility, load planning,
-                and operational controls need to be considered together.
+                Most users should begin with the Professional Report to understand
+                exposure clearly. Upgrade to the Execution layer only when shipment
+                planning, route feasibility, and operational controls need to be
+                assessed together.
               </p>
               <div className="mt-8 rounded-2xl border border-white/10 bg-[#0f172a]/60 p-5 text-sm leading-7 text-slate-300">
-                This keeps conversion clean:
+                Typical progression:
                 <br />
-                Initial signal → paid clarity → execution upgrade when needed
+                Initial signal → paid clarity → execution upgrade when shipment planning becomes real
               </div>
               <Link
                 href="/riskatlas/report"
@@ -223,23 +241,29 @@ export default function RiskAtlasPricingPage() {
                 Execution Upgrade ($149)
               </h3>
               <p className="mt-3 text-sm leading-7 text-slate-300">
-                Built for users moving from assessment into execution, where shipment feasibility,
-                operational control, and load-planning linkage matter.
+                Move from assessment into real execution support, where shipment feasibility,
+                operational control, and load-planning linkage materially affect continuity.
               </p>
               <ul className="mt-5 space-y-3 text-sm leading-7 text-slate-200">
                 <li>✓ Everything included in the Professional Report</li>
-                <li>✓ Additional execution sensitivity note for operational risk exposure</li>
-                <li>✓ Operational control priorities for shipment readiness and continuity</li>
-                <li>✓ Load Planning linkage for packing, routing, and handling feasibility</li>
-                <li>✓ Stronger execution-oriented PDF output for internal coordination</li>
+                <li>✓ Add execution-layer interpretation for operational sensitivity and shipment readiness</li>
+                <li>✓ Surface control priorities for continuity, handling feasibility, and route-linked execution risk</li>
+                <li>✓ Link into Load Planning for packing, routing, and handling logic before execution</li>
+                <li>✓ Generate a stronger execution-oriented PDF output for internal coordination and shipment planning</li>
               </ul>
               <button
                 onClick={() => handleCheckout("execution")}
                 disabled={loadingPlan !== null}
                 className="mt-8 w-full rounded-2xl bg-white px-5 py-4 text-base font-semibold text-slate-950 transition hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-70"
               >
-                {isLoading("execution") ? "Redirecting..." : "Buy Execution Upgrade"}
+                {isLoading("execution")
+                  ? "Redirecting..."
+                  : "Upgrade to Execution Layer → Start Planning"}
               </button>
+
+              <p className="mt-4 text-xs leading-6 text-amber-200/90">
+                Best for users already approaching real shipment planning, route choice, or execution-sensitive commitments.
+              </p>
 
               <p className="mt-6 text-xs leading-6 text-slate-500">
                 This layer is intended to support operational preparation and execution planning.
@@ -257,15 +281,15 @@ export default function RiskAtlasPricingPage() {
             <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
               <div>
                 <div className="text-sm uppercase tracking-[0.2em] text-cyan-300">
-                  Start here
+                  Still deciding
                 </div>
                 <h2 className="mt-4 text-4xl font-semibold text-white">
-                  Choose the right paid entry point.
+                  Start with the paid layer that matches your immediate need.
                 </h2>
                 <p className="mt-4 max-w-3xl text-base leading-8 text-slate-300">
-                  Use Professional if you need structured clarity first. Use
-                  Execution Upgrade if you already know the case needs deeper
-                  execution support.
+                  Begin with the Professional Report for structured clarity.
+                  Upgrade only when the case has already moved into shipment planning,
+                  execution readiness, or operating control.
                 </p>
               </div>
 
@@ -275,7 +299,9 @@ export default function RiskAtlasPricingPage() {
                   disabled={loadingPlan !== null}
                   className="rounded-2xl bg-cyan-400 px-6 py-4 text-base font-semibold text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-70"
                 >
-                  {isLoading("pro") ? "Redirecting..." : "Unlock Full Report"}
+                  {isLoading("pro")
+                    ? "Redirecting..."
+                    : "Buy Professional Report → Get Instant Access"}
                 </button>
 
                 <button
@@ -285,7 +311,7 @@ export default function RiskAtlasPricingPage() {
                 >
                   {isLoading("execution")
                     ? "Redirecting..."
-                    : "Upgrade to Execution Layer"}
+                    : "Upgrade to Execution Layer → Start Planning"}
                 </button>
 
                 <Link
