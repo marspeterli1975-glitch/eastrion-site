@@ -246,6 +246,67 @@ function getExecutiveImpactMatrix(): MatrixRow[] {
   ];
 }
 
+function getMonitoringSignals() {
+  return [
+    {
+      painPoint: "Geopolitical and corridor disruption",
+      signals: [
+        "Transit time deviates beyond normal variance band",
+        "Insurance, surcharge, or war-risk premiums rise abruptly",
+        "Port call sequence or vessel routing becomes unstable",
+      ],
+    },
+    {
+      painPoint: "Freight cost and cost-pass-through pressure",
+      signals: [
+        "Freight rate moves materially beyond contract baseline",
+        "Order-level margin compression becomes visible",
+        "Repeated repricing is needed to protect contribution",
+      ],
+    },
+    {
+      painPoint: "Capacity and equipment mismatch",
+      signals: [
+        "Booking confirmation becomes less predictable",
+        "Container or equipment positioning delays accumulate",
+        "Schedule reliability weakens despite stable demand",
+      ],
+    },
+    {
+      painPoint: "Port congestion and end-to-end delay",
+      signals: [
+        "Vessel waiting time trends upward across consecutive sailings",
+        "Container dwell time exceeds expected operating range",
+        "Delivery reliability falls below internal service target",
+      ],
+    },
+    {
+      painPoint: "Digital visibility and control weakness",
+      signals: [
+        "Status updates rely on manual follow-up instead of system visibility",
+        "Exception handling becomes reactive rather than time-based",
+        "Data reconciliation lag delays management response",
+      ],
+    },
+    {
+      painPoint: "Compliance and market-entry friction",
+      signals: [
+        "Documentation exceptions increase at clearance stage",
+        "Certification lead times begin stretching beyond planning assumptions",
+        "Market-entry requirements change faster than internal update cycles",
+      ],
+    },
+    {
+      painPoint: "Sustainability and green-cost pressure",
+      signals: [
+        "Carbon or sustainability disclosure requests increase by customer or market",
+        "Packaging or fuel compliance cost begins moving outside planned band",
+        "Supplier qualification discussions start including ESG gating criteria",
+      ],
+    },
+  ];
+}
+
 function getExecutiveResponseFramework() {
   return {
     strategic: [
@@ -885,7 +946,7 @@ export async function POST(req: NextRequest) {
       drawFooter(page, 5);
     }
 
-    /* PAGE 6: EXECUTIVE PAIN-POINT MAPPING - EXECUTIVE ONLY */
+    /* PAGE 6: EXECUTIVE PAIN-POINT MAPPING */
     if (executiveReport) {
       const page = addPage();
       drawSectionTitle(page, "Executive Pain-Point Mapping", 770);
@@ -939,7 +1000,7 @@ export async function POST(req: NextRequest) {
       drawFooter(page, 6);
     }
 
-    /* PAGE 7: EXECUTIVE IMPACT MATRIX - EXECUTIVE ONLY */
+    /* PAGE 7: EXECUTIVE IMPACT MATRIX */
     if (executiveReport) {
       const page = addPage();
       drawSectionTitle(page, "Executive Impact Matrix", 770);
@@ -993,7 +1054,70 @@ export async function POST(req: NextRequest) {
       drawFooter(page, 7);
     }
 
-    /* PAGE 8: EXECUTIVE RESPONSE FRAMEWORK - EXECUTIVE ONLY */
+    /* PAGE 8: MONITORING SIGNALS */
+    if (executiveReport) {
+      const page = addPage();
+      drawSectionTitle(page, "Monitoring Signals", 770);
+
+      let y = 724;
+
+      y = drawParagraph(
+        page,
+        "This page converts the executive matrix into management monitoring signals. These are observation cues for attention and escalation, not direct decision commands.",
+        marginX,
+        y,
+        92,
+        11,
+        COLORS.text,
+        7
+      );
+
+      y -= 14;
+
+      const monitoring = getMonitoringSignals();
+
+      monitoring.forEach((item, index) => {
+        const blockHeight = 90;
+
+        if (y - blockHeight < 70) return;
+
+        page.drawRectangle({
+          x: marginX,
+          y: y - blockHeight,
+          width: pageWidth - marginX * 2,
+          height: blockHeight,
+          color: rgb(...COLORS.card),
+          borderWidth: 1,
+          borderColor: rgb(...COLORS.line),
+        });
+
+        page.drawText(`${index + 1}. ${item.painPoint}`, {
+          x: marginX + 14,
+          y: y - 18,
+          size: 12,
+          font: bold,
+          color: rgb(...COLORS.text),
+        });
+
+        let signalY = y - 38;
+        item.signals.forEach((signal) => {
+          page.drawText(`- ${signal}`, {
+            x: marginX + 14,
+            y: signalY,
+            size: 9,
+            font,
+            color: rgb(...COLORS.text),
+          });
+          signalY -= 15;
+        });
+
+        y -= 100;
+      });
+
+      drawFooter(page, 8);
+    }
+
+    /* PAGE 9: EXECUTIVE RESPONSE FRAMEWORK */
     if (executiveReport) {
       const page = addPage();
       drawSectionTitle(page, "Executive Response Framework", 770);
@@ -1061,7 +1185,7 @@ export async function POST(req: NextRequest) {
       y -= 22;
       drawParagraph(
         page,
-        "The executive layer should not be interpreted as a longer version of the same report. Its role is to translate model output into management-facing priorities, differentiated business impact, and next-step action framing.",
+        "The executive layer should not be interpreted as a longer version of the same report. Its role is to translate model output into management-facing priorities, differentiated business impact, next-step action framing, and observation signals for escalation.",
         marginX,
         y,
         92,
@@ -1070,7 +1194,7 @@ export async function POST(req: NextRequest) {
         6
       );
 
-      drawFooter(page, 8);
+      drawFooter(page, 9);
     }
 
     const pdfBytes = await pdfDoc.save();
