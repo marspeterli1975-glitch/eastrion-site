@@ -10,16 +10,15 @@ export default function HomePage() {
       }}
     >
       <section
-  style={{
-    minHeight: "calc(100vh - 80px)", // ⭐关键
-    display: "flex",
-    alignItems: "center",
-
-    background:
-      "radial-gradient(circle at top right, rgba(37, 99, 235, 0.35), transparent 28%), linear-gradient(135deg, #020817 0%, #031033 52%, #071a3d 100%)",
-    borderBottom: "1px solid rgba(148, 163, 184, 0.12)",
-  }}
->
+        style={{
+          minHeight: "calc(100vh - 80px)",
+          display: "flex",
+          alignItems: "center",
+          background:
+            "radial-gradient(circle at top right, rgba(37, 99, 235, 0.35), transparent 28%), linear-gradient(135deg, #020817 0%, #031033 52%, #071a3d 100%)",
+          borderBottom: "1px solid rgba(148, 163, 184, 0.12)",
+        }}
+      >
         <div
           style={{
             maxWidth: "1280px",
@@ -82,6 +81,33 @@ export default function HomePage() {
               report.
             </p>
 
+            <p
+              style={{
+                marginTop: "14px",
+                maxWidth: "860px",
+                fontSize: "18px",
+                lineHeight: 1.8,
+                color: "#dbeafe",
+              }}
+            >
+              Identify supplier, route, and execution risk before it turns into
+              delay, cost escalation, or shipment-level uncertainty.
+            </p>
+
+            <p
+              style={{
+                marginTop: "8px",
+                maxWidth: "860px",
+                fontSize: "16px",
+                lineHeight: 1.8,
+                color: "#94a3b8",
+              }}
+            >
+              Based on real China-linked cross-border execution scenarios and
+              current volatility across Red Sea routes, Panama Canal constraints,
+              and global corridor disruption signals.
+            </p>
+
             <div
               style={{
                 display: "flex",
@@ -114,6 +140,76 @@ export default function HomePage() {
               <div style={chipStyle}>Initial risk signal</div>
               <div style={chipStyle}>Paid report conversion</div>
               <div style={chipStyle}>Execution upgrade path</div>
+            </div>
+
+            <div
+              style={{
+                marginTop: "26px",
+                padding: "18px",
+                borderRadius: "24px",
+                border: "1px solid rgba(103, 232, 249, 0.12)",
+                background:
+                  "linear-gradient(90deg, rgba(15, 35, 87, 0.28), rgba(8, 145, 178, 0.12), rgba(34, 197, 94, 0.08))",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "13px",
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  color: "#67e8f9",
+                  fontWeight: 700,
+                  marginBottom: "14px",
+                }}
+              >
+                Current risk signals · March 2026
+              </div>
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                  gap: "14px",
+                }}
+              >
+                <div style={signalCardStyle}>
+                  <div style={signalDateStyle}>2026-03-28</div>
+                  <div style={signalTitleStyle}>Red Sea Corridor Volatility</div>
+                  <div style={signalTextStyle}>
+                    Transit reliability remains under pressure as rerouting
+                    continues to extend time and cost exposure.
+                  </div>
+                  <div style={signalLayerStyle}>
+                    Logistics · Route · Execution
+                  </div>
+                </div>
+
+                <div style={signalCardStyle}>
+                  <div style={signalDateStyle}>2026-03-27</div>
+                  <div style={signalTitleStyle}>
+                    Panama Canal Capacity Constraint
+                  </div>
+                  <div style={signalTextStyle}>
+                    Reduced vessel throughput continues to affect Asia-linked
+                    routing stability and timing confidence.
+                  </div>
+                  <div style={signalLayerStyle}>
+                    Corridor · Timing · Continuity
+                  </div>
+                </div>
+
+                <div style={signalCardStyle}>
+                  <div style={signalDateStyle}>2026-03-26</div>
+                  <div style={signalTitleStyle}>EU Compliance Tightening</div>
+                  <div style={signalTextStyle}>
+                    Documentation and environmental requirements continue to
+                    increase entry-side execution risk for exporters.
+                  </div>
+                  <div style={signalLayerStyle}>
+                    Regulatory · Market Access · Execution
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -158,32 +254,35 @@ export default function HomePage() {
                 </div>
                 <div style={flowTitleStyle}>Initial Risk Signal</div>
                 <div style={flowTextStyle}>
-                  Get a quick initial view of your supply chain exposure and see
-                  the structure of your risk report.
+                  Get a quick initial view of supply chain exposure and see
+                  whether the route, supplier, or operating case requires deeper
+                  paid clarity.
                 </div>
               </div>
 
               <div style={flowCardStyle}>
                 <div style={flowTopRowStyle}>
                   <div style={flowStepGreenStyle}>Step 2 · US$49</div>
-                  <div style={flowBadgeGreen}>Core Offer</div>
+                  <div style={flowBadgeGreen}>Most Popular</div>
                 </div>
-                <div style={flowTitleStyle}>Unlock Full Report</div>
+                <div style={flowTitleStyle}>Professional Report</div>
                 <div style={flowTextStyle}>
-                  Access score explanation, executive summary, factor breakdown,
-                  priority action plan and premium module preview.
+                  Start with structured clarity: score interpretation, exposure
+                  classification, advisory logic, and a professional PDF for
+                  internal decision alignment.
                 </div>
               </div>
 
               <div style={flowCardStyle}>
                 <div style={flowTopRowStyle}>
                   <div style={flowStepAmberStyle}>Step 3 · US$149</div>
-                  <div style={flowBadgeAmber}>Premium</div>
+                  <div style={flowBadgeAmber}>Execution Layer</div>
                 </div>
                 <div style={flowTitleStyle}>Execution Upgrade</div>
                 <div style={flowTextStyle}>
-                  Go beyond diagnosis with stronger execution guidance,
-                  recommended next actions and deeper operational prioritization.
+                  Move from diagnosis into execution planning when shipment
+                  feasibility, route choice, handling logic, and operating
+                  continuity need stronger support.
                 </div>
               </div>
             </div>
@@ -258,11 +357,12 @@ export default function HomePage() {
               color: "#cbd5e1",
             }}
           >
-            Eastrion is not positioning RiskAtlas as an isolated software
-            widget. The product is grounded in real cross-border supply chain
-            work, where supplier ambiguity, logistics disruption, corridor
-            volatility and execution friction directly affect commercial
-            outcomes.
+            This is not a reporting tool. It is a decision support layer
+            connected to execution. Eastrion is not positioning RiskAtlas as an
+            isolated software widget. The product is grounded in real
+            cross-border supply chain work, where supplier ambiguity, logistics
+            disruption, corridor volatility and execution friction directly
+            affect commercial outcomes.
           </p>
 
           <div
@@ -372,8 +472,9 @@ export default function HomePage() {
               <div style={moduleLabelStyle}>Module 01</div>
               <h3 style={darkCardTitleStyle}>Risk Exposure Scanning</h3>
               <p style={darkCardTextStyle}>
-                Initial country-industry-supplier-route exposure framing through
-                the RiskAtlas logic and structured reporting pathway.
+                Identify where supplier, route, and execution exposure may
+                affect delivery, cost, or contract confidence before real
+                commitment begins.
               </p>
               <div style={{ marginTop: "20px" }}>
                 <Link href="/riskatlas" style={linkCyan}>
@@ -386,9 +487,8 @@ export default function HomePage() {
               <div style={moduleLabelStyle}>Module 02</div>
               <h3 style={darkCardTitleStyle}>Sourcing & Industrial Trade</h3>
               <p style={darkCardTextStyle}>
-                Structured support for supplier discovery, industrial product
-                matching, technical coordination and project-oriented trade
-                opportunities.
+                Reduce supplier uncertainty and improve sourcing clarity through
+                structured supplier discovery, matching, and coordination.
               </p>
               <div style={{ marginTop: "20px" }}>
                 <Link href="/contact" style={linkGreen}>
@@ -401,9 +501,9 @@ export default function HomePage() {
               <div style={moduleLabelStyle}>Module 03</div>
               <h3 style={darkCardTitleStyle}>Logistics & Execution Support</h3>
               <p style={darkCardTextStyle}>
-                Cross-border shipment coordination, execution follow-up, planning
-                logic and supply chain communication support where corridor risk
-                matters.
+                Improve execution visibility and reduce coordination failure
+                across shipments, routing decisions, and corridor-sensitive
+                operating cases.
               </p>
               <div style={{ marginTop: "20px" }}>
                 <Link href="/contact" style={linkAmber}>
@@ -447,7 +547,7 @@ export default function HomePage() {
                 marginBottom: "12px",
               }}
             >
-              Start here
+              Next step
             </div>
 
             <h2
@@ -460,7 +560,7 @@ export default function HomePage() {
                 margin: 0,
               }}
             >
-              Choose the right entry point for your next step.
+              Choose the right entry point for your immediate need.
             </h2>
 
             <p
@@ -472,10 +572,9 @@ export default function HomePage() {
                 maxWidth: "820px",
               }}
             >
-              Use RiskAtlas if you want a structured starting point for risk
-              visibility. Contact Eastrion directly if your case already
-              involves sourcing, logistics, industrial products or cross-border
-              execution support.
+              Start with RiskAtlas for structured visibility. Contact Eastrion
+              directly if your case has already moved into sourcing, logistics,
+              industrial coordination, or cross-border execution support.
             </p>
           </div>
 
@@ -515,6 +614,7 @@ const primaryBtn = {
   fontSize: "16px",
   textDecoration: "none",
   whiteSpace: "nowrap" as const,
+  boxShadow: "0 12px 28px rgba(34, 211, 238, 0.16)",
 };
 
 const secondaryBtnDark = {
@@ -523,8 +623,8 @@ const secondaryBtnDark = {
   justifyContent: "center",
   padding: "16px 30px",
   borderRadius: "999px",
-  background: "rgba(15, 23, 42, 0.24)",
-  border: "1px solid rgba(148, 163, 184, 0.2)",
+  background: "rgba(15, 23, 42, 0.34)",
+  border: "1px solid rgba(186, 230, 253, 0.22)",
   color: "#f8fafc",
   fontWeight: 800,
   fontSize: "16px",
@@ -537,8 +637,8 @@ const textBtn = {
   alignItems: "center",
   justifyContent: "center",
   padding: "16px 18px",
-  color: "#cbd5e1",
-  fontWeight: 600,
+  color: "#e2e8f0",
+  fontWeight: 700,
   fontSize: "16px",
   textDecoration: "none",
   whiteSpace: "nowrap" as const,
@@ -555,6 +655,41 @@ const chipStyle = {
   color: "#94a3b8",
   fontSize: "14px",
   fontWeight: 500,
+};
+
+const signalCardStyle = {
+  background: "rgba(2, 6, 23, 0.38)",
+  border: "1px solid rgba(148, 163, 184, 0.1)",
+  borderRadius: "18px",
+  padding: "14px",
+};
+
+const signalDateStyle = {
+  fontSize: "12px",
+  color: "#94a3b8",
+  fontWeight: 700,
+  marginBottom: "8px",
+};
+
+const signalTitleStyle = {
+  fontSize: "16px",
+  fontWeight: 800,
+  color: "#f8fafc",
+  marginBottom: "8px",
+  lineHeight: 1.35,
+};
+
+const signalTextStyle = {
+  fontSize: "14px",
+  lineHeight: 1.65,
+  color: "#cbd5e1",
+};
+
+const signalLayerStyle = {
+  marginTop: "10px",
+  fontSize: "12px",
+  color: "#a5f3fc",
+  fontWeight: 700,
 };
 
 const flowCardStyle = {
@@ -649,8 +784,8 @@ const darkOutlineBtn = {
   justifyContent: "center",
   padding: "16px 18px",
   borderRadius: "16px",
-  background: "rgba(15, 23, 42, 0.22)",
-  border: "1px solid rgba(148, 163, 184, 0.18)",
+  background: "rgba(15, 23, 42, 0.28)",
+  border: "1px solid rgba(186, 230, 253, 0.18)",
   color: "#f8fafc",
   fontWeight: 800,
   fontSize: "16px",
