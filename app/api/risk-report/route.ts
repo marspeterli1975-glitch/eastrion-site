@@ -19,6 +19,14 @@ const COLORS = {
   critical: [0.73, 0.11, 0.11] as RGB,
 };
 
+type MatrixRow = {
+  painPoint: string;
+  trade: number;
+  investment: number;
+  logistics: number;
+  supplyChain: number;
+};
+
 function wrapText(text: string, maxChars = 88) {
   const words = text.split(/\s+/);
   const lines: string[] = [];
@@ -53,21 +61,6 @@ function getExecutiveSummary(data: RiskScanResult) {
 
 function getStrategicInterpretation() {
   return `The current exposure profile suggests that companies operating within the selected market environment should consider reinforcing supply chain resilience in a targeted manner. Priority attention should be given to supplier diversification, logistics route redundancy, and active monitoring of policy or operational developments. While the overall profile does not necessarily imply immediate disruption, structural dependencies may amplify exposure under adverse scenarios.`;
-}
-
-function getDetailedActions(data: RiskScanResult) {
-  const base = [
-    "Evaluate alternative supplier options to reduce dependency on concentrated upstream sources.",
-    "Assess alternate transportation corridors to mitigate logistics concentration and chokepoint exposure.",
-    "Establish a more active monitoring rhythm for regulatory and operating environment changes.",
-    "Review inventory buffering assumptions for critical inputs, lead times, and continuity planning.",
-  ];
-
-  if (data.level.toLowerCase() === "high" || data.level.toLowerCase() === "critical") {
-    base.push("Escalate exposure review to leadership level before scaling commercial commitments.");
-  }
-
-  return base;
 }
 
 function getStrategicView(data: RiskScanResult) {
@@ -123,36 +116,165 @@ function getRiskConsiderations() {
   ];
 }
 
-
 function getUseBoundaryText() {
   return "This report is provided for analytical and informational purposes only. It does not constitute legal, financial, or investment advice. Users remain responsible for integrating this analysis with their own contractual frameworks, operating controls, and commercial judgment.";
 }
 
-function getMethodologyText() {
+function getExposureDefinitions(): [string, string, string][] {
   return [
-    "Country Risk × 30%",
-    "Industry Sensitivity × 25%",
-    "Logistics Complexity × 25%",
-    "Event Disruption Risk × 20%",
+    ["0-20", "Low", "Stable supply environment with limited structural exposure."],
+    ["21-40", "Guarded", "Limited but manageable exposure requiring routine monitoring."],
+    ["41-60", "Moderate", "Visible structural vulnerability across selected dimensions."],
+    ["61-80", "High", "Significant disruption probability and concentrated risk signals."],
+    ["81-100", "Critical", "Structural instability across key supply chain conditions."],
   ];
 }
 
-function getExposureDefinitions(): [string, string, string][] {
+function isExecutiveReport(data: RiskScanResult) {
+  const factors = (data.risk_factors || []).map((x) => x.toLowerCase());
+  return (
+    factors.includes("executive intelligence layer enabled") ||
+    factors.includes("impact matrix and response framework included")
+  );
+}
+
+function getExecutivePainPoints() {
   return [
-    ["0–20", "Low", "Stable supply environment with limited structural exposure."],
-    ["21–40", "Guarded", "Limited but manageable exposure requiring routine monitoring."],
-    ["41–60", "Moderate", "Visible structural vulnerability across selected dimensions."],
-    ["61–80", "High", "Significant disruption probability and concentrated risk signals."],
-    ["81–100", "Critical", "Structural instability across key supply chain conditions."],
+    {
+      title: "Geopolitical Corridor Disruption",
+      summary:
+        "Route continuity remains exposed to chokepoints, policy intervention, and corridor-level instability rather than only supplier-side issues.",
+      linkage:
+        "Linked to geopolitical exposure, route concentration, event volatility, and cross-border operating conditions inside the existing 8-dimensional model.",
+    },
+    {
+      title: "Freight Cost and Margin Transmission Pressure",
+      summary:
+        "Cost shocks are difficult to transmit cleanly into pricing, which weakens margin discipline and destabilizes working-capital assumptions.",
+      linkage:
+        "Linked to cost volatility, logistics disruption sensitivity, pricing transmission weakness, and execution exposure already captured in the model base.",
+    },
+    {
+      title: "Equipment and Capacity Imbalance",
+      summary:
+        "The operating challenge is not only shortage but mismatch: timing, space, equipment, and deployment readiness can fail to align when conditions turn.",
+      linkage:
+        "Mapped to capacity tightness, route availability, operational readiness, and shipment-level execution strain inside the 8-dimensional structure.",
+    },
+    {
+      title: "Port Congestion and Fulfilment Delay",
+      summary:
+        "The real commercial loss is not limited to delay itself but extends to customer promise erosion, re-planning cost, and follow-on fulfilment instability.",
+      linkage:
+        "Connected to port exposure, transit continuity, planning disruption, and end-to-end fulfilment reliability dimensions.",
+    },
+    {
+      title: "Digital Visibility and Coordination Gaps",
+      summary:
+        "Weak visibility converts manageable volatility into decision lag, manual override dependency, and late-stage firefighting.",
+      linkage:
+        "Derived from coordination, operating predictability, planning reliability, and execution-control dimensions in the current framework.",
+    },
+    {
+      title: "Compliance and Market-Entry Friction",
+      summary:
+        "Trade friction increasingly arises from fragmented rules, documentation burdens, and cross-market compliance asymmetry rather than tariff alone.",
+      linkage:
+        "Aligned with regulatory variability, market-entry exposure, documentation complexity, and operating control dimensions.",
+    },
+    {
+      title: "Sustainability and Green-Cost Pressure",
+      summary:
+        "Green requirements are transitioning from reporting burdens into long-cycle operating constraints that affect supplier qualification and cost design.",
+      linkage:
+        "Mapped to regulatory drift, certification pressure, cost pass-through weakness, and long-horizon operating resilience.",
+    },
   ];
+}
+
+function getExecutiveImpactMatrix(): MatrixRow[] {
+  return [
+    {
+      painPoint: "Geopolitical and corridor disruption",
+      trade: 92,
+      investment: 75,
+      logistics: 88,
+      supplyChain: 95,
+    },
+    {
+      painPoint: "Freight cost and cost-pass-through pressure",
+      trade: 78,
+      investment: 65,
+      logistics: 92,
+      supplyChain: 82,
+    },
+    {
+      painPoint: "Capacity and equipment mismatch",
+      trade: 65,
+      investment: 80,
+      logistics: 85,
+      supplyChain: 78,
+    },
+    {
+      painPoint: "Port congestion and end-to-end delay",
+      trade: 70,
+      investment: 60,
+      logistics: 90,
+      supplyChain: 85,
+    },
+    {
+      painPoint: "Digital visibility and control weakness",
+      trade: 55,
+      investment: 45,
+      logistics: 80,
+      supplyChain: 75,
+    },
+    {
+      painPoint: "Compliance and market-entry friction",
+      trade: 85,
+      investment: 70,
+      logistics: 70,
+      supplyChain: 80,
+    },
+    {
+      painPoint: "Sustainability and green-cost pressure",
+      trade: 60,
+      investment: 85,
+      logistics: 75,
+      supplyChain: 70,
+    },
+  ];
+}
+
+function getExecutiveResponseFramework() {
+  return {
+    strategic: [
+      "Rebuild route resilience through corridor diversification, regional redundancy, and reduced dependency on a single geopolitical passage.",
+      "Use the 8-dimensional model as a board-level exposure lens, then link it to supplier concentration, route resilience, and market-entry strategy.",
+      "Treat green compliance, regional warehousing, and visibility infrastructure as structural capability investment rather than short-term discretionary spend.",
+    ],
+    tactical: [
+      "Create dual-path routing assumptions and predefine trigger conditions for switching between primary and backup corridor options.",
+      "Introduce margin-protection measures such as pricing review thresholds, freight renegotiation windows, and controlled contract buffers.",
+      "Run quarterly exposure reviews that translate model signals into inventory posture, supplier readiness checks, and compliance gating.",
+    ],
+    immediate: [
+      "Confirm the top three current execution vulnerabilities before the next commercial commitment cycle.",
+      "Activate weekly monitoring of route continuity, port stress, policy movement, and cost pass-through deviation.",
+      "Escalate any shipment or order set where exposure moves from guarded into execution-fragile conditions without clear fallback control.",
+    ],
+  };
+}
+
+function average(rows: MatrixRow[], key: keyof Omit<MatrixRow, "painPoint">) {
+  return Math.round(rows.reduce((sum, row) => sum + row[key], 0) / rows.length);
 }
 
 export async function POST(req: NextRequest) {
   try {
     const data = (await req.json()) as RiskScanResult;
 
-    const safe = (text: string) =>
-      text ? text.replace(/[^\x00-\x7F]/g, "") : "";
+    const safe = (text: string) => (text ? text.replace(/[^\x00-\x7F]/g, "") : "");
 
     data.country = safe(data.country);
     data.industry = safe(data.industry);
@@ -163,6 +285,8 @@ export async function POST(req: NextRequest) {
     if (data.risk_factors) {
       data.risk_factors = data.risk_factors.map((f: string) => safe(f));
     }
+
+    const executiveReport = isExecutiveReport(data);
 
     const pdfDoc = await PDFDocument.create();
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
@@ -445,7 +569,7 @@ export async function POST(req: NextRequest) {
       return currentY;
     };
 
-    /* ---------- PAGE 1: COVER ---------- */
+    /* PAGE 1: COVER */
     {
       const page = addPage();
       drawHeaderBand(page);
@@ -510,7 +634,7 @@ export async function POST(req: NextRequest) {
         color: rgb(...COLORS.text),
       });
 
-      page.drawText("Eastrion – Global Supply Chain Infrastructure", {
+      page.drawText("Eastrion - Global Supply Chain Infrastructure", {
         x: marginX,
         y: 366,
         size: 11,
@@ -518,7 +642,7 @@ export async function POST(req: NextRequest) {
         color: rgb(...COLORS.muted),
       });
 
-      page.drawText("Confidential – Strategic Assessment Document", {
+      page.drawText("Confidential - Strategic Assessment Document", {
         x: marginX,
         y: 92,
         size: 10,
@@ -529,7 +653,7 @@ export async function POST(req: NextRequest) {
       drawFooter(page, 1);
     }
 
-    /* ---------- PAGE 2: EXECUTIVE SUMMARY ---------- */
+    /* PAGE 2: EXECUTIVE SUMMARY */
     {
       const page = addPage();
       drawSectionTitle(page, "Executive Summary", 770);
@@ -560,7 +684,7 @@ export async function POST(req: NextRequest) {
       drawFooter(page, 2);
     }
 
-    /* ---------- PAGE 3: BREAKDOWN ---------- */
+    /* PAGE 3: BREAKDOWN */
     {
       const page = addPage();
       drawSectionTitle(page, "Exposure Score Breakdown", 770);
@@ -613,7 +737,7 @@ export async function POST(req: NextRequest) {
       drawFooter(page, 3);
     }
 
-    /* ---------- PAGE 4: RISK SIGNALS ---------- */
+    /* PAGE 4: RISK SIGNALS */
     {
       const page = addPage();
       drawSectionTitle(page, "Key Structural Risk Signals", 770);
@@ -675,124 +799,295 @@ export async function POST(req: NextRequest) {
       drawFooter(page, 4);
     }
 
-   /* ---------- PAGE 5: STRUCTURED ADVISORY LAYER ---------- */
-{
-  const page = addPage();
-  drawSectionTitle(page, "Structured Advisory Layer", 770);
+    /* PAGE 5: STRUCTURED ADVISORY LAYER */
+    {
+      const page = addPage();
+      drawSectionTitle(page, "Structured Advisory Layer", 770);
 
-  let y = 724;
+      let y = 724;
 
-  y = drawParagraph(
-    page,
-    "This section translates the current exposure profile into a structured recommendation layer designed to support practical commercial and operating decisions.",
-    marginX,
-    y,
-    92,
-    11,
-    COLORS.text,
-    7
-  );
+      y = drawParagraph(
+        page,
+        "This section translates the current exposure profile into a structured recommendation layer designed to support practical commercial and operating decisions.",
+        marginX,
+        y,
+        92,
+        11,
+        COLORS.text,
+        7
+      );
 
-  y -= 18;
+      y -= 18;
 
-  page.drawText("Strategic View", {
-    x: marginX,
-    y,
-    size: 14,
-    font: bold,
-    color: rgb(...COLORS.text),
-  });
+      page.drawText("Strategic View", {
+        x: marginX,
+        y,
+        size: 14,
+        font: bold,
+        color: rgb(...COLORS.text),
+      });
 
-  y -= 22;
-  y = drawParagraph(
-    page,
-    getStrategicView(data),
-    marginX,
-    y,
-    92,
-    11,
-    COLORS.text,
-    7
-  );
+      y -= 22;
+      y = drawParagraph(page, getStrategicView(data), marginX, y, 92, 11, COLORS.text, 7);
 
-  y -= 18;
+      y -= 18;
 
-  page.drawText("Tactical Focus", {
-    x: marginX,
-    y,
-    size: 14,
-    font: bold,
-    color: rgb(...COLORS.text),
-  });
+      page.drawText("Tactical Focus", {
+        x: marginX,
+        y,
+        size: 14,
+        font: bold,
+        color: rgb(...COLORS.text),
+      });
 
-  y -= 22;
-  y = drawBulletList(page, getTacticalFocus(data), marginX, y, 82);
+      y -= 22;
+      y = drawBulletList(page, getTacticalFocus(data), marginX, y, 82);
 
-  y -= 10;
+      y -= 10;
 
-  page.drawText("Execution Actions", {
-    x: marginX,
-    y,
-    size: 14,
-    font: bold,
-    color: rgb(...COLORS.text),
-  });
+      page.drawText("Execution Actions", {
+        x: marginX,
+        y,
+        size: 14,
+        font: bold,
+        color: rgb(...COLORS.text),
+      });
 
-  y -= 22;
-  y = drawBulletList(page, getExecutionActions(data), marginX, y, 82);
+      y -= 22;
+      y = drawBulletList(page, getExecutionActions(data), marginX, y, 82);
 
-  y -= 10;
+      y -= 10;
 
-  page.drawText("Risk Considerations", {
-    x: marginX,
-    y,
-    size: 14,
-    font: bold,
-    color: rgb(...COLORS.text),
-  });
+      page.drawText("Risk Considerations", {
+        x: marginX,
+        y,
+        size: 14,
+        font: bold,
+        color: rgb(...COLORS.text),
+      });
 
-  y -= 22;
-  y = drawBulletList(page, getRiskConsiderations(), marginX, y, 82);
+      y -= 22;
+      y = drawBulletList(page, getRiskConsiderations(), marginX, y, 82);
 
-  y -= 10;
+      y -= 10;
 
-  page.drawText("Use Boundary", {
-    x: marginX,
-    y,
-    size: 14,
-    font: bold,
-    color: rgb(...COLORS.text),
-  });
+      page.drawText("Use Boundary", {
+        x: marginX,
+        y,
+        size: 14,
+        font: bold,
+        color: rgb(...COLORS.text),
+      });
 
-  y -= 22;
-  y = drawParagraph(
-    page,
-    getUseBoundaryText(),
-    marginX,
-    y,
-    92,
-    10,
-    COLORS.muted,
-    6
-  );
+      y -= 22;
+      drawParagraph(page, getUseBoundaryText(), marginX, y, 92, 10, COLORS.muted, 6);
 
-  drawFooter(page, 5);
-}
+      drawFooter(page, 5);
+    }
 
-const pdfBytes = await pdfDoc.save();
+    /* PAGE 6: EXECUTIVE PAIN-POINT MAPPING - EXECUTIVE ONLY */
+    if (executiveReport) {
+      const page = addPage();
+      drawSectionTitle(page, "Executive Pain-Point Mapping", 770);
+
+      let y = 724;
+
+      y = drawParagraph(
+        page,
+        "This section does not replace the original 8-dimensional model. It translates the same model output into industry pain points that management teams can use for scanning, prioritization, and decision framing.",
+        marginX,
+        y,
+        92,
+        11,
+        COLORS.text,
+        7
+      );
+
+      y -= 10;
+
+      const painPoints = getExecutivePainPoints();
+
+      painPoints.forEach((item, index) => {
+        const blockHeight = 84;
+
+        if (y - blockHeight < 70) return;
+
+        page.drawRectangle({
+          x: marginX,
+          y: y - blockHeight,
+          width: pageWidth - marginX * 2,
+          height: blockHeight,
+          color: rgb(...COLORS.card),
+          borderWidth: 1,
+          borderColor: rgb(...COLORS.line),
+        });
+
+        page.drawText(`${index + 1}. ${item.title}`, {
+          x: marginX + 14,
+          y: y - 20,
+          size: 12,
+          font: bold,
+          color: rgb(...COLORS.text),
+        });
+
+        drawParagraph(page, item.summary, marginX + 14, y - 38, 82, 9, COLORS.text, 4);
+        drawParagraph(page, `Model linkage: ${item.linkage}`, marginX + 14, y - 60, 82, 8, COLORS.muted, 4);
+
+        y -= 94;
+      });
+
+      drawFooter(page, 6);
+    }
+
+    /* PAGE 7: EXECUTIVE IMPACT MATRIX - EXECUTIVE ONLY */
+    if (executiveReport) {
+      const page = addPage();
+      drawSectionTitle(page, "Executive Impact Matrix", 770);
+
+      let y = 724;
+
+      y = drawParagraph(
+        page,
+        "A single score cannot show where pressure is most concentrated. This matrix translates the same exposure environment into differentiated impact across trade, investment, logistics, and the overall supply chain.",
+        marginX,
+        y,
+        92,
+        11,
+        COLORS.text,
+        7
+      );
+
+      y -= 14;
+
+      const matrix = getExecutiveImpactMatrix();
+      const rows = matrix.map((item) => [
+        item.painPoint,
+        String(item.trade),
+        String(item.investment),
+        String(item.logistics),
+        String(item.supplyChain),
+      ]);
+
+      drawTable(
+        page,
+        ["Pain Point", "Trade", "Investment", "Logistics", "Supply Chain"],
+        rows,
+        marginX,
+        y,
+        [235, 62, 82, 72, 96]
+      );
+
+      page.drawText("Average Impact by Domain", {
+        x: marginX,
+        y: 190,
+        size: 14,
+        font: bold,
+        color: rgb(...COLORS.text),
+      });
+
+      drawMetricCard(page, marginX, 84, 110, 80, "Trade", String(average(matrix, "trade")));
+      drawMetricCard(page, 176, 84, 110, 80, "Investment", String(average(matrix, "investment")));
+      drawMetricCard(page, 304, 84, 110, 80, "Logistics", String(average(matrix, "logistics")));
+      drawMetricCard(page, 432, 84, 115, 80, "Supply Chain", String(average(matrix, "supplyChain")));
+
+      drawFooter(page, 7);
+    }
+
+    /* PAGE 8: EXECUTIVE RESPONSE FRAMEWORK - EXECUTIVE ONLY */
+    if (executiveReport) {
+      const page = addPage();
+      drawSectionTitle(page, "Executive Response Framework", 770);
+
+      let y = 724;
+
+      y = drawParagraph(
+        page,
+        "The purpose of this framework is to turn a guarded exposure reading into a management response stack. It keeps the 8-dimensional model unchanged while improving usability for planning, budget discussion, and operating control.",
+        marginX,
+        y,
+        92,
+        11,
+        COLORS.text,
+        7
+      );
+
+      y -= 18;
+
+      const framework = getExecutiveResponseFramework();
+
+      page.drawText("Strategic Horizon", {
+        x: marginX,
+        y,
+        size: 14,
+        font: bold,
+        color: rgb(...COLORS.text),
+      });
+      y -= 22;
+      y = drawBulletList(page, framework.strategic, marginX, y, 82);
+
+      y -= 6;
+
+      page.drawText("Tactical Hedging", {
+        x: marginX,
+        y,
+        size: 14,
+        font: bold,
+        color: rgb(...COLORS.text),
+      });
+      y -= 22;
+      y = drawBulletList(page, framework.tactical, marginX, y, 82);
+
+      y -= 6;
+
+      page.drawText("Immediate Executive Actions", {
+        x: marginX,
+        y,
+        size: 14,
+        font: bold,
+        color: rgb(...COLORS.text),
+      });
+      y -= 22;
+      y = drawBulletList(page, framework.immediate, marginX, y, 82);
+
+      y -= 4;
+
+      page.drawText("Executive Closing Note", {
+        x: marginX,
+        y,
+        size: 14,
+        font: bold,
+        color: rgb(...COLORS.text),
+      });
+      y -= 22;
+      drawParagraph(
+        page,
+        "The executive layer should not be interpreted as a longer version of the same report. Its role is to translate model output into management-facing priorities, differentiated business impact, and next-step action framing.",
+        marginX,
+        y,
+        92,
+        10,
+        COLORS.muted,
+        6
+      );
+
+      drawFooter(page, 8);
+    }
+
+    const pdfBytes = await pdfDoc.save();
+
+    const fileSuffix = executiveReport ? "executive-intelligence" : "report";
 
     return new Response(pdfBytes, {
       status: 200,
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="riskatlas-report-${data.country}-${data.industry}.pdf"`,
+        "Content-Disposition": `attachment; filename="riskatlas-${fileSuffix}-${data.country}-${data.industry}.pdf"`,
       },
     });
   } catch (error) {
     console.error("risk-report error:", error);
 
-    const message =
-      error instanceof Error ? error.message : "Unknown server error";
+    const message = error instanceof Error ? error.message : "Unknown server error";
 
     return new Response(`Failed to generate PDF report: ${message}`, {
       status: 500,
