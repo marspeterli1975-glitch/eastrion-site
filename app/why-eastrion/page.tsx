@@ -9,6 +9,7 @@ export default function WhyEastrionPage() {
         color: "#0f172a",
       }}
     >
+      {/* ================= Hero ================= */}
       <section
         style={{
           maxWidth: "1280px",
@@ -74,6 +75,7 @@ export default function WhyEastrionPage() {
         </div>
       </section>
 
+      {/* ================= 原有三卡 ================= */}
       <section
         style={{
           maxWidth: "1280px",
@@ -118,6 +120,95 @@ export default function WhyEastrionPage() {
               risk communication.
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* ================= VOIF 新增模块 ================= */}
+      <section
+        style={{
+          maxWidth: "1280px",
+          margin: "0 auto",
+          padding: "40px 24px 80px",
+        }}
+      >
+        <div
+          style={{
+            marginBottom: "28px",
+            maxWidth: "900px",
+          }}
+        >
+          <div style={labelStyle}>Decision framework</div>
+
+          <h2
+            style={{
+              fontSize: "40px",
+              fontWeight: 600,
+              letterSpacing: "-0.03em",
+              margin: "12px 0",
+            }}
+          >
+            Vertical Opportunity & Investability Framework
+          </h2>
+
+          <p
+            style={{
+              fontSize: "18px",
+              color: "#475569",
+              lineHeight: 1.8,
+            }}
+          >
+            Before execution, the primary question is not how to deliver — but
+            whether the opportunity itself is structurally sound. This framework
+            provides a structured approach to evaluate commercial viability,
+            operational feasibility and exposure conditions in a consistent way.
+          </p>
+        </div>
+
+        {/* 六阶段 */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+            gap: "20px",
+          }}
+        >
+          {[
+            "Define Scope & Context",
+            "Value Chain & Stakeholder Mapping",
+            "Process Breakdown & Quantification",
+            "Pain & Friction Discovery",
+            "Prioritization & Validation",
+            "Opportunity Window & Hypothesis Solutions",
+          ].map((item, index) => (
+            <div key={index} style={cardStyle}>
+              <div style={labelStyle}>Stage {index + 1}</div>
+              <h3 style={cardTitleStyle}>{item}</h3>
+            </div>
+          ))}
+        </div>
+
+        {/* 核心判断语句 */}
+        <div
+          style={{
+            marginTop: "40px",
+            padding: "28px",
+            background: "#0f172a",
+            borderRadius: "20px",
+            color: "white",
+            fontSize: "20px",
+            lineHeight: 1.6,
+            maxWidth: "900px",
+          }}
+        >
+          Most failures are not execution failures — but failures in defining the
+          right problem.
+        </div>
+
+        {/* 引导到 RiskAtlas */}
+        <div style={{ marginTop: "32px" }}>
+          <Link href="/riskatlas" style={primaryBtn}>
+            Run RiskAtlas Scan →
+          </Link>
         </div>
       </section>
     </main>
