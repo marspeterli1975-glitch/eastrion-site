@@ -49,7 +49,7 @@ export default function RiskAtlasPricingPage() {
   return (
     <main className="min-h-screen bg-[#020b2a] text-white">
       <section className="border-b border-white/10 bg-gradient-to-r from-[#020b2a] via-[#04144d] to-[#0d235f]">
-        <div className="mx-auto max-w-7xl px-6 py-14 lg:px-8 lg:py-16">
+        <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-14">
           <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
             <div>
               <div className="inline-flex rounded-full border border-cyan-400/20 bg-cyan-500/10 px-4 py-2 text-sm font-medium text-cyan-200">
