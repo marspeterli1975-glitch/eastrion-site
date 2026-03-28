@@ -65,6 +65,89 @@ export default function ContactPage() {
 
       <section className="content-section">
         <div className="content-shell">
+          <div className="content-card">
+            <span className="content-kicker">Help Us Understand Your Challenge Better</span>
+            <h2 style={{ marginTop: "10px" }}>A faster way to define the real issue before the first reply.</h2>
+            <p style={{ marginTop: "14px", maxWidth: "920px" }}>
+              A clearer first message usually leads to a faster and more useful discussion. You do not need
+              a long brief. A short answer to the questions below is often enough for us to understand whether
+              the issue is related to supplier risk, route friction, cost pressure, execution coordination or
+              a broader supply chain exposure.
+            </p>
+            <p style={{ marginTop: "14px", maxWidth: "920px" }}>
+              You can answer these points directly in your email to{" "}
+              <a href="mailto:peter.li@eastrion.com">peter.li@eastrion.com</a>. All information is treated as
+              confidential and used only to frame an initial discussion.
+            </p>
+
+            <div className="content-grid two" style={{ marginTop: "24px" }}>
+              <div>
+                <ul className="content-list">
+                  <li>
+                    <strong>1. What is the main challenge you are facing?</strong>
+                    <br />
+                    Example: freight spike, supplier uncertainty, port congestion, customs compliance,
+                    execution delay, routing disruption or shipment planning friction.
+                  </li>
+                  <li>
+                    <strong>2. What is this problem mainly affecting?</strong>
+                    <br />
+                    Cost increase, lead time delay, risk exposure, operating continuity, shipment execution
+                    or commercial visibility.
+                  </li>
+                  <li>
+                    <strong>3. Which trade corridor, market or operating region is involved?</strong>
+                    <br />
+                    Example: China-Europe, China-US, Middle East, Southeast Asia, India, Australia or a more
+                    specific route.
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <ul className="content-list">
+                  <li>
+                    <strong>4. How long has this issue existed, and how soon do you want improvement?</strong>
+                    <br />
+                    Newly emerged, recurring over 3-6 months, or long-standing. Desired timing can be within
+                    1 month, within 3 months or still under evaluation.
+                  </li>
+                  <li>
+                    <strong>5. Who else is involved in the decision?</strong>
+                    <br />
+                    Optional, but useful when the issue touches procurement, logistics, operations, finance
+                    or management alignment.
+                  </li>
+                  <li>
+                    <strong>Optional shortcut</strong>
+                    <br />
+                    If you prefer, send only a short summary of the issue, the route involved and the next
+                    business decision you are trying to make.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div
+              style={{
+                marginTop: "24px",
+                padding: "18px 20px",
+                borderRadius: "16px",
+                background: "rgba(15, 23, 42, 0.04)",
+              }}
+            >
+              <p style={{ margin: 0 }}>
+                <strong>Best next move:</strong> send a short structured note to{" "}
+                <a href="mailto:peter.li@eastrion.com">peter.li@eastrion.com</a>, or start with RiskAtlas if
+                you want a faster first-pass view of route, supplier or execution exposure.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="content-section">
+        <div className="content-shell">
           <div className="content-feature">
             <div>
               <span className="content-kicker">Positioning</span>
