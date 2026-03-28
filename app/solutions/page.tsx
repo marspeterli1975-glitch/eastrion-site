@@ -13,7 +13,7 @@ export default function SolutionsPage() {
         style={{
           maxWidth: "1280px",
           margin: "0 auto",
-          padding: "64px 24px 36px",
+          padding: "48px 24px 36px",
         }}
       >
         <div
@@ -31,12 +31,12 @@ export default function SolutionsPage() {
 
         <h1
           style={{
-            fontSize: "76px",
-            lineHeight: 1.05,
+            fontSize: "72px",
+            lineHeight: 1.06,
             fontWeight: 500,
             letterSpacing: "-0.04em",
             margin: 0,
-            maxWidth: "1100px",
+            maxWidth: "1120px",
           }}
         >
           Structured supply chain support for global SMEs.
@@ -45,15 +45,44 @@ export default function SolutionsPage() {
         <p
           style={{
             marginTop: "28px",
-            maxWidth: "920px",
+            maxWidth: "980px",
             fontSize: "20px",
             lineHeight: 1.8,
             color: "#475569",
           }}
         >
-          Eastrion supports sourcing, trade execution, coordination and structured
-          risk visibility across cross-border operations.
+          Eastrion supports sourcing, trade execution, coordination, and structured
+          risk visibility across cross-border operations where corridor volatility,
+          supplier uncertainty, and execution friction can materially affect
+          commercial outcomes.
         </p>
+
+        <p
+          style={{
+            marginTop: "12px",
+            maxWidth: "980px",
+            fontSize: "16px",
+            lineHeight: 1.85,
+            color: "#64748b",
+          }}
+        >
+          In 2026, Red Sea routing instability, Panama Canal constraints, freight
+          spikes, and compliance tightening are increasing decision pressure for
+          SMEs. Our role is to make exposure clearer before cost, delay, or
+          shipment disruption becomes operational.
+        </p>
+
+        <div
+          style={{
+            marginTop: "12px",
+            fontSize: "14px",
+            lineHeight: 1.75,
+            color: "#64748b",
+          }}
+        >
+          Typical outcomes: faster supplier validation · clearer route decisions ·
+          lower execution uncertainty before shipment commitment
+        </div>
 
         <div
           style={{
@@ -91,8 +120,9 @@ export default function SolutionsPage() {
             <div style={labelStyle}>Module 01</div>
             <h3 style={cardTitleStyle}>Risk Exposure Scanning</h3>
             <p style={cardTextStyle}>
-              Initial country-industry-logistics-event exposure screening through
-              the RiskAtlas framework.
+              Quickly identify where supplier, route, logistics, and execution
+              exposure may affect delivery confidence, operating continuity, or
+              contract timing through the RiskAtlas framework.
             </p>
             <div style={{ marginTop: "22px" }}>
               <Link href="/riskatlas" style={linkCyan}>
@@ -105,8 +135,9 @@ export default function SolutionsPage() {
             <div style={labelStyle}>Module 02</div>
             <h3 style={cardTitleStyle}>Sourcing Support</h3>
             <p style={cardTextStyle}>
-              Supplier discovery, qualification framing and structured execution
-              support for global SME trade activity.
+              Reduce supplier uncertainty through structured discovery,
+              qualification framing, and sourcing-side coordination before trade
+              activity moves into deeper execution.
             </p>
             <div style={{ marginTop: "22px" }}>
               <Link href="/contact" style={linkEmerald}>
@@ -119,8 +150,9 @@ export default function SolutionsPage() {
             <div style={labelStyle}>Module 03</div>
             <h3 style={cardTitleStyle}>Operational Coordination</h3>
             <p style={cardTextStyle}>
-              Practical support for cross-border shipment coordination,
-              documentation awareness and execution alignment.
+              Improve shipment coordination, documentation awareness, and
+              execution alignment where routing, handling, or cross-border
+              operating detail matters.
             </p>
             <div style={{ marginTop: "22px" }}>
               <Link href="/contact" style={linkAmber}>
@@ -167,9 +199,10 @@ export default function SolutionsPage() {
                 margin: 0,
               }}
             >
-              A typical engagement can begin with a lightweight exposure scan,
-              then move toward more detailed sourcing review, corridor discussion,
-              execution planning or tailored assessment.
+              A typical engagement begins with a lightweight exposure scan, then
+              moves toward more detailed sourcing review, corridor discussion,
+              execution planning, or tailored support as commercial decisions
+              move closer to real shipment.
             </p>
           </div>
 
@@ -183,22 +216,26 @@ export default function SolutionsPage() {
               <div style={infoTitleStyle}>Early stage</div>
               <div style={infoTextStyle}>
                 Use RiskAtlas to frame where the main exposure may be concentrated.
+                For example, before committing to a corridor affected by Red Sea
+                volatility or route-level uncertainty.
               </div>
             </div>
 
             <div style={infoBoxStyle}>
               <div style={infoTitleStyle}>Middle stage</div>
               <div style={infoTextStyle}>
-                Clarify supplier assumptions, route dependencies and execution
-                friction points.
+                Clarify supplier assumptions, route dependencies, and execution
+                friction points before decisions become contract-linked or
+                shipment-sensitive.
               </div>
             </div>
 
             <div style={infoBoxStyle}>
               <div style={infoTitleStyle}>Next step</div>
               <div style={infoTextStyle}>
-                Move into tailored discussion with Eastrion where corridor or
-                supplier detail matters.
+                Move into tailored discussion with Eastrion when corridor detail,
+                supplier validation, handling logic, or execution planning
+                requires more than standard visibility.
               </div>
             </div>
           </div>
