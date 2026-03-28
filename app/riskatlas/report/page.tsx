@@ -22,6 +22,7 @@ type MatrixItem = {
   investment: { score: number; note: string };
   logistics: { score: number; note: string };
   supplyChain: { score: number; note: string };
+  monitoringSignals: string[];
 };
 
 function getRiskBand(score: number) {
@@ -190,6 +191,11 @@ const executiveImpactMatrix: MatrixItem[] = [
       score: 95,
       note: "Single-point fragility becomes most visible at the end-to-end network level.",
     },
+    monitoringSignals: [
+      "Transit time deviates beyond normal variance band",
+      "Insurance, surcharge, or war-risk premiums rise abruptly",
+      "Port call sequence or vessel routing becomes unstable",
+    ],
   },
   {
     id: 2,
@@ -210,6 +216,11 @@ const executiveImpactMatrix: MatrixItem[] = [
       score: 82,
       note: "Inventory pressure and cash conversion worsen under cost spikes.",
     },
+    monitoringSignals: [
+      "Freight rate moves materially beyond contract baseline",
+      "Order-level margin compression becomes visible",
+      "Repeated repricing is needed to protect contribution",
+    ],
   },
   {
     id: 3,
@@ -230,6 +241,11 @@ const executiveImpactMatrix: MatrixItem[] = [
       score: 78,
       note: "Multimodal coordination breaks more easily when capacity assumptions fail.",
     },
+    monitoringSignals: [
+      "Booking confirmation becomes less predictable",
+      "Container or equipment positioning delays accumulate",
+      "Schedule reliability weakens despite stable demand",
+    ],
   },
   {
     id: 4,
@@ -250,6 +266,11 @@ const executiveImpactMatrix: MatrixItem[] = [
       score: 85,
       note: "Visibility interruption and downstream planning failure expand beyond the port itself.",
     },
+    monitoringSignals: [
+      "Vessel waiting time trends upward across consecutive sailings",
+      "Container dwell time exceeds expected operating range",
+      "Delivery reliability falls below internal service target",
+    ],
   },
   {
     id: 5,
@@ -270,6 +291,11 @@ const executiveImpactMatrix: MatrixItem[] = [
       score: 75,
       note: "Forecast and execution variance amplify risk across the network.",
     },
+    monitoringSignals: [
+      "Status updates rely on manual follow-up instead of system visibility",
+      "Exception handling becomes reactive rather than time-based",
+      "Data reconciliation lag delays management response",
+    ],
   },
   {
     id: 6,
@@ -290,6 +316,11 @@ const executiveImpactMatrix: MatrixItem[] = [
       score: 80,
       note: "Diversification becomes more complex as regulatory asymmetry increases.",
     },
+    monitoringSignals: [
+      "Documentation exceptions increase at clearance stage",
+      "Certification lead times begin stretching beyond planning assumptions",
+      "Market-entry requirements change faster than internal update cycles",
+    ],
   },
   {
     id: 7,
@@ -310,6 +341,11 @@ const executiveImpactMatrix: MatrixItem[] = [
       score: 70,
       note: "ESG becomes a longer-cycle qualification and continuity barrier.",
     },
+    monitoringSignals: [
+      "Carbon or sustainability disclosure requests increase by customer or market",
+      "Packaging or fuel compliance cost begins moving outside planned band",
+      "Supplier qualification discussions start including ESG gating criteria",
+    ],
   },
 ];
 
@@ -331,9 +367,45 @@ const executiveResponseFramework = {
   ],
 };
 
-function averageScore(items: MatrixItem[], key: keyof Omit<MatrixItem, "id" | "painPoint">) {
+function averageScore(items: MatrixItem[], key: keyof Omit<MatrixItem, "id" | "painPoint" | "monitoringSignals">) {
   const total = items.reduce((sum, item) => sum + item[key].score, 0);
   return Math.round(total / items.length);
+}
+
+function MonitoringSignalsTable({ items }: { items: MatrixItem[] }) {
+  return (
+    <div className="rounded-3xl border border-white/10 bg-black/20 p-5 md:p-6">
+      <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Monitoring Signals</div>
+      <div className="mt-2 text-sm leading-7 text-slate-400">
+        Observation signals for management attention, not decision commands
+      </div>
+
+      <div className="mt-5 overflow-hidden rounded-2xl border border-white/10">
+        <div className="grid grid-cols-[84px_minmax(0,1fr)] border-b border-white/10 bg-white/[0.03]">
+          <div className="px-4 py-4 text-sm font-semibold text-white">No.</div>
+          <div className="px-4 py-4 text-sm font-semibold text-white">Monitoring Signals</div>
+        </div>
+
+        {items.map((item) => (
+          <div
+            key={`signals-${item.id}`}
+            className="grid grid-cols-[84px_minmax(0,1fr)] border-b border-white/10 last:border-b-0"
+          >
+            <div className="px-4 py-4 text-lg font-semibold text-white">{item.id}</div>
+            <div className="px-4 py-4">
+              <div className="space-y-2">
+                {item.monitoringSignals.map((signal, idx) => (
+                  <div key={`${item.id}-${idx}`} className="text-sm leading-7 text-slate-300">
+                    • {signal}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 function MatrixTable({
@@ -345,7 +417,7 @@ function MatrixTable({
   title: string;
   subtitle: string;
   items: MatrixItem[];
-  column: keyof Omit<MatrixItem, "id" | "painPoint">;
+  column: keyof Omit<MatrixItem, "id" | "painPoint" | "monitoringSignals">;
 }) {
   const avg = averageScore(items, column);
 
@@ -1075,7 +1147,7 @@ export default function RiskAtlasReportPage() {
                 Differentiated impact by business domain
               </h3>
               <p className="mt-3 text-sm leading-7 text-slate-300">
-                A single score cannot show where pain is most concentrated. This matrix translates the same risk environment into domain-specific pressure on trade, investment, logistics, and the overall supply chain.
+                A single score cannot show where pain is most concentrated. This matrix translates the same risk environment into domain-specific pressure on trade, investment, logistics, and the overall supply chain, while adding monitoring signals for management attention.
               </p>
 
               <div className="mt-6 grid gap-6 xl:grid-cols-2">
@@ -1106,6 +1178,10 @@ export default function RiskAtlasReportPage() {
                   items={executiveImpactMatrix}
                   column="supplyChain"
                 />
+
+                <div className="xl:col-span-2">
+                  <MonitoringSignalsTable items={executiveImpactMatrix} />
+                </div>
               </div>
             </div>
 
