@@ -52,7 +52,7 @@ export default function HomePage() {
 
             <h1
               style={{
-                fontSize: "72px",
+                fontSize: "64px",
                 lineHeight: 1.02,
                 fontWeight: 800,
                 letterSpacing: "-0.05em",
@@ -159,7 +159,7 @@ export default function HomePage() {
                   textTransform: "uppercase",
                   color: "#67e8f9",
                   fontWeight: 700,
-                  marginBottom: "14px",
+                  marginBottom: "12px",
                 }}
               >
                 Current risk signals · March 2026
@@ -315,7 +315,7 @@ export default function HomePage() {
       >
         <div
           style={{
-            maxWidth: "1280px",
+            maxWidth: "1100px",
             margin: "0 auto",
             padding: "72px 24px 72px",
           }}
