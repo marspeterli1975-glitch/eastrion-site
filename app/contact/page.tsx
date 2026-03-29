@@ -45,6 +45,13 @@ export default function ContactPage() {
                   <br />
                   Suitable for early-stage corridor, route, supplier or execution exposure screening.
                 </li>
+                <li>
+                  <strong>RaaS and risk-bridging models</strong>
+                  <br />
+                  Relevant where adoption is blocked not by product capability, but by trust, execution
+                  uncertainty, and commercial structure. Eastrion helps translate these gaps into a workable,
+                  staged, and contractable model — so solutions can actually be deployed, not just evaluated.
+                </li>
               </ul>
             </div>
 
