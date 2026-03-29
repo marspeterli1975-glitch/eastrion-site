@@ -23,6 +23,12 @@ export default function RiskAtlasPage() {
                 decision-ready report.
               </p>
 
+              <p className="mt-4 max-w-3xl text-base leading-8 text-slate-300">
+                Most users start here when they need to clarify where risk is actually building
+                up — before it turns into higher landed cost, shipment delay, supplier friction
+                or weaker operating continuity across critical trade corridors.
+              </p>
+
               <div className="mt-8 flex flex-col gap-4 sm:flex-row">
                 <Link
                   href="/riskatlas/report"
@@ -96,7 +102,8 @@ export default function RiskAtlasPage() {
                       </h3>
                       <p className="mt-2 text-sm leading-6 text-slate-300">
                         Access score explanation, executive summary, factor breakdown,
-                        priority action plan and premium module preview.
+                        priority action plan and a clearer view of what is driving exposure
+                        across the assessed route or operating context.
                       </p>
                     </div>
                     <span className="rounded-full bg-emerald-400/15 px-3 py-1 text-xs font-medium text-emerald-200">
@@ -116,7 +123,8 @@ export default function RiskAtlasPage() {
                       </h3>
                       <p className="mt-2 text-sm leading-6 text-slate-300">
                         Go beyond diagnosis with stronger execution guidance, recommended
-                        next actions and deeper operational prioritization.
+                        next actions and deeper operational prioritization for higher-risk
+                        or execution-sensitive situations.
                       </p>
                     </div>
                     <span className="rounded-full bg-amber-400/15 px-3 py-1 text-xs font-medium text-amber-200">
@@ -185,7 +193,7 @@ export default function RiskAtlasPage() {
             <h3 className="text-xl font-semibold">Decision-ready output</h3>
             <p className="mt-3 text-sm leading-7 text-slate-300">
               Show exactly what becomes available after upgrade: explanation, breakdown,
-              priorities and stronger clarity.
+              priorities and stronger clarity around what needs attention first.
             </p>
             <div className="mt-6">
               <Link
