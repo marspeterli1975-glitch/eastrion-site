@@ -61,7 +61,7 @@ export default function HomePage() {
                 maxWidth: "860px",
               }}
             >
-              Build clearer decisions where supply chain risk meets execution.
+              Translate supply chain uncertainty into clearer commercial action.
             </h1>
 
             <p
@@ -73,10 +73,10 @@ export default function HomePage() {
                 color: "#cbd5e1",
               }}
             >
-              Eastrion helps companies turn fragmented supplier, route, compliance,
-              and execution uncertainty into a more structured commercial next step.
-              The objective is not only to see risk earlier, but to reduce the gap
-              between signal, decision, and real operating action.
+              Eastrion operates as a risk bridge between fragmented market signals,
+              commercial judgment and real execution. The goal is not only to detect
+              exposure earlier, but to help businesses move from ambiguity to a more
+              contractable and workable next step.
             </p>
 
             <p
@@ -88,10 +88,10 @@ export default function HomePage() {
                 color: "#dbeafe",
               }}
             >
-              RiskAtlas is the entry point for fast exposure scanning. Eastrion extends
-              that logic into sourcing support, execution coordination, and selective
-              risk-bridging models where adoption still depends on trust, local handling,
-              and commercial feasibility.
+              RiskAtlas is the fastest entry point into that workflow. Around it,
+              Eastrion extends into sourcing support, execution coordination and
+              selected bridge models where trust, local handling and commercial
+              structure still determine whether a deal or pilot can actually move.
             </p>
 
             <p
@@ -104,7 +104,7 @@ export default function HomePage() {
               }}
             >
               Built around real China-linked cross-border operating cases, corridor
-              volatility, supplier ambiguity, and shipment-level execution friction.
+              volatility, supplier ambiguity and shipment-level execution friction.
             </p>
 
             <div
@@ -136,9 +136,9 @@ export default function HomePage() {
                 marginTop: "22px",
               }}
             >
-              <div style={chipStyle}>Structured risk entry</div>
-              <div style={chipStyle}>Decision support layer</div>
-              <div style={chipStyle}>Execution bridge capability</div>
+              <div style={chipStyle}>Risk bridge layer</div>
+              <div style={chipStyle}>Commercial translation</div>
+              <div style={chipStyle}>Execution-linked support</div>
             </div>
 
             <div
@@ -595,11 +595,11 @@ export default function HomePage() {
           >
             <div style={darkCardStyle}>
               <div style={smallTagBlue}>Demand side</div>
-              <h3 style={darkCardTitleStyle}>Pilot-first adoption logic</h3>
+              <h3 style={darkCardTitleStyle}>RaaS changes the buying logic</h3>
               <p style={darkCardTextStyle}>
-                For care, agriculture or other field operations, the first step is
-                often a structured diagnosis and staged rollout model rather than a
-                direct hardware push.
+                The core shift is from a one-time hardware purchase into a staged,
+                service-like operating relationship where cost, responsibility,
+                uptime and adoption risk can be distributed more clearly over time.
               </p>
             </div>
 
