@@ -47,7 +47,7 @@ export default function HomePage() {
                 marginBottom: "22px",
               }}
             >
-              RiskAtlas · Supply Chain Risk Assessment + Decision Engine
+              Eastrion · Supply Chain Infrastructure + Risk Bridge
             </div>
 
             <h1
@@ -61,8 +61,7 @@ export default function HomePage() {
                 maxWidth: "860px",
               }}
             >
-              Turn supply chain uncertainty into a structured, paid risk
-              intelligence workflow.
+              Build clearer decisions where supply chain risk meets execution.
             </h1>
 
             <p
@@ -74,11 +73,10 @@ export default function HomePage() {
                 color: "#cbd5e1",
               }}
             >
-              RiskAtlas helps importers, exporters, sourcing teams and logistics
-              operators quickly identify exposure across supplier, route,
-              country and execution layers — starting with an initial
-              assessment, then upgrading into a professional decision-ready
-              report.
+              Eastrion helps companies turn fragmented supplier, route, compliance,
+              and execution uncertainty into a more structured commercial next step.
+              The objective is not only to see risk earlier, but to reduce the gap
+              between signal, decision, and real operating action.
             </p>
 
             <p
@@ -90,8 +88,10 @@ export default function HomePage() {
                 color: "#dbeafe",
               }}
             >
-              Identify supplier, route, and execution risk before it turns into
-              delay, cost escalation, or shipment-level uncertainty.
+              RiskAtlas is the entry point for fast exposure scanning. Eastrion extends
+              that logic into sourcing support, execution coordination, and selective
+              risk-bridging models where adoption still depends on trust, local handling,
+              and commercial feasibility.
             </p>
 
             <p
@@ -103,9 +103,8 @@ export default function HomePage() {
                 color: "#94a3b8",
               }}
             >
-              Based on real China-linked cross-border execution scenarios and
-              current volatility across Red Sea routes, Panama Canal constraints,
-              and global corridor disruption signals.
+              Built around real China-linked cross-border operating cases, corridor
+              volatility, supplier ambiguity, and shipment-level execution friction.
             </p>
 
             <div
@@ -137,9 +136,9 @@ export default function HomePage() {
                 marginTop: "22px",
               }}
             >
-              <div style={chipStyle}>Initial risk signal</div>
-              <div style={chipStyle}>Paid report conversion</div>
-              <div style={chipStyle}>Execution upgrade path</div>
+              <div style={chipStyle}>Structured risk entry</div>
+              <div style={chipStyle}>Decision support layer</div>
+              <div style={chipStyle}>Execution bridge capability</div>
             </div>
 
             <div
@@ -517,6 +516,135 @@ export default function HomePage() {
 
       <section
         style={{
+          borderBottom: "1px solid rgba(148, 163, 184, 0.1)",
+          background: "#020817",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: "1280px",
+            margin: "0 auto",
+            padding: "72px 24px 72px",
+          }}
+        >
+          <div
+            style={{
+              fontSize: "14px",
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+              color: "#67e8f9",
+              fontWeight: 700,
+              marginBottom: "14px",
+            }}
+          >
+            Capability demo · RaaS
+          </div>
+
+          <h2
+            style={{
+              fontSize: "54px",
+              lineHeight: 1.08,
+              fontWeight: 800,
+              letterSpacing: "-0.04em",
+              color: "#f8fafc",
+              margin: 0,
+              maxWidth: "980px",
+            }}
+          >
+            Beyond diagnostics, Eastrion also understands risk-bridging service models.
+          </h2>
+
+          <p
+            style={{
+              marginTop: "22px",
+              maxWidth: "980px",
+              fontSize: "18px",
+              lineHeight: 1.85,
+              color: "#cbd5e1",
+            }}
+          >
+            This is a forward-looking demo layer, not a mainstream navigation path.
+            In selected cases, the real commercial bottleneck is not the hardware
+            itself, but the trust, local execution, pilot design and operating
+            uncertainty that prevent adoption. That is where a risk bridge model
+            can matter.
+          </p>
+
+          <p
+            style={{
+              marginTop: "12px",
+              maxWidth: "980px",
+              fontSize: "17px",
+              lineHeight: 1.85,
+              color: "#dbeafe",
+            }}
+          >
+            We do not start by selling machines. We help translate operational
+            uncertainty into a contractable next step for both hardware partners
+            and end users when a pilot, subscription or staged deployment needs a
+            clearer commercial structure.
+          </p>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+              gap: "22px",
+              marginTop: "30px",
+            }}
+          >
+            <div style={darkCardStyle}>
+              <div style={smallTagBlue}>Demand side</div>
+              <h3 style={darkCardTitleStyle}>Pilot-first adoption logic</h3>
+              <p style={darkCardTextStyle}>
+                For care, agriculture or other field operations, the first step is
+                often a structured diagnosis and staged rollout model rather than a
+                direct hardware push.
+              </p>
+            </div>
+
+            <div style={darkCardStyle}>
+              <div style={smallTagGreen}>Bridge layer</div>
+              <h3 style={darkCardTitleStyle}>Trust and execution compression</h3>
+              <p style={darkCardTextStyle}>
+                The value sits in reducing the gap between vendor capability,
+                customer hesitation and local operating risk through a clearer
+                commercial and delivery structure.
+              </p>
+            </div>
+
+            <div style={darkCardStyle}>
+              <div style={smallTagAmber}>Partner signal</div>
+              <h3 style={darkCardTitleStyle}>Selective market interface</h3>
+              <p style={darkCardTextStyle}>
+                This module is shown as a capability signal for hardware partners
+                or demand-side operators who want to explore selective trial,
+                subscription or regional bridge models with Eastrion.
+              </p>
+            </div>
+          </div>
+
+          <div
+            style={{
+              marginTop: "28px",
+              display: "flex",
+              gap: "16px",
+              flexWrap: "wrap",
+            }}
+          >
+            <Link href="/contact" style={secondaryBtnDark}>
+              Discuss a RaaS-type pilot
+            </Link>
+
+            <Link href="/contact" style={textBtn}>
+              Contact Eastrion
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section
+        style={{
           background: "#020817",
           padding: "62px 24px 72px",
         }}
@@ -574,7 +702,8 @@ export default function HomePage() {
             >
               Start with RiskAtlas for structured visibility. Contact Eastrion
               directly if your case has already moved into sourcing, logistics,
-              industrial coordination, or cross-border execution support.
+              industrial coordination, cross-border execution support, or a more
+              selective partnership discussion.
             </p>
           </div>
 
