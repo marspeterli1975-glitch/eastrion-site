@@ -17,16 +17,15 @@ export default function RiskAtlasPage() {
               </h1>
 
               <p className="mt-6 max-w-3xl text-base leading-8 text-slate-300 md:text-lg">
-                RiskAtlas helps importers, exporters, sourcing teams and logistics operators
-                quickly identify exposure across supplier, route, country and execution layers
-                — starting with an initial assessment, then upgrading into a professional
-                decision-ready report.
+                RiskAtlas gives you a fast first-pass scan of supplier, route, country and
+                execution exposure, so you can move from a broad concern to a clearer risk
+                signal in minutes.
               </p>
 
               <p className="mt-4 max-w-3xl text-base leading-8 text-slate-300">
-                Most users start here when they need to clarify where risk is actually building
-                up — before it turns into higher landed cost, shipment delay, supplier friction
-                or weaker operating continuity across critical trade corridors.
+                Start with an initial assessment, then upgrade only when you need deeper
+                score interpretation, structured report output and stronger execution-facing
+                clarity for the next business step.
               </p>
 
               <div className="mt-8 flex flex-col gap-4 sm:flex-row">
@@ -102,8 +101,7 @@ export default function RiskAtlasPage() {
                       </h3>
                       <p className="mt-2 text-sm leading-6 text-slate-300">
                         Access score explanation, executive summary, factor breakdown,
-                        priority action plan and a clearer view of what is driving exposure
-                        across the assessed route or operating context.
+                        priority action plan and premium module preview.
                       </p>
                     </div>
                     <span className="rounded-full bg-emerald-400/15 px-3 py-1 text-xs font-medium text-emerald-200">
@@ -123,8 +121,7 @@ export default function RiskAtlasPage() {
                       </h3>
                       <p className="mt-2 text-sm leading-6 text-slate-300">
                         Go beyond diagnosis with stronger execution guidance, recommended
-                        next actions and deeper operational prioritization for higher-risk
-                        or execution-sensitive situations.
+                        next actions and deeper operational prioritization.
                       </p>
                     </div>
                     <span className="rounded-full bg-amber-400/15 px-3 py-1 text-xs font-medium text-amber-200">
@@ -193,7 +190,7 @@ export default function RiskAtlasPage() {
             <h3 className="text-xl font-semibold">Decision-ready output</h3>
             <p className="mt-3 text-sm leading-7 text-slate-300">
               Show exactly what becomes available after upgrade: explanation, breakdown,
-              priorities and stronger clarity around what needs attention first.
+              priorities and stronger clarity.
             </p>
             <div className="mt-6">
               <Link
