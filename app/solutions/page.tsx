@@ -13,7 +13,7 @@ export default function SolutionsPage() {
         style={{
           maxWidth: "1280px",
           margin: "0 auto",
-          padding: "48px 24px 36px",
+          padding: "28px 24px 32px",
         }}
       >
         <div
@@ -23,7 +23,7 @@ export default function SolutionsPage() {
             textTransform: "uppercase",
             color: "#94a3b8",
             fontWeight: 700,
-            marginBottom: "20px",
+            marginBottom: "18px",
           }}
         >
           Services
@@ -44,7 +44,7 @@ export default function SolutionsPage() {
 
         <p
           style={{
-            marginTop: "28px",
+            marginTop: "24px",
             maxWidth: "980px",
             fontSize: "20px",
             lineHeight: 1.8,
@@ -89,7 +89,7 @@ export default function SolutionsPage() {
             display: "flex",
             gap: "16px",
             flexWrap: "wrap",
-            marginTop: "28px",
+            marginTop: "24px",
           }}
         >
           <Link href="/riskatlas" style={primaryBtn}>
@@ -112,7 +112,7 @@ export default function SolutionsPage() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+            gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
             gap: "20px",
           }}
         >
@@ -157,6 +157,22 @@ export default function SolutionsPage() {
             <div style={{ marginTop: "22px" }}>
               <Link href="/contact" style={linkAmber}>
                 Contact Eastrion →
+              </Link>
+            </div>
+          </div>
+
+          <div style={cardStyle}>
+            <div style={labelStyle}>Module 04</div>
+            <h3 style={cardTitleStyle}>RaaS Bridge Models</h3>
+            <p style={cardTextStyle}>
+              Explore selective risk-bridging structures where the challenge is
+              not only the hardware itself, but how to translate trust, local
+              execution, staged deployment, and commercial responsibility into a
+              workable service model.
+            </p>
+            <div style={{ marginTop: "22px" }}>
+              <Link href="/contact" style={linkSlate}>
+                Discuss with Eastrion →
               </Link>
             </div>
           </div>
@@ -234,8 +250,8 @@ export default function SolutionsPage() {
               <div style={infoTitleStyle}>Next step</div>
               <div style={infoTextStyle}>
                 Move into tailored discussion with Eastrion when corridor detail,
-                supplier validation, handling logic, or execution planning
-                requires more than standard visibility.
+                supplier validation, handling logic, execution planning, or a
+                selective bridge-model discussion requires more than standard visibility.
               </div>
             </div>
           </div>
@@ -340,6 +356,13 @@ const linkEmerald = {
 
 const linkAmber = {
   color: "#fcd34d",
+  fontWeight: 700,
+  fontSize: "16px",
+  textDecoration: "none",
+};
+
+const linkSlate = {
+  color: "#475569",
   fontWeight: 700,
   fontSize: "16px",
   textDecoration: "none",
