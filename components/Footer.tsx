@@ -23,6 +23,7 @@ export default function Footer() {
             alignItems: "start",
           }}
         >
+          {/* ===== Brand ===== */}
           <div>
             <div
               style={{
@@ -51,6 +52,7 @@ export default function Footer() {
             </p>
           </div>
 
+          {/* ===== Navigation ===== */}
           <div>
             <div
               style={{
@@ -73,7 +75,7 @@ export default function Footer() {
               <Link href="/" style={footerLinkStyle}>
                 Home
               </Link>
-              <Link href="/why eastrion" style={footerLinkStyle}>
+              <Link href="/why-eastrion" style={footerLinkStyle}>
                 Why Eastrion
               </Link>
               <Link href="/services" style={footerLinkStyle}>
@@ -88,6 +90,7 @@ export default function Footer() {
             </div>
           </div>
 
+          {/* ===== Contact ===== */}
           <div>
             <div
               style={{
@@ -117,6 +120,7 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* ===== Bottom Bar ===== */}
         <div
           style={{
             marginTop: "34px",
@@ -136,6 +140,27 @@ export default function Footer() {
             }}
           >
             © Eastrion. All rights reserved.
+          </div>
+
+          {/* ===== ✅ 新增 Legal Links（关键） ===== */}
+          <div
+            style={{
+              display: "flex",
+              gap: "16px",
+              fontSize: "14px",
+            }}
+          >
+            <Link href="/terms" style={legalLinkStyle}>
+              Terms
+            </Link>
+
+            <Link href="/privacy" style={legalLinkStyle}>
+              Privacy
+            </Link>
+
+            <Link href="/disclaimer" style={legalLinkStyle}>
+              Disclaimer
+            </Link>
           </div>
 
           <div
@@ -158,4 +183,9 @@ const footerLinkStyle = {
   fontSize: "16px",
   fontWeight: 600,
   whiteSpace: "nowrap" as const,
+};
+
+const legalLinkStyle = {
+  color: "#64748b",
+  textDecoration: "none",
 };
