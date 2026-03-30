@@ -65,20 +65,20 @@ export default function RiskAtlasSuccessPage() {
           return;
         }
 
-       const nowIso = new Date().toISOString();
-const plan = data?.metadata?.plan || "pro";
+        const nowIso = new Date().toISOString();
+        const plan = data?.metadata?.plan || "pro";
 
-const unlockState: UnlockState = {
-  pro: true,
-  execution: plan === "execution",
-  lastSessionId: session,
-  lastPaidAt: nowIso,
-};
+        const unlockState: UnlockState = {
+          pro: true,
+          execution: plan === "execution",
+          lastSessionId: session,
+          lastPaidAt: nowIso,
+        };
 
-localStorage.setItem("riskatlas_unlock_state", JSON.stringify(unlockState));
+        localStorage.setItem("riskatlas_unlock_state", JSON.stringify(unlockState));
 
-setVerified(true);
-setCustomerEmail(data?.customerEmail || null);
+        setVerified(true);
+        setCustomerEmail(data?.customerEmail || null);
       } catch (error) {
         console.error(error);
         setVerified(false);
@@ -139,9 +139,9 @@ setCustomerEmail(data?.customerEmail || null);
 
           <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-300 md:text-base">
             {verifying
-              ? "Please wait while RiskAtlas confirms your Stripe checkout session and activates your Professional access on this browser."
+              ? "Please wait while RiskAtlas confirms your Stripe checkout session and activates your paid access in this browser."
               : verified
-              ? "Your payment has been confirmed. Your paid RiskAtlas access is now active in this browser. You can open the unlocked report immediately below."
+              ? "Your payment has been confirmed. Your paid RiskAtlas access is now active in this browser, and you can open the unlocked report immediately below."
               : "We could not fully confirm your payment status from this page. Your checkout may still be valid, but this session needs verification before access can be confirmed."}
           </p>
         </div>
@@ -161,8 +161,8 @@ setCustomerEmail(data?.customerEmail || null);
                 Payment confirmed
               </div>
               <h2 className="mt-2 text-2xl font-semibold">
-  Paid access is active
-</h2>
+                Paid access is active
+              </h2>
               <p className="mt-3 text-sm leading-7 text-slate-200">
                 Your payment has unlocked paid RiskAtlas access. This browser now has access to the appropriate report layer based on your selected plan.
               </p>
@@ -191,7 +191,7 @@ setCustomerEmail(data?.customerEmail || null);
                     Customer email
                   </div>
                   <div className="mt-2 text-sm text-slate-200">
-                    {customerEmail || "Not returned by checkout session"}
+                    {customerEmail || "Email not returned by Stripe for this session"}
                   </div>
                 </div>
               </div>
@@ -221,13 +221,13 @@ setCustomerEmail(data?.customerEmail || null);
 
               <div className="rounded-3xl border border-amber-400/20 bg-amber-400/5 p-6">
                 <div className="text-xs uppercase tracking-[0.18em] text-amber-300">
-                  Export status
+                  Delivery status
                 </div>
                 <h3 className="mt-3 text-xl font-semibold">
-                  PDF export is coming next
+                  Your report is now available in this browser
                 </h3>
                 <p className="mt-3 text-sm leading-7 text-slate-300">
-                  Your purchase currently unlocks the browser-based Professional Report view. A direct downloadable PDF file is not yet active in this beta flow.
+                  Your purchase currently unlocks the browser-based Professional Report view. A direct downloadable PDF version will be introduced in a later update.
                 </p>
 
                 <div className="mt-4 rounded-2xl border border-white/10 bg-black/20 p-4 text-sm text-slate-300">
