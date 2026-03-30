@@ -39,27 +39,27 @@ export async function POST(req: Request) {
     const selected = planConfig[plan];
 
     const session = await stripe.checkout.sessions.create({
-  mode: "payment",
-  line_items: [
-    {
-      price_data: {
-        currency: "usd",
-        product_data: {
-          name: selected.name,
-          description: selected.description,
+      mode: "payment",
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: selected.name,
+              description: selected.description,
+            },
+            unit_amount: selected.amount,
+          },
+          quantity: 1,
         },
-        unit_amount: selected.amount,
+      ],
+      metadata: {
+        plan,
       },
-      quantity: 1,
-    },
-  ],
-  metadata: {
-    plan,
-  },
-  success_url: `${siteUrl}/riskatlas/success?session_id={CHECKOUT_SESSION_ID}`,
-  cancel_url: `${siteUrl}/riskatlas/cancel`,
-  payment_method_types: ["card"],
-});
+      success_url: `${siteUrl}/riskatlas/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${siteUrl}/riskatlas?payment=cancelled`,
+      payment_method_types: ["card"],
+    });
 
     return NextResponse.json({ url: session.url });
   } catch (error) {
