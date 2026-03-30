@@ -28,12 +28,18 @@ export async function GET(request: NextRequest) {
     const paid =
       session.payment_status === "paid" || session.status === "complete";
 
+    const customerEmail =
+      session.customer_details?.email ||
+      session.customer_email ||
+      null;
+
     return NextResponse.json({
       ok: true,
       paid,
       sessionId: session.id,
       paymentStatus: session.payment_status,
       status: session.status,
+      customerEmail,
       metadata: session.metadata || {},
     });
   } catch (error) {
