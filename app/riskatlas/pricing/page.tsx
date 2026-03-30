@@ -110,6 +110,10 @@ export default function RiskAtlasPricingPage() {
                 </Link>
               </div>
 
+              <div className="mt-4 text-sm leading-7 text-slate-400">
+                Secure payment via Stripe. You can return at any time using the back arrow in the top-left corner of Stripe Checkout.
+              </div>
+
               {error ? (
                 <div className="mt-5 rounded-2xl border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
                   {error}
@@ -201,6 +205,10 @@ export default function RiskAtlasPricingPage() {
                   : "Buy Professional Report → Get Instant Access"}
               </button>
 
+              <p className="mt-3 text-xs leading-6 text-slate-400">
+                Secure payment via Stripe. You can return at any time using the back arrow in the top-left corner.
+              </p>
+
               <p className="mt-4 text-xs leading-6 text-emerald-200/90">
                 Best starting point for exporters, sourcing teams, and logistics operators who need structured clarity first.
               </p>
@@ -265,6 +273,10 @@ export default function RiskAtlasPricingPage() {
                   : "Upgrade to Execution Layer → Start Planning"}
               </button>
 
+              <p className="mt-3 text-xs leading-6 text-slate-400">
+                Secure payment via Stripe. You can return at any time using the back arrow in the top-left corner.
+              </p>
+
               <p className="mt-4 text-xs leading-6 text-amber-200/90">
                 Best for users already approaching real shipment planning, route choice, or execution-sensitive commitments.
               </p>
@@ -317,6 +329,10 @@ export default function RiskAtlasPricingPage() {
                     ? "Redirecting..."
                     : "Upgrade to Execution Layer → Start Planning"}
                 </button>
+
+                <div className="text-sm leading-7 text-slate-400">
+                  Secure payment via Stripe. You can return at any time using the back arrow in the top-left corner of Stripe Checkout.
+                </div>
 
                 <Link
                   href="/contact"
