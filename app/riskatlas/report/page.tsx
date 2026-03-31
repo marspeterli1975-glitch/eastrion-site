@@ -367,7 +367,10 @@ const executiveResponseFramework = {
   ],
 };
 
-function averageScore(items: MatrixItem[], key: keyof Omit<MatrixItem, "id" | "painPoint" | "monitoringSignals">) {
+function averageScore(
+  items: MatrixItem[],
+  key: keyof Omit<MatrixItem, "id" | "painPoint" | "monitoringSignals">
+) {
   const total = items.reduce((sum, item) => sum + item[key].score, 0);
   return Math.round(total / items.length);
 }
@@ -458,6 +461,9 @@ export default function RiskAtlasReportPage() {
   const [mounted, setMounted] = useState(false);
   const [unlockState, setUnlockState] = useState<UnlockState>({});
   const [isPaying, setIsPaying] = useState(false);
+  const [isDownloadingProfessional, setIsDownloadingProfessional] = useState(false);
+  const [isDownloadingExecution, setIsDownloadingExecution] = useState(false);
+  const [downloadNotice, setDownloadNotice] = useState("");
 
   useEffect(() => {
     setMounted(true);
@@ -473,12 +479,19 @@ export default function RiskAtlasReportPage() {
     }
   }, []);
 
+  useEffect(() => {
+    if (!downloadNotice) return;
+    const timer = setTimeout(() => setDownloadNotice(""), 3200);
+    return () => clearTimeout(timer);
+  }, [downloadNotice]);
+
   const overallScore = 38;
   const band = useMemo(() => getRiskBand(overallScore), [overallScore]);
   const verdict = useMemo(() => getDecisionVerdict(overallScore), [overallScore]);
 
   const isProUnlocked = !!unlockState?.pro;
   const isExecutionUnlocked = !!unlockState?.execution;
+  const canShowPaymentConfirmation = !!unlockState?.lastSessionId;
 
   async function handleUnlockProfessional() {
     try {
@@ -519,6 +532,8 @@ export default function RiskAtlasReportPage() {
 
   async function downloadProfessionalPdf() {
     try {
+      setIsDownloadingProfessional(true);
+
       const payload = {
         country: "China - India",
         industry: "Battery Materials",
@@ -564,14 +579,19 @@ export default function RiskAtlasReportPage() {
       a.click();
 
       window.URL.revokeObjectURL(url);
+      setDownloadNotice("Professional PDF download started. This action does not redirect to the success page.");
     } catch (e) {
       console.error("PDF FETCH ERROR:", e);
       alert("PDF export failed");
+    } finally {
+      setIsDownloadingProfessional(false);
     }
   }
 
   async function downloadExecutionPdf() {
     try {
+      setIsDownloadingExecution(true);
+
       const payload = {
         country: "China - India",
         industry: "Battery Materials",
@@ -619,9 +639,12 @@ export default function RiskAtlasReportPage() {
       a.click();
 
       window.URL.revokeObjectURL(url);
+      setDownloadNotice("Executive report download started. This action does not redirect to the success page.");
     } catch (e) {
       console.error("EXECUTION PDF FETCH ERROR:", e);
       alert("Execution PDF export failed");
+    } finally {
+      setIsDownloadingExecution(false);
     }
   }
 
@@ -637,6 +660,21 @@ export default function RiskAtlasReportPage() {
     }
 
     window.location.href = "/load-planning";
+  }
+
+  function handleRefreshBrowserUnlockState() {
+    try {
+      const raw = localStorage.getItem("riskatlas_unlock_state");
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        setUnlockState(parsed || {});
+      } else {
+        setUnlockState({});
+      }
+    } catch (error) {
+      console.error("Failed to refresh unlock state:", error);
+      setUnlockState({});
+    }
   }
 
   if (!mounted) {
@@ -824,10 +862,15 @@ export default function RiskAtlasReportPage() {
               <div className="mt-6">
                 {isProUnlocked ? (
                   <div className="space-y-3">
-                    <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-300">
-                      {isExecutionUnlocked
-                        ? "Executive Intelligence Layer is active on this browser."
-                        : "Professional access is active on this browser."}
+                    <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/10 px-4 py-3">
+                      <div className="text-sm font-semibold text-emerald-300">
+                        {isExecutionUnlocked
+                          ? "Executive Intelligence Layer is active on this browser."
+                          : "Professional access is active on this browser."}
+                      </div>
+                      <div className="mt-1 text-xs leading-6 text-emerald-200/80">
+                        This is a browser access status notice, not a clickable action.
+                      </div>
                     </div>
 
                     {isExecutionUnlocked ? (
@@ -842,10 +885,20 @@ export default function RiskAtlasReportPage() {
 
                         <button
                           onClick={downloadExecutionPdf}
-                          className="block w-full rounded-xl border border-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/5"
+                          disabled={isDownloadingExecution}
+                          className="block w-full rounded-xl border border-white/10 px-5 py-3 text-sm font-semibold text-white hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-60"
                         >
-                          Download Executive Report
+                          {isDownloadingExecution ? "Preparing Executive Report..." : "Download Executive Report"}
                         </button>
+
+                        {canShowPaymentConfirmation && (
+                          <Link
+                            href={`/riskatlas/success?session_id=${unlockState.lastSessionId}`}
+                            className="block w-full rounded-xl border border-cyan-400/20 bg-cyan-400/10 px-5 py-3 text-center text-sm font-semibold text-cyan-200 hover:bg-cyan-400/15"
+                          >
+                            View Payment Confirmation
+                          </Link>
+                        )}
 
                         <div className="text-xs text-slate-500">
                           The second layer is positioned as a management-facing intelligence block rather than a longer version of the same report.
@@ -855,15 +908,39 @@ export default function RiskAtlasReportPage() {
                       <>
                         <button
                           onClick={downloadProfessionalPdf}
-                          className="block w-full rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-200"
+                          disabled={isDownloadingProfessional}
+                          className="block w-full rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-60"
                         >
-                          Download PDF Report
+                          {isDownloadingProfessional ? "Preparing PDF..." : "Download PDF Report"}
                         </button>
 
+                        {canShowPaymentConfirmation && (
+                          <Link
+                            href={`/riskatlas/success?session_id=${unlockState.lastSessionId}`}
+                            className="block w-full rounded-xl border border-cyan-400/20 bg-cyan-400/10 px-5 py-3 text-center text-sm font-semibold text-cyan-200 hover:bg-cyan-400/15"
+                          >
+                            View Payment Confirmation
+                          </Link>
+                        )}
+
                         <div className="text-xs text-slate-500">
-                          PDF export is currently the professional report handoff layer.
+                          PDF export is the report handoff action. Downloading the file does not redirect to the success page.
                         </div>
                       </>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={handleRefreshBrowserUnlockState}
+                      className="w-full rounded-xl border border-white/10 px-5 py-3 text-sm font-medium text-slate-300 hover:bg-white/5"
+                    >
+                      Refresh Browser Access Status
+                    </button>
+
+                    {downloadNotice && (
+                      <div className="rounded-2xl border border-cyan-400/20 bg-cyan-400/10 px-4 py-3 text-sm text-cyan-200">
+                        {downloadNotice}
+                      </div>
                     )}
                   </div>
                 ) : (
@@ -878,7 +955,7 @@ export default function RiskAtlasReportPage() {
               </div>
 
               <div className="mt-4 text-xs leading-6 text-slate-500">
-                Checkout is handled by Stripe Hosted Checkout. Access is currently unlocked on this browser via local storage.
+                Checkout is handled by Stripe Hosted Checkout. A success page appears immediately after payment return. Browser unlock status is then stored locally for continued access on this device.
               </div>
             </div>
 
@@ -1248,10 +1325,20 @@ export default function RiskAtlasReportPage() {
 
                 <button
                   onClick={downloadExecutionPdf}
-                  className="inline-flex items-center justify-center rounded-2xl border border-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/5"
+                  disabled={isDownloadingExecution}
+                  className="inline-flex items-center justify-center rounded-2xl border border-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  Download Executive Report
+                  {isDownloadingExecution ? "Preparing Executive Report..." : "Download Executive Report"}
                 </button>
+
+                {canShowPaymentConfirmation && (
+                  <Link
+                    href={`/riskatlas/success?session_id=${unlockState.lastSessionId}`}
+                    className="inline-flex items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-400/10 px-5 py-3 text-sm font-semibold text-cyan-200 transition hover:bg-cyan-400/15"
+                  >
+                    View Payment Confirmation
+                  </Link>
+                )}
               </div>
             </div>
           </div>
