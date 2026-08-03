@@ -1,6 +1,14 @@
 import { NextRequest } from "next/server";
 import { PDFDocument, PDFPage, StandardFonts, rgb } from "pdf-lib";
 import type { RiskScanResult } from "@/lib/risk-types";
+import {
+  getDimensionInterpretation,
+  getExecutionActions as getScanExecutionActions,
+  getOverallInterpretation,
+  getPreferredRecommendations,
+  getPreferredRiskFactors,
+  getStructuredAdvisory,
+} from "@/lib/risk-copy";
 
 type RGB = [number, number, number];
 
@@ -60,59 +68,23 @@ function getLevelColor(level: string): RGB {
 }
 
 function getExecutiveSummary(data: RiskScanResult) {
-  return `${data.summary} RiskAtlas records an overall exposure score of ${data.risk_score}, grade ${data.grade}, and a ${data.level.toLowerCase()} exposure level for this assessment.`;
+  return getOverallInterpretation(data);
 }
 
-function getStrategicInterpretation() {
-  return `The current exposure profile suggests that companies operating within the selected market environment should consider reinforcing supply chain resilience in a targeted manner. Priority attention should be given to supplier diversification, logistics route redundancy, and active monitoring of policy or operational developments. While the overall profile does not necessarily imply immediate disruption, structural dependencies may amplify exposure under adverse scenarios.`;
+function getStrategicInterpretation(data: RiskScanResult) {
+  return getStructuredAdvisory(data);
 }
 
 function getStrategicView(data: RiskScanResult) {
-  const lvl = data.level.toLowerCase();
-
-  if (lvl === "high" || lvl === "critical") {
-    return "The route should be treated as a controlled execution channel rather than a default expansion corridor. Management priority should be placed on exposure containment, execution resilience, and protection of commercial downside before scaling commitments.";
-  }
-
-  if (lvl === "moderate") {
-    return "The route should be treated as a managed operating channel. Priority should be placed on maintaining execution reliability, protecting margin assumptions, and reinforcing resilience before wider commercial expansion.";
-  }
-
-  return "The route remains commercially usable, but it should not be treated as frictionless. Priority should be placed on disciplined execution, monitoring continuity signals, and preserving reliability as transaction volume grows.";
+  return getStructuredAdvisory(data);
 }
 
 function getTacticalFocus(data: RiskScanResult) {
-  if (data.suggested_risk_awareness.length > 0) {
-    return data.suggested_risk_awareness;
-  }
-
-  const base = [
-    "Strengthen supplier readiness validation before commitment.",
-    "Protect margin assumptions under cost and timing variability.",
-    "Introduce delivery buffers for operational uncertainty.",
-    "Monitor execution volatility instead of relying on baseline assumptions.",
-  ];
-
-  if (data.level.toLowerCase() === "high" || data.level.toLowerCase() === "critical") {
-    base.push("Escalate exception handling and leadership review before scaling exposure.");
-  }
-
-  return base;
+  return getPreferredRecommendations(data);
 }
 
 function getExecutionActions(data: RiskScanResult) {
-  const base = [
-    "Conduct secondary validation of supplier production stability.",
-    "Adjust customer-facing lead-time expectations where required.",
-    "Prepare alternative routing scenarios for sensitive shipments.",
-    "Avoid single-point dependency in execution planning.",
-  ];
-
-  if (data.level.toLowerCase() === "high" || data.level.toLowerCase() === "critical") {
-    base.push("Trigger pre-shipment escalation review for material exposure changes.");
-  }
-
-  return base;
+  return getScanExecutionActions(data);
 }
 
 function getRiskConsiderations() {
@@ -781,7 +753,7 @@ export async function POST(req: NextRequest) {
       });
 
       y -= 22;
-      drawParagraph(page, getStrategicInterpretation(), marginX, y, 92, 11, COLORS.text, 7);
+      drawParagraph(page, getStrategicInterpretation(data), marginX, y, 92, 11, COLORS.text, 7);
 
       drawFooter(page, 2);
     }
@@ -802,11 +774,11 @@ export async function POST(req: NextRequest) {
         }
       );
 
-      const rows = [
-        ["Country Risk", String(data.breakdown.country_risk), "Moderate macro and operating exposure"],
-        ["Industry Sensitivity", String(data.breakdown.industry_risk), "Sector-specific material and compliance sensitivity"],
-        ["Logistics Complexity", String(data.breakdown.logistics_risk), "Transport and corridor concentration exposure"],
-        ["Event Disruption", String(data.breakdown.event_risk), "Policy and short-term disruption vulnerability"],
+      const rows: [string, string, string][] = [
+        ["Country Risk", String(data.breakdown.country_risk), getDimensionInterpretation(data, "country_risk", true)],
+        ["Industry Sensitivity", String(data.breakdown.industry_risk), getDimensionInterpretation(data, "industry_risk", true)],
+        ["Logistics Complexity", String(data.breakdown.logistics_risk), getDimensionInterpretation(data, "logistics_risk", true)],
+        ["Event Disruption", String(data.breakdown.event_risk), getDimensionInterpretation(data, "event_risk", true)],
       ];
 
       drawTable(
@@ -846,23 +818,11 @@ export async function POST(req: NextRequest) {
 
       let y = 724;
 
-      const signalBlocks = [
-        {
-          title: "Supplier Concentration",
-          text:
-            "Supply chains within the selected industry may remain dependent on a limited number of upstream suppliers, which can increase vulnerability to disruptions in availability, lead times, or pricing dynamics.",
-        },
-        {
-          title: "Logistics Corridor Exposure",
-          text:
-            "Transportation flows may rely on a relatively concentrated set of corridors, ports, or maritime routes, introducing exposure to congestion, chokepoints, and continuity pressures.",
-        },
-        {
-          title: "Regulatory and Operating Variability",
-          text:
-            "The operating environment may be influenced by evolving policy direction, compliance requirements, or intervention risk, which can affect planning assumptions and execution predictability.",
-        },
-      ];
+      const scanFactors = getPreferredRiskFactors(data);
+      const signalBlocks = scanFactors.slice(0, 3).map((factor, index) => ({
+        title: `Scan-derived signal ${String(index + 1).padStart(2, "0")}`,
+        text: `${factor} This signal is evaluated in the context of ${data.industry} activity in ${data.country}.`,
+      }));
 
       signalBlocks.forEach((block) => {
         page.drawRectangle({
@@ -896,7 +856,7 @@ export async function POST(req: NextRequest) {
         color: rgb(...COLORS.text),
       });
 
-      drawBulletList(page, data.risk_factors, marginX, 362, 80);
+      drawBulletList(page, scanFactors, marginX, 362, 80);
 
       drawFooter(page, 4);
     }
@@ -910,7 +870,7 @@ export async function POST(req: NextRequest) {
 
       y = drawParagraph(
         page,
-        "This section translates the current exposure profile into a structured recommendation layer designed to support practical commercial and operating decisions.",
+        getOverallInterpretation(data),
         marginX,
         y,
         92,

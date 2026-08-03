@@ -3,6 +3,14 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import type { RiskScanResult } from "@/lib/risk-types";
+import {
+  getDimensionInterpretation,
+  getExecutionActions,
+  getOverallInterpretation,
+  getPreferredRecommendations,
+  getPreferredRiskFactors,
+  getStructuredAdvisory,
+} from "@/lib/risk-copy";
 
 type UnlockState = {
   pro?: boolean;
@@ -1187,7 +1195,7 @@ export default function RiskAtlasReportPage() {
                   Professional Report · {scanResult.industry} · {scanResult.country}
                 </h3>
                 <p className="mt-3 text-sm leading-7 text-slate-400">
-                  {scanResult.summary}
+                  {getOverallInterpretation(scanResult)}
                 </p>
 
                 <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
@@ -1218,24 +1226,24 @@ export default function RiskAtlasReportPage() {
                 <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
                   <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Strategic View</div>
                   <p className="mt-4 text-sm leading-7 text-slate-300">
-                    {verdict.description}
+                    {getStructuredAdvisory(scanResult)}
                   </p>
                 </div>
 
                 <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
                   <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Dimension Breakdown</div>
-                  <div className="mt-4 space-y-3 text-sm text-slate-300">
-                    <div className="flex justify-between gap-4"><span>Country risk</span><strong>{scanResult.breakdown.country_risk}</strong></div>
-                    <div className="flex justify-between gap-4"><span>Industry sensitivity</span><strong>{scanResult.breakdown.industry_risk}</strong></div>
-                    <div className="flex justify-between gap-4"><span>Logistics complexity</span><strong>{scanResult.breakdown.logistics_risk}</strong></div>
-                    <div className="flex justify-between gap-4"><span>Event disruption</span><strong>{scanResult.breakdown.event_risk}</strong></div>
+                  <div className="mt-4 space-y-4 text-sm text-slate-300">
+                    <div><strong>Country risk</strong><p className="mt-1 leading-6 text-slate-400">{getDimensionInterpretation(scanResult, "country_risk", true)}</p></div>
+                    <div><strong>Industry sensitivity</strong><p className="mt-1 leading-6 text-slate-400">{getDimensionInterpretation(scanResult, "industry_risk", true)}</p></div>
+                    <div><strong>Logistics complexity</strong><p className="mt-1 leading-6 text-slate-400">{getDimensionInterpretation(scanResult, "logistics_risk", true)}</p></div>
+                    <div><strong>Event disruption</strong><p className="mt-1 leading-6 text-slate-400">{getDimensionInterpretation(scanResult, "event_risk", true)}</p></div>
                   </div>
                 </div>
 
                 <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
                   <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Key Risk Factors</div>
                   <div className="mt-4 space-y-3 text-sm text-slate-300">
-                    {scanResult.risk_factors.map((factor) => (
+                    {getPreferredRiskFactors(scanResult).map((factor) => (
                       <div key={factor}>• {factor}</div>
                     ))}
                   </div>
@@ -1244,7 +1252,7 @@ export default function RiskAtlasReportPage() {
                 <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/5 p-5">
                   <div className="text-xs uppercase tracking-[0.18em] text-emerald-300">Recommended Actions</div>
                   <div className="mt-4 space-y-3 text-sm text-slate-300">
-                    {scanResult.suggested_risk_awareness.map((item, index) => (
+                    {getPreferredRecommendations(scanResult).map((item, index) => (
                       <div key={item}>{index + 1}. {item}</div>
                     ))}
                   </div>
@@ -1354,7 +1362,7 @@ export default function RiskAtlasReportPage() {
               <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
                 <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Current Scan Factors</div>
                 <div className="mt-4 space-y-3 text-sm leading-7 text-slate-300">
-                  {scanResult.risk_factors.map((factor) => (
+                  {getPreferredRiskFactors(scanResult).map((factor) => (
                     <div key={factor}>• {factor}</div>
                   ))}
                 </div>
@@ -1362,7 +1370,7 @@ export default function RiskAtlasReportPage() {
               <div className="rounded-3xl border border-emerald-400/20 bg-emerald-400/5 p-6">
                 <div className="text-xs uppercase tracking-[0.18em] text-emerald-300">Current Scan Recommendations</div>
                 <div className="mt-4 space-y-3 text-sm leading-7 text-slate-300">
-                  {scanResult.suggested_risk_awareness.map((item, index) => (
+                  {getExecutionActions(scanResult).map((item, index) => (
                     <div key={item}>{index + 1}. {item}</div>
                   ))}
                 </div>
