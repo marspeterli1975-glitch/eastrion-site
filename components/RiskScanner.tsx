@@ -14,7 +14,7 @@ export default function RiskScanner() {
       industry,
     }).toString();
 
-    router.push(`/riskatlas?${query}`);
+    router.push(`/riskatlas/report?${query}`);
   }
 
   return (
@@ -99,7 +99,7 @@ export default function RiskScanner() {
         </h3>
 
         <p style={{ margin: 0, fontSize: "18px", color: "#111827", lineHeight: 1.7 }}>
-          Click the button to open the full RiskAtlas scan page with your selected country and industry.
+          Click the button to open the working RiskAtlas assessment with your selected country and industry prefilled.
         </p>
       </div>
     </section>

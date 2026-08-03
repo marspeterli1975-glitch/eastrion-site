@@ -92,7 +92,7 @@ export default function SolutionsPage() {
             marginTop: "24px",
           }}
         >
-          <Link href="/riskatlas" style={primaryBtn}>
+          <Link href="/riskatlas/report" style={primaryBtn}>
             Start Risk Assessment
           </Link>
 

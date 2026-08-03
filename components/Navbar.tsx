@@ -110,7 +110,7 @@ export default function Navbar() {
 
         <div style={{ minWidth: "fit-content" }}>
           <Link
-            href="/riskatlas"
+            href="/riskatlas/report"
             style={{
               display: "inline-flex",
               alignItems: "center",

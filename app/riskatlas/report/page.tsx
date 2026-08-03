@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import type { RiskScanResult } from "@/lib/risk-types";
 
 type UnlockState = {
   pro?: boolean;
@@ -460,6 +461,11 @@ function MatrixTable({
 export default function RiskAtlasReportPage() {
   const [mounted, setMounted] = useState(false);
   const [unlockState, setUnlockState] = useState<UnlockState>({});
+  const [country, setCountry] = useState("China");
+  const [industry, setIndustry] = useState("Oil");
+  const [scanResult, setScanResult] = useState<RiskScanResult | null>(null);
+  const [isScanning, setIsScanning] = useState(false);
+  const [scanError, setScanError] = useState("");
   const [isPaying, setIsPaying] = useState(false);
   const [isDownloadingProfessional, setIsDownloadingProfessional] = useState(false);
   const [isDownloadingExecution, setIsDownloadingExecution] = useState(false);
@@ -474,8 +480,25 @@ export default function RiskAtlasReportPage() {
         const parsed = JSON.parse(raw);
         setUnlockState(parsed || {});
       }
+
+      const params = new URLSearchParams(window.location.search);
+      const queryCountry = params.get("country");
+      const queryIndustry = params.get("industry");
+
+      if (queryCountry) setCountry(queryCountry);
+      if (queryIndustry) setIndustry(queryIndustry);
+
+      if (!queryCountry && !queryIndustry) {
+        const savedSignal = sessionStorage.getItem("riskatlas_initial_signal");
+        if (savedSignal) {
+          const parsedSignal = JSON.parse(savedSignal) as RiskScanResult;
+          setScanResult(parsedSignal);
+          setCountry(parsedSignal.country);
+          setIndustry(parsedSignal.industry);
+        }
+      }
     } catch (error) {
-      console.error("Failed to read unlock state:", error);
+      console.error("Failed to restore RiskAtlas browser state:", error);
     }
   }, []);
 
@@ -485,13 +508,60 @@ export default function RiskAtlasReportPage() {
     return () => clearTimeout(timer);
   }, [downloadNotice]);
 
-  const overallScore = 38;
+  const overallScore = scanResult?.risk_score ?? 0;
   const band = useMemo(() => getRiskBand(overallScore), [overallScore]);
   const verdict = useMemo(() => getDecisionVerdict(overallScore), [overallScore]);
 
   const isProUnlocked = !!unlockState?.pro;
   const isExecutionUnlocked = !!unlockState?.execution;
   const canShowPaymentConfirmation = !!unlockState?.lastSessionId;
+
+  async function handleRiskScan(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const cleanCountry = country.trim();
+    const cleanIndustry = industry.trim();
+
+    if (!cleanCountry || !cleanIndustry) {
+      setScanError("Country and industry are required.");
+      return;
+    }
+
+    try {
+      setIsScanning(true);
+      setScanError("");
+
+      const response = await fetch("/api/risk-scan", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          country: cleanCountry,
+          industry: cleanIndustry,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data?.error || "Unable to run the risk scan.");
+      }
+
+      const result = data as RiskScanResult;
+      setScanResult(result);
+      sessionStorage.setItem("riskatlas_initial_signal", JSON.stringify(result));
+    } catch (error) {
+      console.error("Initial risk scan failed:", error);
+      setScanError(
+        error instanceof Error
+          ? error.message
+          : "Unable to run the risk scan. Please try again."
+      );
+    } finally {
+      setIsScanning(false);
+    }
+  }
 
   async function handleUnlockProfessional() {
     try {
@@ -751,12 +821,78 @@ export default function RiskAtlasReportPage() {
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-10">
+        <div className="rounded-3xl border border-cyan-400/20 bg-white/[0.04] p-6 md:p-8">
+          <div className="max-w-3xl">
+            <div className="text-xs font-medium uppercase tracking-[0.18em] text-cyan-300">
+              Initial Risk Signal
+            </div>
+            <h2 className="mt-3 text-2xl font-semibold md:text-3xl">
+              Assess a country and industry exposure
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-slate-300 md:text-base">
+              Enter the primary country and industry for the exposure you want to review. RiskAtlas will use the existing country, industry, logistics, and event risk model to generate an initial signal.
+            </p>
+          </div>
+
+          <form
+            onSubmit={handleRiskScan}
+            className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-[1fr_1fr_auto] lg:items-end"
+          >
+            <label className="grid gap-2 text-sm font-medium text-slate-200">
+              Country
+              <input
+                type="text"
+                value={country}
+                onChange={(event) => setCountry(event.target.value)}
+                placeholder="e.g. China, India, Germany"
+                autoComplete="country-name"
+                className="min-w-0 rounded-2xl border border-white/10 bg-black/20 px-4 py-3.5 text-base text-white outline-none transition placeholder:text-slate-600 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/10"
+              />
+            </label>
+
+            <label className="grid gap-2 text-sm font-medium text-slate-200">
+              Industry
+              <input
+                type="text"
+                value={industry}
+                onChange={(event) => setIndustry(event.target.value)}
+                placeholder="e.g. Electronics, Automotive, Chemicals"
+                className="min-w-0 rounded-2xl border border-white/10 bg-black/20 px-4 py-3.5 text-base text-white outline-none transition placeholder:text-slate-600 focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/10"
+              />
+            </label>
+
+            <button
+              type="submit"
+              disabled={isScanning}
+              className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-cyan-400 px-6 py-3.5 text-base font-semibold text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-70 md:col-span-2 lg:col-span-1"
+            >
+              {isScanning ? "Running Risk Scan..." : "Generate Initial Signal"}
+            </button>
+          </form>
+
+          <p className="mt-4 text-xs leading-6 text-slate-500">
+            Logistics and event exposure are included through the current model defaults for the selected country and industry.
+          </p>
+
+          {scanError ? (
+            <div className="mt-5 rounded-2xl border border-red-400/20 bg-red-400/10 px-4 py-3 text-sm text-red-200">
+              {scanError}
+            </div>
+          ) : null}
+        </div>
+      </section>
+
+      {scanResult && (
+        <>
+      <section className="mx-auto max-w-7xl px-6 py-10">
         <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
           <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 md:p-8">
             <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
               <div>
-                <div className="text-xs uppercase tracking-[0.18em] text-slate-400">Executive result</div>
-                <h2 className="mt-2 text-2xl font-semibold">Initial Supply Chain Risk Reading</h2>
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-400">Initial Risk Signal</div>
+                <h2 className="mt-2 text-2xl font-semibold">
+                  {scanResult.industry} exposure in {scanResult.country}
+                </h2>
 
                 <div className={`mt-4 rounded-2xl border px-4 py-4 ${verdict.box}`}>
                   <div className={`text-sm font-semibold ${verdict.tone}`}>
@@ -768,9 +904,7 @@ export default function RiskAtlasReportPage() {
                 </div>
 
                 <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-300">
-                  The current route sits in a guarded zone. It is not a breakdown scenario, but it is not a clean
-                  low-risk channel either. The main commercial implication is that margin planning, timing confidence,
-                  and execution resilience are not yet strong enough to support aggressive commitments without further validation.
+                  {scanResult.summary}
                 </p>
               </div>
 
@@ -944,13 +1078,21 @@ export default function RiskAtlasReportPage() {
                     )}
                   </div>
                 ) : (
-                  <button
-                    onClick={handleUnlockProfessional}
-                    disabled={isPaying}
-                    className="w-full rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    {isPaying ? "Redirecting to Checkout..." : "Unlock Professional Report"}
-                  </button>
+                  <div className="space-y-3">
+                    <button
+                      onClick={handleUnlockProfessional}
+                      disabled={isPaying}
+                      className="w-full rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      {isPaying ? "Redirecting to Checkout..." : "Unlock Full Professional Report — US$49"}
+                    </button>
+                    <Link
+                      href="/contact"
+                      className="block w-full rounded-xl border border-white/10 px-5 py-3 text-center text-sm font-semibold text-slate-200 transition hover:bg-white/5 hover:text-white"
+                    >
+                      Contact Eastrion
+                    </Link>
+                  </div>
                 )}
               </div>
 
@@ -974,33 +1116,36 @@ export default function RiskAtlasReportPage() {
       <section className="mx-auto max-w-7xl px-6 pb-10">
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6">
-            <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Preview insight 01</div>
-            <h3 className="mt-3 text-lg font-semibold">Primary reading</h3>
+            <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Signal summary</div>
+            <h3 className="mt-3 text-lg font-semibold">Current exposure</h3>
             <p className="mt-3 text-sm leading-7 text-slate-300">
-              The current risk level is not severe enough to force immediate avoidance, but it is high enough to justify
-              tighter controls around supplier reliability, timing exposure, and cost discipline.
+              {scanResult.summary}
             </p>
           </div>
 
           <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6">
-            <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Preview insight 02</div>
-            <h3 className="mt-3 text-lg font-semibold">Commercial implication</h3>
-            <p className="mt-3 text-sm leading-7 text-slate-300">
-              A guarded route can still be commercially workable, but quoted margins and promised timelines should not be
-              positioned as if the corridor were stable and low-volatility.
-            </p>
+            <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Top risk factors</div>
+            <h3 className="mt-3 text-lg font-semibold">What drives the signal</h3>
+            <div className="mt-3 space-y-2 text-sm leading-7 text-slate-300">
+              {scanResult.risk_factors.slice(0, 3).map((factor) => (
+                <div key={factor}>• {factor}</div>
+              ))}
+            </div>
           </div>
 
           <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6">
-            <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Preview insight 03</div>
-            <h3 className="mt-3 text-lg font-semibold">Decision posture</h3>
-            <p className="mt-3 text-sm leading-7 text-slate-300">
-              Proceeding is possible, but the route should be treated as a managed decision rather than a default one.
-              That distinction is where premium interpretation starts to matter.
-            </p>
+            <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Suggested awareness</div>
+            <h3 className="mt-3 text-lg font-semibold">Immediate monitoring priorities</h3>
+            <div className="mt-3 space-y-2 text-sm leading-7 text-slate-300">
+              {scanResult.suggested_risk_awareness.slice(0, 3).map((item) => (
+                <div key={item}>• {item}</div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
+        </>
+      )}
 
       <section className="mx-auto max-w-7xl px-6 pb-12">
         <div className="rounded-3xl border border-white/10 bg-[#0a1526] p-6 md:p-8">

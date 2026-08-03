@@ -115,7 +115,7 @@ export default function HomePage() {
                 marginTop: "28px",
               }}
             >
-              <Link href="/riskatlas" style={primaryBtn}>
+              <Link href="/riskatlas/report" style={primaryBtn}>
                 Start Risk Assessment
               </Link>
 
@@ -151,6 +151,7 @@ export default function HomePage() {
                   "linear-gradient(90deg, rgba(15, 35, 87, 0.28), rgba(8, 145, 178, 0.12), rgba(34, 197, 94, 0.08))",
               }}
             >
+              {/* Review this risk-signal block monthly to keep dates and commercial context current. */}
               <div
                 style={{
                   fontSize: "13px",
@@ -161,7 +162,7 @@ export default function HomePage() {
                   marginBottom: "12px",
                 }}
               >
-                Current risk signals · March 2026
+                Current risk signals · August 2026
               </div>
 
               <div
@@ -172,25 +173,23 @@ export default function HomePage() {
                 }}
               >
                 <div style={signalCardStyle}>
-                  <div style={signalDateStyle}>2026-03-28</div>
-                  <div style={signalTitleStyle}>Red Sea Corridor Volatility</div>
+                  <div style={signalDateStyle}>2026-08-03</div>
+                  <div style={signalTitleStyle}>Asia Export Freight Volatility</div>
                   <div style={signalTextStyle}>
-                    Transit reliability remains under pressure as rerouting
-                    continues to extend time and cost exposure.
+                    Rates and available space across Asia–Americas and Asia–Europe lanes remain sensitive to demand and carrier capacity shifts.
                   </div>
                   <div style={signalLayerStyle}>
-                    Logistics · Route · Execution
+                    Freight · Capacity · Cost
                   </div>
                 </div>
 
                 <div style={signalCardStyle}>
-                  <div style={signalDateStyle}>2026-03-27</div>
+                  <div style={signalDateStyle}>2026-08-02</div>
                   <div style={signalTitleStyle}>
-                    Panama Canal Capacity Constraint
+                    East–West Schedule Reliability
                   </div>
                   <div style={signalTextStyle}>
-                    Reduced vessel throughput continues to affect Asia-linked
-                    routing stability and timing confidence.
+                    Congestion, blank sailings and route adjustments continue to widen transit-time ranges for China-linked shipments.
                   </div>
                   <div style={signalLayerStyle}>
                     Corridor · Timing · Continuity
@@ -198,14 +197,13 @@ export default function HomePage() {
                 </div>
 
                 <div style={signalCardStyle}>
-                  <div style={signalDateStyle}>2026-03-26</div>
-                  <div style={signalTitleStyle}>EU Compliance Tightening</div>
+                  <div style={signalDateStyle}>2026-08-01</div>
+                  <div style={signalTitleStyle}>EU Export Documentation Pressure</div>
                   <div style={signalTextStyle}>
-                    Documentation and environmental requirements continue to
-                    increase entry-side execution risk for exporters.
+                    CBAM-era data and authorization requirements are increasing the value of earlier documentation checks for exporters.
                   </div>
                   <div style={signalLayerStyle}>
-                    Regulatory · Market Access · Execution
+                    Compliance · Documentation · Market Access
                   </div>
                 </div>
               </div>
@@ -713,7 +711,7 @@ export default function HomePage() {
               gap: "14px",
             }}
           >
-            <Link href="/riskatlas" style={ctaPrimaryWide}>
+            <Link href="/riskatlas/report" style={ctaPrimaryWide}>
               Start Risk Assessment
             </Link>
 

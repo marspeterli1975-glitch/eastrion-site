@@ -57,7 +57,7 @@ export async function POST(req: Request) {
         plan,
       },
       success_url: `${siteUrl}/riskatlas/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${siteUrl}/riskatlas?payment=cancelled`,
+      cancel_url: `${siteUrl}/riskatlas/cancel`,
       payment_method_types: ["card"],
     });
 
