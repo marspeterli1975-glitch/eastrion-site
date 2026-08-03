@@ -113,6 +113,15 @@ function getDecisionVerdict(score: number) {
   };
 }
 
+function getReportFileLabel(result: RiskScanResult) {
+  return (
+    `${result.country}-${result.industry}`
+      .replace(/[^a-z0-9]+/gi, "-")
+      .replace(/^-+|-+$/g, "")
+      .toLowerCase() || "assessment"
+  );
+}
+
 const executivePainPoints = [
   {
     id: 1,
@@ -564,6 +573,15 @@ export default function RiskAtlasReportPage() {
   }
 
   async function handleUnlockProfessional() {
+    if (!scanResult) {
+      setScanError("Generate an Initial Risk Signal before unlocking the Professional Report.");
+      document.getElementById("initial-risk-signal")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+      return;
+    }
+
     try {
       setIsPaying(true);
 
@@ -601,28 +619,21 @@ export default function RiskAtlasReportPage() {
   }
 
   async function downloadProfessionalPdf() {
+    if (!scanResult) {
+      setScanError("Generate an Initial Risk Signal before downloading the Professional Report.");
+      document.getElementById("initial-risk-signal")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+      return;
+    }
+
     try {
       setIsDownloadingProfessional(true);
 
       const payload = {
-        country: "China - India",
-        industry: "Battery Materials",
-        risk_score: 38,
-        grade: "B",
-        level: "Guarded",
-        breakdown: {
-          country_risk: 42,
-          industry_risk: 36,
-          logistics_risk: 48,
-          event_risk: 30,
-        },
-        risk_factors: [
-          "Supplier concentration risk",
-          "Logistics corridor dependency",
-          "Regulatory variability",
-        ],
-        disclaimer:
-          "This report is for analytical purposes only and does not constitute legal, financial, or investment advice.",
+        ...scanResult,
+        report_variant: "professional",
       };
 
       const res = await fetch("/api/risk-report", {
@@ -645,7 +656,7 @@ export default function RiskAtlasReportPage() {
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = "riskatlas-report.pdf";
+      a.download = `riskatlas-report-${getReportFileLabel(scanResult)}.pdf`;
       a.click();
 
       window.URL.revokeObjectURL(url);
@@ -659,30 +670,21 @@ export default function RiskAtlasReportPage() {
   }
 
   async function downloadExecutionPdf() {
+    if (!scanResult) {
+      setScanError("Generate an Initial Risk Signal before downloading the Execution Report.");
+      document.getElementById("initial-risk-signal")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+      return;
+    }
+
     try {
       setIsDownloadingExecution(true);
 
       const payload = {
-        country: "China - India",
-        industry: "Battery Materials",
-        risk_score: 38,
-        grade: "B",
-        level: "Guarded",
-        breakdown: {
-          country_risk: 42,
-          industry_risk: 36,
-          logistics_risk: 48,
-          event_risk: 30,
-        },
-        risk_factors: [
-          "Supplier concentration risk",
-          "Logistics corridor dependency",
-          "Regulatory variability",
-          "Executive intelligence layer enabled",
-          "Impact matrix and response framework included",
-        ],
-        disclaimer:
-          "This executive-intelligence report is for analytical and operating-planning purposes only and does not constitute legal, financial, engineering, or investment advice.",
+        ...scanResult,
+        report_variant: "execution",
       };
 
       const res = await fetch("/api/risk-report", {
@@ -705,7 +707,7 @@ export default function RiskAtlasReportPage() {
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = "riskatlas-executive-intelligence-report.pdf";
+      a.download = `riskatlas-executive-intelligence-${getReportFileLabel(scanResult)}.pdf`;
       a.click();
 
       window.URL.revokeObjectURL(url);
@@ -820,7 +822,7 @@ export default function RiskAtlasReportPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-10">
+      <section id="initial-risk-signal" className="mx-auto max-w-7xl scroll-mt-24 px-6 py-10">
         <div className="rounded-3xl border border-cyan-400/20 bg-white/[0.04] p-6 md:p-8">
           <div className="max-w-3xl">
             <div className="text-xs font-medium uppercase tracking-[0.18em] text-cyan-300">
@@ -1155,73 +1157,96 @@ export default function RiskAtlasReportPage() {
                 {isExecutionUnlocked ? "Professional report complete" : "Professional report layer"}
               </div>
               <h2 className="mt-2 text-2xl font-semibold">
-                {isExecutionUnlocked ? "Professional report concludes here" : "Paid content block"}
+                {scanResult
+                  ? `${scanResult.industry} in ${scanResult.country}`
+                  : "Generate a signal to populate the Professional Report"}
               </h2>
               <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-300">
-                {isExecutionUnlocked
-                  ? "For 149 users, the advisory report remains the base layer. The next section is intentionally presented as a separate executive intelligence block rather than additional report text."
-                  : "This section is intentionally designed to make the difference between free preview and paid report obvious. The paid layer should feel materially more structured than the preview layer."}
+                {scanResult
+                  ? `This paid layer uses the same ${scanResult.risk_score} / ${scanResult.grade} / ${scanResult.level} signal shown in the free assessment above.`
+                  : "Run the Initial Risk Signal first. If access is already unlocked, the report will populate immediately after the scan."}
               </p>
             </div>
 
-            {!isProUnlocked && (
+            {(!isProUnlocked || !scanResult) && (
               <div className="rounded-2xl border border-amber-400/20 bg-amber-400/10 px-4 py-2 text-sm text-amber-300">
-                Locked until Professional Report is purchased
+                {!scanResult
+                  ? "Initial Risk Signal required"
+                  : "Locked until Professional Report is purchased"}
               </div>
             )}
           </div>
 
-          {isProUnlocked ? (
+          {isProUnlocked && scanResult ? (
             <div className="mt-8 space-y-6">
               <div className="rounded-3xl border border-cyan-400/20 bg-cyan-400/5 p-6 md:p-8">
                 <div className="text-xs uppercase tracking-[0.18em] text-cyan-300">
                   Structured Advisory Layer
                 </div>
                 <h3 className="mt-2 text-xl font-semibold">
-                  Consulting-Style Recommendation Output
+                  Professional Report · {scanResult.industry} · {scanResult.country}
                 </h3>
                 <p className="mt-3 text-sm leading-7 text-slate-400">
-                  This section translates the current exposure profile into a structured recommendation layer designed to support practical commercial and operating decisions.
+                  {scanResult.summary}
                 </p>
+
+                <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Country</div>
+                    <div className="mt-2 font-semibold text-white">{scanResult.country}</div>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Industry</div>
+                    <div className="mt-2 font-semibold text-white">{scanResult.industry}</div>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Score</div>
+                    <div className="mt-2 font-semibold text-white">{scanResult.risk_score}</div>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Grade</div>
+                    <div className="mt-2 font-semibold text-white">{scanResult.grade}</div>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                    <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Level</div>
+                    <div className="mt-2 font-semibold text-white">{scanResult.level}</div>
+                  </div>
+                </div>
               </div>
 
               <div className="grid gap-6 lg:grid-cols-2">
                 <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
                   <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Strategic View</div>
                   <p className="mt-4 text-sm leading-7 text-slate-300">
-                    The route remains commercially usable, but it should not be treated as frictionless.
-                    Priority should be placed on disciplined execution, monitoring continuity signals,
-                    and preserving reliability as transaction volume grows.
+                    {verdict.description}
                   </p>
                 </div>
 
                 <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-                  <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Tactical Focus</div>
+                  <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Dimension Breakdown</div>
                   <div className="mt-4 space-y-3 text-sm text-slate-300">
-                    <div>• Strengthen supplier readiness validation before commitment.</div>
-                    <div>• Protect margin assumptions under cost and timing variability.</div>
-                    <div>• Introduce delivery buffers for operational uncertainty.</div>
-                    <div>• Monitor execution volatility instead of relying on baseline assumptions.</div>
+                    <div className="flex justify-between gap-4"><span>Country risk</span><strong>{scanResult.breakdown.country_risk}</strong></div>
+                    <div className="flex justify-between gap-4"><span>Industry sensitivity</span><strong>{scanResult.breakdown.industry_risk}</strong></div>
+                    <div className="flex justify-between gap-4"><span>Logistics complexity</span><strong>{scanResult.breakdown.logistics_risk}</strong></div>
+                    <div className="flex justify-between gap-4"><span>Event disruption</span><strong>{scanResult.breakdown.event_risk}</strong></div>
                   </div>
                 </div>
 
                 <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
-                  <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Execution Actions</div>
+                  <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Key Risk Factors</div>
                   <div className="mt-4 space-y-3 text-sm text-slate-300">
-                    <div>1. Conduct secondary validation of supplier production stability.</div>
-                    <div>2. Adjust customer-facing lead-time expectations where required.</div>
-                    <div>3. Prepare alternative routing scenarios for sensitive shipments.</div>
-                    <div>4. Avoid single-point dependency in execution planning.</div>
+                    {scanResult.risk_factors.map((factor) => (
+                      <div key={factor}>• {factor}</div>
+                    ))}
                   </div>
                 </div>
 
-                <div className="rounded-2xl border border-amber-400/20 bg-amber-400/5 p-5">
-                  <div className="text-xs uppercase tracking-[0.18em] text-amber-300">Risk Considerations</div>
+                <div className="rounded-2xl border border-emerald-400/20 bg-emerald-400/5 p-5">
+                  <div className="text-xs uppercase tracking-[0.18em] text-emerald-300">Recommended Actions</div>
                   <div className="mt-4 space-y-3 text-sm text-slate-300">
-                    <div>• This assessment reflects a relative positioning, not a deterministic outcome.</div>
-                    <div>• External volatility in policy, logistics, pricing, or operating conditions may alter execution performance.</div>
-                    <div>• Results should be integrated with contractual, commercial, and operational context.</div>
-                    <div>• This report is designed as a decision-support layer, not a substitute for professional judgment.</div>
+                    {scanResult.suggested_risk_awareness.map((item, index) => (
+                      <div key={item}>{index + 1}. {item}</div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -1238,10 +1263,15 @@ export default function RiskAtlasReportPage() {
           ) : (
             <div className="mt-8 rounded-3xl border border-dashed border-white/15 bg-white/[0.03] p-8">
               <div className="max-w-3xl">
-                <h3 className="text-xl font-semibold">Professional content is locked</h3>
+                <h3 className="text-xl font-semibold">
+                  {!scanResult
+                    ? "Generate an Initial Risk Signal first"
+                    : "Professional content is locked"}
+                </h3>
                 <p className="mt-3 text-sm leading-7 text-slate-300">
-                  The free preview shows the headline score and strategic reading. The paid layer adds the more commercially useful part:
-                  structured advisory output, premium interpretation, and the beta PDF handoff.
+                  {!scanResult
+                    ? "The paid report uses the latest scan stored in this browser session. Complete the form above to populate it."
+                    : "The free preview shows the headline score and strategic reading. The paid layer adds the dimension breakdown, key factors, recommendations, and PDF handoff."}
                 </p>
 
                 <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -1259,7 +1289,7 @@ export default function RiskAtlasReportPage() {
                   </div>
                 </div>
 
-                <div className="mt-6">
+                {scanResult && !isProUnlocked && <div className="mt-6">
                   <button
                     onClick={handleUnlockProfessional}
                     disabled={isPaying}
@@ -1267,14 +1297,14 @@ export default function RiskAtlasReportPage() {
                   >
                     {isPaying ? "Redirecting to Checkout..." : "Pay US$49 to Unlock"}
                   </button>
-                </div>
+                </div>}
               </div>
             </div>
           )}
         </div>
       </section>
 
-      {isExecutionUnlocked && (
+      {isExecutionUnlocked && scanResult && (
         <section className="mx-auto max-w-7xl px-6 pb-16">
           <div className="space-y-8 rounded-3xl border border-emerald-400/20 bg-gradient-to-br from-emerald-400/8 to-cyan-400/5 p-6 md:p-8">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -1284,13 +1314,11 @@ export default function RiskAtlasReportPage() {
                 </div>
 
                 <h2 className="mt-4 text-2xl font-semibold md:text-3xl">
-                  Management-facing risk translation and action framing
+                  {scanResult.industry} execution intelligence for {scanResult.country}
                 </h2>
 
                 <p className="mt-4 text-sm leading-7 text-slate-300 md:text-base">
-                  This layer does not replace the original 8-dimensional model. It translates the same model output into
-                  industry pain points, differentiated business impact, and executive action priorities so the 149 path
-                  feels like a distinct management tool rather than a slightly longer report.
+                  This layer applies the execution framework to the same {scanResult.risk_score} / {scanResult.grade} / {scanResult.level} signal and recommendations used in the Professional Report.
                 </p>
               </div>
 
@@ -1305,20 +1333,39 @@ export default function RiskAtlasReportPage() {
 
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
               <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Layer type</div>
-                <div className="mt-2 text-base font-semibold text-white">Executive intelligence</div>
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Country</div>
+                <div className="mt-2 text-base font-semibold text-white">{scanResult.country}</div>
               </div>
               <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Model basis</div>
-                <div className="mt-2 text-base font-semibold text-white">Original 8 dimensions retained</div>
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Industry</div>
+                <div className="mt-2 text-base font-semibold text-white">{scanResult.industry}</div>
               </div>
               <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Primary use</div>
-                <div className="mt-2 text-base font-semibold text-white">Management prioritization</div>
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Score / Grade</div>
+                <div className="mt-2 text-base font-semibold text-white">{scanResult.risk_score} / {scanResult.grade}</div>
               </div>
               <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Linked capability</div>
-                <div className="mt-2 text-base font-semibold text-white">Load Planning available</div>
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Exposure Level</div>
+                <div className="mt-2 text-base font-semibold text-white">{scanResult.level}</div>
+              </div>
+            </div>
+
+            <div className="grid gap-6 lg:grid-cols-2">
+              <div className="rounded-3xl border border-white/10 bg-black/20 p-6">
+                <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Current Scan Factors</div>
+                <div className="mt-4 space-y-3 text-sm leading-7 text-slate-300">
+                  {scanResult.risk_factors.map((factor) => (
+                    <div key={factor}>• {factor}</div>
+                  ))}
+                </div>
+              </div>
+              <div className="rounded-3xl border border-emerald-400/20 bg-emerald-400/5 p-6">
+                <div className="text-xs uppercase tracking-[0.18em] text-emerald-300">Current Scan Recommendations</div>
+                <div className="mt-4 space-y-3 text-sm leading-7 text-slate-300">
+                  {scanResult.suggested_risk_awareness.map((item, index) => (
+                    <div key={item}>{index + 1}. {item}</div>
+                  ))}
+                </div>
               </div>
             </div>
 

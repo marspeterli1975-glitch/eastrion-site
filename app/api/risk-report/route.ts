@@ -27,6 +27,10 @@ type MatrixRow = {
   supplyChain: number;
 };
 
+type RiskReportPayload = RiskScanResult & {
+  report_variant?: "professional" | "execution";
+};
+
 function wrapText(text: string, maxChars = 88) {
   const words = text.split(/\s+/);
   const lines: string[] = [];
@@ -56,7 +60,7 @@ function getLevelColor(level: string): RGB {
 }
 
 function getExecutiveSummary(data: RiskScanResult) {
-  return `RiskAtlas evaluates structural exposure across supply chain environments based on country conditions, industry sensitivity, logistics complexity, and event-driven disruption factors. For the selected parameters, the overall exposure score is ${data.risk_score}, indicating a ${data.level.toLowerCase()} level of supply chain exposure. The current profile reflects a combination of structural dependencies and operating conditions that may affect continuity, predictability, and resilience.`;
+  return `${data.summary} RiskAtlas records an overall exposure score of ${data.risk_score}, grade ${data.grade}, and a ${data.level.toLowerCase()} exposure level for this assessment.`;
 }
 
 function getStrategicInterpretation() {
@@ -78,6 +82,10 @@ function getStrategicView(data: RiskScanResult) {
 }
 
 function getTacticalFocus(data: RiskScanResult) {
+  if (data.suggested_risk_awareness.length > 0) {
+    return data.suggested_risk_awareness;
+  }
+
   const base = [
     "Strengthen supplier readiness validation before commitment.",
     "Protect margin assumptions under cost and timing variability.",
@@ -130,7 +138,9 @@ function getExposureDefinitions(): [string, string, string][] {
   ];
 }
 
-function isExecutiveReport(data: RiskScanResult) {
+function isExecutiveReport(data: RiskReportPayload) {
+  if (data.report_variant === "execution") return true;
+
   const factors = (data.risk_factors || []).map((x) => x.toLowerCase());
   return (
     factors.includes("executive intelligence layer enabled") ||
@@ -333,19 +343,50 @@ function average(rows: MatrixRow[], key: keyof Omit<MatrixRow, "painPoint">) {
 
 export async function POST(req: NextRequest) {
   try {
-    const data = (await req.json()) as RiskScanResult;
+    const raw = (await req.json()) as Partial<RiskReportPayload>;
+    const safe = (text: unknown, fallback = "") =>
+      typeof text === "string" && text.trim()
+        ? text.replace(/[^\x00-\x7F]/g, "").trim()
+        : fallback;
+    const safeNumber = (value: unknown, fallback = 0) => {
+      const parsed = Number(value);
+      return Number.isFinite(parsed) ? Math.max(0, Math.min(100, parsed)) : fallback;
+    };
+    const safeList = (value: unknown) =>
+      Array.isArray(value)
+        ? value.map((item) => safe(item)).filter(Boolean)
+        : [];
 
-    const safe = (text: string) => (text ? text.replace(/[^\x00-\x7F]/g, "") : "");
+    const country = safe(raw.country, "Not provided");
+    const industry = safe(raw.industry, "Not provided");
+    const riskScore = safeNumber(raw.risk_score);
+    const level = safe(raw.level, "Unknown");
 
-    data.country = safe(data.country);
-    data.industry = safe(data.industry);
-    data.grade = safe(data.grade);
-    data.level = safe(data.level);
-    data.disclaimer = safe(data.disclaimer);
-
-    if (data.risk_factors) {
-      data.risk_factors = data.risk_factors.map((f: string) => safe(f));
-    }
+    const data: RiskReportPayload = {
+      country,
+      industry,
+      risk_score: riskScore,
+      grade: safe(raw.grade, "N/A"),
+      level,
+      summary: safe(
+        raw.summary,
+        `This assessment records a ${level.toLowerCase()} exposure level for ${industry} activity in ${country}.`
+      ),
+      risk_factors: safeList(raw.risk_factors),
+      suggested_risk_awareness: safeList(raw.suggested_risk_awareness),
+      breakdown: {
+        country_risk: safeNumber(raw.breakdown?.country_risk),
+        industry_risk: safeNumber(raw.breakdown?.industry_risk),
+        logistics_risk: safeNumber(raw.breakdown?.logistics_risk),
+        event_risk: safeNumber(raw.breakdown?.event_risk),
+      },
+      disclaimer: safe(
+        raw.disclaimer,
+        "RiskAtlas is a supply chain exposure scanning tool for informational use only."
+      ),
+      report_variant:
+        raw.report_variant === "execution" ? "execution" : "professional",
+    };
 
     const executiveReport = isExecutiveReport(data);
 
